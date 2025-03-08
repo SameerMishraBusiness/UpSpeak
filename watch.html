@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speakifi Watch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #ff8c00;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: white;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-width: 320px;
+            max-width: 800px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .content {
+            text-align: left;
+            width: 100%;
+        }
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .button {
+            display: inline-block;
+            width: 200px;
+            padding: 15px 0;
+            margin: 10px auto;
+            background-color: #d47300;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 18px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #b35a00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        .speeches-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .speeches-list li {
+            margin-bottom: 20px;
+        }
+        .speeches-list a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 5px;
+        }
+        .speeches-list a:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+        .speech-description {
+            font-size: 0.9em;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+
+        #speechVideo {
+            width: 640px;
+            height: 360px;
+            background-color: black;
+        }
+
+        #speechTranscript {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            background-color: white;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content section active" id="home-section">
+           <h2>Start watching today with Speakifi!</h2>
+           <a href="#" class="button" id="your-speeches-button">Your Speeches</a>
+           <a href="#" class="button" id="famous-speeches-button">Famous Speeches</a>
+       </div>
+
+       <div class="content section" id="your-speeches-section">
+           <h2>Your Speeches</h2>
+           <ul class="speeches-list" id="your-speeches-list">
+               <!-- List of user speeches will be dynamically generated here -->
+           </ul>
+
+           <video id="speechVideo" controls></video>
+           <p id="speechTranscript"></p>
+
+           <a href="home.html" class="button">Back to Home</a>
+       </div>
+
+       <div class="content section" id="famous-speeches-section">
+           <h2>Famous Speeches</h2>
+           <ul class="speeches-list">
+               <li>
+                   <a href="https://www.youtube.com/watch?v=vP4iY1TtS3s" target="_blank" onclick="incrementSpeechCount()">"I Have a Dream" - Martin Luther King Jr. (August 28, 1963)</a>
+                   <p class="speech-description">King's iconic speech calling for racial equality and an end to discrimination, delivered during the March on Washington.</p>
+               </li>
+               <li>
+                   <a href="https://www.youtube.com/watch?v=8jPQjjsRr7k" target="_blank" onclick="incrementSpeechCount()">"The Gettysburg Address" - Abraham Lincoln (November 19, 1863)</a>
+                   <p class="speech-description">A brief but powerful speech given during the American Civil War, emphasizing the principles of human equality.</p>
+               </li>
+               <li>
+                   <a href="https://www.youtube.com/watch?v=xvzZ_kjWm64" target="_blank" onclick="incrementSpeechCount()">"We Choose to Go to the Moon" - John F. Kennedy (September 12, 1962)</a>
+                   <p class="speech-description">Kennedy's speech at Rice University, inspiring the nation to support the Apollo space program.</p>
+               </li>
+               <li>
+                   <a href="https://www.youtube.com/watch?v=lZNttC-xCMA" target="_blank" onclick="incrementSpeechCount()">"Tear Down This Wall" - Ronald Reagan (June 12, 1987)</a>
+                   <p class="speech-description">Reagan's famous speech at the Brandenburg Gate in Berlin, challenging Soviet leader Gorbachev to tear down the Berlin Wall.</p>
+               </li>
+               <li>
+                   <a href="https://www.youtube.com/watch?v=MX_v0zxM23Q" target="_blank" onclick="incrementSpeechCount()">"The Only Thing We Have To Fear Is Fear Itself" - Franklin D. Roosevelt (March 4, 1933)</a>
+                   <p class="speech-description">FDR's first inaugural address during the Great Depression, aiming to restore hope and confidence to the American people.</p>
+               </li>
+           </ul>
+           <a href="home.html" class="button">Back to Home</a>
+       </div>
+    </div>
+
+    <script>
+        document.getElementById('your-speeches-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            showSection('your-speeches-section');
+        });
+
+        document.getElementById('famous-speeches-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            showSection('famous-speeches-section');
+        });
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                if (sectionId === 'your-speeches-section') {
+                    populateYourSpeeches();
+                }
+            }
+        }
+
+        function incrementSpeechCount() {
+            let speechesWatched = localStorage.getItem('speechesWatched');
+            speechesWatched = speechesWatched ? parseInt(speechesWatched) : 0;
+            speechesWatched++;
+            localStorage.setItem('speechesWatched', speechesWatched);
+            console.log('Speeches watched:', speechesWatched);
+
+            // Update quest progress
+            if (typeof updateQuestProgress === 'function') {
+                updateQuestProgress();
+            }
+        }
+
+        function populateYourSpeeches() {
+            const speechList = document.getElementById('your-speeches-list');
+            speechList.innerHTML = ''; // Clear existing list
+
+            const speechKeys = JSON.parse(localStorage.getItem("speechKeys") || "[]");
+
+            if (speechKeys.length === 0) {
+                speechList.textContent = "No speeches saved yet.";
+                return;
+            }
+
+            speechKeys.forEach(key => {
+                const listItem = document.createElement("li");
+                const link = document.createElement("a");
+                link.href = "#";
+                link.textContent = `Speech recorded on ${new Date(parseInt(key.split('_')[1])).toLocaleString()}`;
+
+                link.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    loadSpeech(key);
+                });
+
+                listItem.appendChild(link);
+                speechList.appendChild(listItem);
+            });
+        }
+
+        function loadSpeech(speechKey) {
+            const video = document.getElementById('speechVideo');
+            const transcript = document.getElementById('speechTranscript');
+
+            const videoData = localStorage.getItem(`${speechKey}_video`);
+            const transcriptText = localStorage.getItem(`${speechKey}_transcript`);
+
+            if (videoData) {
+                video.src = videoData;
+                video.style.display = "block";
+            } else {
+                video.style.display = "none";
+                video.src = "";
+            }
+
+            transcript.textContent = transcriptText || "No transcript available.";
+        }
+    </script>
+</body>
+</html>
