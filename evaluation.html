@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speaky Recording</title>
+    <style>
+        /* Existing CSS styles remain unchanged */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0073e6, #ff8c00);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+            overflow-x: hidden;
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            width: 900px;
+            max-width: 100%;
+            animation: fadeIn 0.6s ease-in-out, floatIn 1s ease-out;
+            transition: transform 0.5s ease, box-shadow 0.3s ease, height 0.5s ease;
+            height: auto;
+            max-height: 90vh;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 255, 255, 0.2);
+        }
+
+        .left-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .video-container {
+            background-color: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            height: 40vh;
+            position: relative;
+        }
+
+        .video-container.recording {
+            transform: scale(1.05);
+            border: 4px solid #ff8c00;
+            box-shadow: 0 8px 20px rgba(255, 140, 0, 0.5);
+        }
+
+        .video-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-container:hover::before {
+            opacity: 1;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .transcription-box {
+            padding: 15px;
+            border: 2px solid #ff8c00;
+            background-color: #fff4e3;
+            color: #333;
+            font-size: 1em;
+            height: 150px;
+            overflow-y: auto;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+        }
+
+        .transcription-box:focus {
+            outline: none;
+            border-color: #0073e6;
+            box-shadow: 0 0 0 3px rgba(0, 115, 230, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .right-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        button {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s, background-color 0.3s;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover:not(:disabled) {
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .primary-btn {
+            background-color: #ff8c00;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(255, 140, 0, 0.4);
+        }
+
+        .primary-btn:hover:not(:disabled) {
+            background-color: #ff9f33;
+        }
+
+        .secondary-btn {
+            background-color: #0073e6;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 115, 230, 0.4);
+        }
+
+        .secondary-btn:hover:not(:disabled) {
+            background-color: #1a8cff;
+        }
+
+        .home-btn {
+            background: linear-gradient(135deg, #ff8c00, #0073e6);
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 115, 230, 0.4);
+            width: 150px;
+            height: 150px;
+            font-size: 16px;
+        }
+
+        .home-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #ff9f33, #1a8cff);
+        }
+
+        button:active {
+            transform: scale(0.9);
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        button:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+
+        .feedback-box {
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .strengths-box {
+            border: 3px solid #28a745;
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #155724;
+            animation: legendaryAppear 1s forwards 0.5s;
+        }
+
+        .improvement-box {
+            border: 3px solid #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #721c24;
+            animation: legendaryAppear 1s forwards 0.7s;
+        }
+
+        .feedback-box::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.2) 0%,
+                rgba(255, 255, 255, 0.2) 40%,
+                rgba(255, 255, 255, 0.6) 50%,
+                rgba(255, 255, 255, 0.2) 60%,
+                rgba(255, 255, 255, 0.2) 100%
+            );
+            transform: rotate(30deg);
+            transition: transform 0.5s ease;
+        }
+
+        .feedback-box:hover::after {
+            transform: rotate(30deg) translate(0, -80px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes floatIn {
+            from { transform: translateY(20px); }
+            to { transform: translateY(0); }
+        }
+
+        @keyframes legendaryAppear {
+            0% { opacity: 0; transform: translateY(50px) scale(0.8); }
+            50% { opacity: 0.5; transform: translateY(-20px) scale(1.1); }
+            75% { transform: translateY(10px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(0, 0); opacity: 1; }
+            20% { transform: scale(25, 25); opacity: 1; }
+            100% { opacity: 0; transform: scale(40, 40); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+            }
+
+            .left-section,
+            .right-section {
+                width: 100%;
+            }
+
+            .video-container {
+                width: 100%;
+            }
+
+            button {
+                width: 100px;
+                height: 100px;
+                font-size: 12px;
+            }
+
+            .home-btn {
+                width: 120px;
+                height: 120px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            button {
+                width: 80px;
+                height: 80px;
+                font-size: 10px;
+            }
+
+            .home-btn {
+                width: 100px;
+                height: 100px;
+                font-size: 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #001f3f, #8B4513);
+            }
+
+            .container {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+
+            .transcription-box,
+            .feedback-box {
+                background-color: #2c2c2c;
+                color: #f0f0f0;
+            }
+
+            .strengths-box {
+                border-color: #28a745;
+                background-color: rgba(40, 167, 69, 0.2);
+                color: #28a745;
+            }
+
+            .improvement-box {
+                border-color: #dc3545;
+                background-color: rgba(220, 53, 69, 0.2);
+                color: #dc3545;
+            }
+        }
+
+        .container.speech-finished {
+            transform: translateY(0);
+            height: auto;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .container.speech-finished:hover {
+            transform: translateY(0);
+        }
+
+        .container.speech-finished .left-section,
+        .container.speech-finished .right-section {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .container.speech-finished .video-container {
+            max-height: 50vh;
+            height: auto;
+            width: 100%;
+        }
+
+        .container.speech-finished .transcription-box,
+        .container.speech-finished .feedback-box {
+            max-height: 30vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <div class="video-container" id="videoContainer">
+                <video id="video" autoplay muted></video>
+            </div>
+            <div id="transcription" class="transcription-box">
+                Transcription will appear here...
+            </div>
+        </div>
+        <div class="right-section">
+            <div class="buttons-container">
+                <button id="startBtn" class="primary-btn">Start Recording</button>
+                <button id="stopBtn" class="primary-btn" disabled>Stop Recording</button>
+                <button id="restartBtn" class="secondary-btn" disabled>Restart</button>
+                <button id="homeBtn" class="home-btn" style="display: none;">Back to Home</button>
+                <div class="feedback-box strengths-box" id="strengths-feedback" style="display: none;"></div>
+                <div class="feedback-box improvement-box" id="improvement-feedback" style="display: none;"></div>
+            </div>
+            <div id="filler-feedback" class="feedback-box">
+                Filler Word Feedback will appear here...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript code
+        let mediaRecorder;
+        let recordedChunks = [];
+        let videoElement = document.getElementById("video");
+        let startBtn = document.getElementById("startBtn");
+        let stopBtn = document.getElementById("stopBtn");
+        let restartBtn = document.getElementById("restartBtn");
+        let homeBtn = document.getElementById("homeBtn");
+        let transcriptionBox = document.getElementById("transcription");
+        let fillerFeedback = document.getElementById("filler-feedback");
+        let strengthsFeedback = document.getElementById("strengths-feedback");
+        let improvementFeedback = document.getElementById("improvement-feedback");
+
+        let stream;
+        let recognition;
+        let isRecording = false;
+        let finalTranscript = "";
+        let silenceTimeout;
+
+        let previousFrame = null;
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        document.querySelector('.container').classList.add('speech-finished');
+
+        async function startVideoStream() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+                videoElement.play();
+            } catch (error) {
+                console.error("Error accessing webcam:", error);
+            }
+        }
+
+        function setupSpeechRecognition() {
+            if (!('webkitSpeechRecognition' in window)) {
+                alert("Your browser does not support speech recognition.");
+                return;
+            }
+
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            recognition.onresult = function (event) {
+                let interimTranscript = "";
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+
+                    if (event.results[i].isFinal) {
+                        clearTimeout(silenceTimeout);
+                        finalTranscript += transcript + ". ";
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+
+                transcriptionBox.textContent = finalTranscript + interimTranscript;
+
+                clearTimeout(silenceTimeout);
+                silenceTimeout = setTimeout(() => {
+                    if (interimTranscript) {
+                        finalTranscript += interimTranscript + ". ";
+                        transcriptionBox.textContent = finalTranscript;
+                    }
+                }, 1000);
+            };
+
+            recognition.onerror = function (event) {
+                console.error("Speech Recognition Error:", event.error);
+            };
+
+            recognition.onend = function () {
+                if (isRecording) {
+                    recognition.start();
+                } else {
+                    evaluateSpeech();
+                }
+            };
+        }
+
+        function startRecording() {
+            recordedChunks = [];
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(recordedChunks, { type: "video/webm" });
+                const videoUrl = URL.createObjectURL(blob);
+
+                videoElement.srcObject = null;
+                videoElement.src = videoUrl;
+                videoElement.controls = true;
+                videoElement.play();
+            };
+
+            mediaRecorder.start();
+            recognition.start();
+            isRecording = true;
+
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            restartBtn.disabled = false;
+            homeBtn.style.display = "none";
+
+            previousFrame = null;
+            detectHandMotions();
+        }
+
+        function stopRecording() {
+            if (isRecording) {
+                mediaRecorder.stop();
+                recognition.stop();
+                isRecording = false;
+
+                stopBtn.disabled = true;
+                restartBtn.disabled = false;
+            }
+        }
+
+        function restartRecording() {
+            finalTranscript = "";
+            transcriptionBox.textContent = "Transcription will appear here...";
+            fillerFeedback.style.display = "none";
+            strengthsFeedback.style.display = "none";
+            improvementFeedback.style.display = "none";
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            restartBtn.disabled = true;
+            homeBtn.style.display = "none";
+
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+
+            if (recognition && isRecording) {
+                recognition.stop();
+            }
+
+            startVideoStream();
+            setupSpeechRecognition();
+        }
+
+        function detectHandMotions() {
+            if (!videoElement.videoWidth || !videoElement.videoHeight) {
+                requestAnimationFrame(detectHandMotions);
+                return;
+            }
+
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+            const currentFrame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            if (previousFrame) {
+                let motionCount = 0;
+                for (let i = 0; i < currentFrame.data.length; i += 4) {
+                    const diff = Math.abs(currentFrame.data[i] - previousFrame.data[i]) +
+                        Math.abs(currentFrame.data[i + 1] - previousFrame.data[i + 1]) +
+                        Math.abs(currentFrame.data[i + 2] - previousFrame.data[i + 2]);
+                    if (diff > 50) motionCount++;
+                }
+                return motionCount;
+            }
+            previousFrame = currentFrame;
+            requestAnimationFrame(detectHandMotions);
+        }
+
+        async function evaluateSpeech() {
+            const strengths = [];
+            const improvement = [];
+
+            const sentences = finalTranscript.split(/[.!?]/).filter(Boolean);
+            const wordCount = finalTranscript.split(/\s+/).filter(Boolean).length;
+
+            if (sentences.length >= 5 && wordCount > 150) {
+                strengths.push("Content: Constructing thorough and detailed content helped inform the audience when delivering your speech! ");
+            } else {
+                improvement.push("Content: Although brevity is often powerful, expanding upon your key ideas can elevate the speech.");
+            }
+
+            const complexSentences = sentences.filter(sentence => sentence.split(' ').length > 15).length;
+            if (complexSentences > 2) {
+                strengths.push("Complexity: Using advanced words and sentences created a sense of professionalism in your speech!");
+            } else {
+                improvement.push("Complexity: Even though simplicity is often helpful, using advanced vocabulary can create a sense of professionalism in your speech.");
+            }
+
+            if (finalTranscript.includes("Thank you") || finalTranscript.includes("I appreciate")) {
+                strengths.push("Credits: Conveying gratitude in your speech created a positive conclusion for the audience!");
+            } else {
+                improvement.push("Credits: Finishing the speech on a note of gratitude could create an engaging finish for the audience.");
+            }
+
+            const transitionWords = ["however", "therefore", "moreover", "for example", "in addition", "to contrast", "firstly", "secondly", "thirdly", "finally", "resulting in"];
+            const transitionsUsed = transitionWords.filter(word => finalTranscript.includes(word)).length;
+
+            if (transitionsUsed >= 3) {
+                strengths.push("Connection: Connecting ideas with transition words created a smooth feeling during the speech!");
+            } else {
+                improvement.push("Connection: Connecting ideas with transition words would create a more cohesive speech.");
+            }
+
+            const fillerWords = ["um", "uh", "like", "you know", "actually", "basically", "absolutely", "highly", "totally"];
+            const fillerWordCounts = fillerWords.reduce((acc, word) => {
+                const regex = new RegExp(`\\b${word}\\b`, "gi");
+                const count = (finalTranscript.match(regex) || []).length;
+                if (count > 0) {
+                    acc.push(`${word} (${count})`);
+                }
+                return acc;
+            }, []);
+
+            if (fillerWordCounts.length > 0) {
+                improvement.push(`Clarity: Reducing fillers such as ${fillerWordCounts.join(", ")} would allow for a more seamless delivery.`);
+            } else {
+                strengths.push("Clarity: Absence of filler words made the speech feel seamless!");
+            }
+
+            const durationSeconds = recordedChunks.length * 0.03;
+            const wordsPerMinute = Math.floor((wordCount / durationSeconds) * 60);
+
+            if (wordsPerMinute > 200) {
+                improvement.push("Clip: Slowing down will help the audience understand your speech better.");
+            } else if (wordsPerMinute < 110) {
+                improvement.push("Clip: Speeding up will help keep the audience's attention.");
+            } else {
+                strengths.push("Clip: Perfecting the speed of the speech helped the audience understand your points!");
+            }
+
+            let motionCount = detectHandMotions();
+            if (motionCount > 5000) {
+                strengths.push("Charisma: Effective hand gestures enhances your speech and delivery!");
+            } else {
+                improvement.push("Charisma: Consider using more expressive hand gestures to further engage the audience.");
+            }
+
+            const selectedImprovements = [];
+            if (improvement.length > 3) {
+                const shuffled = improvement.sort(() => 0.5 - Math.random());
+                const maxImprovements = 3;
+                for (let i = 0; i < maxImprovements; i++) {
+                    selectedImprovements.push(shuffled[i]);
+                }
+            } else {
+                selectedImprovements.push(...improvement);
+            }
+
+            fillerFeedback.style.display = "block";
+            fillerFeedback.innerHTML = `<strong>Feedback:</strong><br>${strengths.join("<br>")}<br><br><strong>Areas for Improvement:</strong><br>${selectedImprovements.join("<br>")}`;
+
+            strengthsFeedback.style.display = "block";
+            strengthsFeedback.innerHTML = `<strong>Strengths:</strong><br>${strengths.join("<br>")}`;
+
+            improvementFeedback.style.display = "block";
+            improvementFeedback.innerHTML = `<strong>Areas for Improvement:</strong><br>${selectedImprovements.join("<br>")}`;
+
+            startBtn.style.display = "none";
+            stopBtn.style.display = "none";
+            restartBtn.style.display = "none";
+            homeBtn.style.display = "block";
+        }
+
+        startBtn.addEventListener("click", () => {
+            startRecording();
+        });
+
+        stopBtn.addEventListener("click", () => {
+            stopRecording();
+        });
+
+        restartBtn.addEventListener("click", () => {
+            restartRecording();
+        });
+
+        homeBtn.addEventListener("click", () => {
+            window.location.href = "home.html";
+        });
+
+        startVideoStream();
+        setupSpeechRecognition();
+    </script>
+</body>
+</html>
