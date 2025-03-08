@@ -1,0 +1,735 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speakifi Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background-color: #1a4d1a;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: white;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-width: 320px;
+            max-width: 800px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .content {
+            text-align: left;
+            width: 100%;
+        }
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .button {
+            display: inline-block;
+            width: 180px;
+            padding: 15px 0;
+            margin: 10px 10px 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 18px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        /* Badges Styles */
+        .badges-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 20px;
+            width: 100%;
+            flex-wrap: wrap;
+            display: none; /* Hidden by default */
+        }
+        .badge {
+            width: 150px;
+            height: 50px;
+            border-radius: 25px;
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            padding: 5px 10px;
+            gap: 5px;
+        }
+        .badge i {
+            margin-right: 5px; /* Space between icon and text */
+        }
+        .badge-illuminated {
+            box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.5); /* Yellow glow effect */
+        }
+        /* Quest Styles */
+        .quests-container {
+            width: 100%;
+            margin-top: 30px;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+        }
+        .quest {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Make quests longer */
+        }
+        .quest h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress {
+            display: block;
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0%; /* Will be updated dynamically */
+            transition: width 0.5s ease;
+            float: left; /* Ensure progress starts from the beginning */
+        }
+        #quiz-container {
+            display: none;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+        }
+        .question {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 25px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: background-color 0.3s ease;
+        }
+        .options label:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+        #next-question {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            align-self: center; /* Center the button */
+            display: block; /* Ensure margin works correctly */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #next-question:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        #result-container {
+            margin-top: 30px;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-align: center;
+          text-shadow:
+          -1px -1px #000,
+          -1px +1px #000,
+          +1px -1px #000,
+          +1px +1px #000; /* Add shadow to make it more readable */
+          padding-bottom :20 px; /* Add space below the result */
+          display: none;
+        }
+        .share-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .share-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 0 5px;
+            text-decoration: none;
+        }
+        .share-button:hover {
+            opacity: 0.8;
+        }
+        #copy-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        #copy-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Progress Dots */
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #bbb;
+            margin: 0 5px;
+        }
+
+        .dot.completed {
+            background-color: green;
+        }
+
+        /* New Styles for Share Buttons */
+        .social-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .social-button {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+        }
+
+        .twitter-button {
+            background-color: #1da1f2; /* Twitter's blue */
+        }
+
+        .facebook-button {
+            background-color: #1877f2; /* Facebook's blue */
+        }
+
+        .instagram-button {
+            background-color: #e4405f; /* Instagram's pink/purple */
+        }
+
+        .copy-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content" id="home-content">
+           <h2>Start profiling today with Speakifi!</h2>
+           <a href="#" class="button" id="personality-button">Personality</a>
+           <a href="#" class="button" id="badges-button">Badges</a>
+           <a href="#" class="button" id="quests-button">Quests</a>
+       </div>
+
+           <!-- Badges Section -->
+           <div class="badges-container" id="badges-container">
+               <div class="badge badge-illuminated" style="background-color: gold;"><i class="fas fa-rocket"></i>Starter</div>
+               <div class="badge" style="background-color: grey;"><i class="fas fa-trophy"></i>Achiever</div>
+               <div class="badge" style="background-color: grey;"><i class="fas fa-comment-dots"></i>Communicator</div>
+               <div class="badge" style="background-color: grey;"><i class="fas fa-compass"></i>Explorer</div>
+               <div class="badge" style="background-color: grey;"><i class="fas fa-crown"></i>Master</div>
+               <a href="home.html" class="button" style="background-color: darkgreen;">Back to Home</a>
+           </div>
+
+           <!-- Quests Section -->
+           <!-- Quests Section -->
+          <div class="quests-container" id="quests-container">
+              <div class="quest">
+                  <h3>Deliver 3 Speeches</h3>
+                  <div class="progress-bar">
+                      <span class="progress" id="speech-progress"></span>
+                  </div>
+              </div>
+              <div class="quest">
+                  <h3>Complete 5 Puzzles</h3>
+                  <div class="progress-bar">
+                      <span class="progress" id="puzzle-progress"></span>
+                  </div>
+              </div>
+              <div class="quest">
+                  <h3>Watch 10 Speeches</h3>
+                  <div class="progress-bar">
+                      <span class="progress" id="watch-progress"></span>
+                  </div>
+              </div>
+              <a href="home.html" class="button" style="background-color: darkgreen;">Back to Home</a>
+           </div>
+
+           <div id="quiz-container">
+                <div class="progress-dots" id="progress-dots">
+                    <div class="dot" data-question="1"></div>
+                    <div class="dot" data-question="2"></div>
+                    <div class="dot" data-question="3"></div>
+                    <div class="dot" data-question="4"></div>
+                    <div class="dot" data-question="5"></div>
+                    <div class="dot" data-question="6"></div>
+                </div>
+                <div id="question-container">
+                    <!-- Quiz questions will be injected here -->
+                </div>
+                <button id="next-question">Next Question</button>
+                <a href="home.html" class="button" style="background-color: darkgreen;">Back to Home</a>
+           </div>
+
+       <div id="result-container">
+           <!-- Result will be displayed here -->
+           <div class="share-buttons">
+               <div id="result-message"></div>
+               <div class="social-buttons">
+                    <a href="https://twitter.com/" class="social-button twitter-button" target="_blank">Share on X</a>
+                    <a href="https://www.facebook.com/" class="social-button facebook-button" target="_blank">Share on Facebook</a>
+                    <a href="https://www.instagram.com/" class="social-button instagram-button" target="_blank">Share on Instagram</a>
+               </div>
+               <button id="copy-button" class="copy-button">Copy</button>
+           </div>
+       </div>
+   </div>
+
+   <script>
+        document.getElementById('personality-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'flex';
+            document.getElementById('badges-container').style.display = 'none';
+            document.getElementById('quests-container').style.display = 'none';
+            loadQuestion(1); // Load the first question
+        });
+
+        document.getElementById('badges-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('badges-container').style.display = 'flex';
+            document.getElementById('quests-container').style.display = 'none';
+        });
+
+        document.getElementById('quests-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('badges-container').style.display = 'none';
+            document.getElementById('quests-container').style.display = 'flex';
+        });
+
+        let currentQuestion = 1;
+        let answers = {};
+
+        const questions = {
+            1: {
+                question: "Which speech excerpt intrigues you more?",
+                options: {
+                    a: "In the face of impossibility, we find our true strength.",
+                    b: "By analyzing patterns, we can predict and shape our future."
+                }
+            },
+            2: {
+                question: "Which presentation title appeals to you most?",
+                options: {
+                    a: "Breaking Boundaries: The Art of the Impossible",
+                    b: "Decoding Success: A Data-Driven Approach"
+                }
+            },
+            3: {
+                question: "When listening to a speech, do you prefer:",
+                options: {
+                    a: "Passionate delivery with dramatic pauses",
+                    b: "Steady pace with clear, logical progression"
+                }
+            },
+            4: {
+                question: "Which type of speaker would you rather listen to?",
+                options: {
+                    a: "An inspiring leader sharing personal experiences",
+                    b: "An expert explaining complex concepts"
+                }
+            },
+            5: {
+                question: "How do you best engage with the content of a presentation?",
+                options: {
+                    a: "Visualizing scenarios and possibilities",
+                    b: "Taking notes and analyzing key points"
+                }
+            },
+            6: {
+                question: "After a thought-provoking talk, would you rather:",
+                options: {
+                    a: "Engage in a lively group discussion about the ideas",
+                    b: "Quietly reflect and research more on the topic"
+                }
+            }
+        };
+
+
+       function loadQuestion(questionNumber) {
+           const questionContainer = document.getElementById('question-container');
+           const questionData = questions[questionNumber];
+
+           if (!questionData) {
+               // Quiz is complete
+               return showResults();
+           }
+
+           let questionHTML = `
+               <div class="question">${questionData.question}</div>
+               <div class="options">
+           `;
+
+           for (const option in questionData.options) {
+               questionHTML += `
+                   <label>
+                       <input type="radio" name="q${questionNumber}" value="${option}" ${answers[questionNumber] === option ? 'checked' : ''}>
+                       ${questionData.options[option]}
+                   </label>
+               `;
+           }
+
+           questionHTML += `</div>`;
+           questionContainer.innerHTML = questionHTML;
+
+           // Update Progress Dots
+           updateProgressDots();
+        }
+
+        document.getElementById('next-question').addEventListener('click', function() {
+            // Get the selected answer
+            const selectedAnswer = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
+
+            if (selectedAnswer) {
+                answers[currentQuestion] = selectedAnswer.value;
+                // Move to the next question
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            } else {
+                alert("Please select an answer.");
+            }
+        });
+
+        function updateProgressDots() {
+            const dots = document.querySelectorAll('.progress-dots .dot');
+            dots.forEach(dot => {
+                const questionNumber = parseInt(dot.dataset.question);
+                if (questionNumber < currentQuestion) {
+                    dot.classList.add('completed');
+                } else {
+                    dot.classList.remove('completed');
+                }
+            });
+        }
+
+       function showResults() {
+           document.getElementById('quiz-container').style.display = 'none';
+           document.getElementById('result-container').style.display = 'flex';
+
+           let aCount = 0;
+           for (const question in answers) {
+               if (answers[question] === 'a') {
+                   aCount++;
+               }
+           }
+
+            // Assign personality based on the number of A's selected
+            let personality = "";
+            if (aCount >= 5) {
+                personality = "Dolphin"; // Very enthusiastic and engaging listeners
+            } else if (aCount === 4) {
+                personality = "Eagle"; // Visionary listeners who appreciate big ideas
+            } else if (aCount === 3) {
+                personality = "Elephant"; // Empathetic listeners who connect emotionally
+            } else if (aCount === 2) {
+                personality = "Owl"; // Analytical listeners who prefer structured talks
+            } else if (aCount === 1) {
+                personality = "Fox"; // Critical thinkers who enjoy debates
+            } else {
+                personality = "Bear"; // Practical listeners focused on actionable information
+            }
+
+            // Determine result message
+            let resultMessage = "";
+            switch (personality) {
+                case "Dolphin":
+                    resultMessage = "Congratulations! You are the Dolphin! You thrive in dynamic presentations and enjoy engaging with energetic speakers who inspire you!";
+                    break;
+                case "Eagle":
+                    resultMessage = "Congratulations! You are the Eagle! You are inspired by big ideas and motivational speeches.";
+                    break;
+                case "Elephant":
+                    resultMessage = "Congratulations! You are the Elephant! You connect emotionally and value personal stories.";
+                    break;
+                case "Owl":
+                    resultMessage = "Congratulations! You are the Owl! You appreciate structured talks and analytical speakers.";
+                    break;
+                case "Fox":
+                    resultMessage = "Congratulations! You are the Fox! You enjoy debates and critical thinking.";
+                    break;
+                case "Bear":
+                    resultMessage = "Congratulations! You are the Bear! You are practical and focus on actionable information.";
+                    break;
+            }
+
+            // Display the result message
+            document.getElementById('result-message').textContent = resultMessage;
+
+           // Add event listener to the copy button
+           document.getElementById('copy-button').addEventListener('click', function() {
+               const copyText = `I'm the ${personality}! What are you? Test at upspeak.tiiny.site`;
+
+               navigator.clipboard.writeText(copyText)
+                   .then(() => {
+                       alert('Copied to clipboard!');
+                   })
+                   .catch(err => {
+                       console.error('Failed to copy: ', err);
+                   });
+           });
+       }
+       // Define variables for quest progress
+       let speechesDelivered = 0;
+       let puzzlesAnswered = 0;
+       let speechesWatched = 0;
+
+       // Function to update quest progress
+       function updateQuestProgress() {
+           // Retrieve the latest counts from localStorage
+           speechesDelivered = parseInt(localStorage.getItem('speechesDelivered')) || 0;
+           puzzlesAnswered = parseInt(localStorage.getItem('puzzlesAnswered')) || 0;
+           speechesWatched = parseInt(localStorage.getItem('speechesWatched')) || 0;
+
+           // Calculate progress percentages
+           const speechProgress = (speechesDelivered / 3) * 100;
+           const puzzleProgress = (puzzlesAnswered / 5) * 100;
+           const watchProgress = (speechesWatched / 10) * 100;
+
+           // Update progress bars
+           updateProgressBar('speech-progress', speechProgress);
+           updateProgressBar('puzzle-progress', puzzleProgress);
+           updateProgressBar('watch-progress', watchProgress);
+
+           // Check for completion and trigger fireworks
+           if (speechProgress >= 100) triggerFireworks(document.getElementById('speech-progress').parentElement);
+           if (puzzleProgress >= 100) triggerFireworks(document.getElementById('puzzle-progress').parentElement);
+           if (watchProgress >= 100) triggerFireworks(document.getElementById('watch-progress').parentElement);
+       }
+
+       // Helper function to update a single progress bar
+       function updateProgressBar(id, progress) {
+           const progressBar = document.getElementById(id);
+           if (progressBar) {
+               progressBar.style.width = `${Math.min(progress, 100)}%`;
+               progressBar.setAttribute('aria-valuenow', Math.min(progress, 100));
+           }
+       }
+
+       // Functions to increment progress
+       function incrementSpeeches() {
+           speechesDelivered++;
+           localStorage.setItem('speechesDelivered', speechesDelivered);
+           updateQuestProgress();
+       }
+
+       function incrementPuzzles() {
+           puzzlesAnswered++;
+           localStorage.setItem('puzzlesAnswered', puzzlesAnswered);
+           updateQuestProgress();
+       }
+
+       function incrementWatched() {
+           speechesWatched++;
+           localStorage.setItem('speechesWatched', speechesWatched);
+           updateQuestProgress();
+       }
+
+       // Call updateQuestProgress when the page loads
+       document.addEventListener('DOMContentLoaded', updateQuestProgress);
+
+       // Example usage:
+       // Add these buttons to your HTML
+       // <button onclick="incrementSpeeches()">Deliver Speech</button>
+       // <button onclick="incrementPuzzles()">Answer Puzzle</button>
+       // <button onclick="incrementWatched()">Watch Speech</button>
+
+        function triggerFireworks(element) {
+    // Add fireworks container class
+    element.classList.add('fireworks-container');
+    
+    // Create and append the stylesheet
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = `
+        .fireworks-container {
+            position: relative;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .firework-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: explode 1.2s ease-out forwards;
+        }
+        
+        @keyframes explode {
+            0% {
+                transform: scale(0.1);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(styleSheet);
+
+    // Colors for fireworks
+    const colors = [
+        '#ff4444', '#ffbb33', '#00ff00',
+        '#00ffff', '#ff00ff', '#4444ff'
+    ];
+
+    // Create multiple firework bursts
+    function createBurst() {
+        const burstCount = 3 + Math.floor(Math.random() * 3); // 3-5 bursts
+        
+        for (let b = 0; b < burstCount; b++) {
+            setTimeout(() => {
+                // Generate particles for each burst
+                const particleCount = 15 + Math.floor(Math.random() * 10);
+                const centerX = 20 + Math.random() * (element.offsetWidth - 40);
+                const centerY = 20 + Math.random() * (element.offsetHeight - 40);
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'firework-particle';
+                    
+                    // Random color
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    // Random angle and distance
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 60 + 20;
+                    
+                    particle.style.backgroundColor = color;
+                    particle.style.left = `${centerX}px`;
+                    particle.style.top = `${centerY}px`;
+                    particle.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
+                    particle.style.animationDuration = `${0.8 + Math.random() * 0.6}s`;
+
+                    element.appendChild(particle);
+                    
+                    // Clean up
+                    particle.addEventListener('animationend', () => {
+                        particle.remove();
+                    });
+                }
+            }, b * 200); // Stagger bursts by 200ms
+        }
+    }
+
+    // Trigger multiple burst sequences
+    createBurst();
+    setTimeout(createBurst, 1000);
+
+    // Clean up
+    setTimeout(() => {
+        element.classList.remove('fireworks-container');
+        styleSheet.remove();
+    }, 3000);
+}
+
+        // Call updateQuestProgress when the quests section is shown
+        document.getElementById('quests-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('badges-container').style.display = 'none';
+            document.getElementById('quests-container').style.display = 'flex';
+            updateQuestProgress(); // Update progress when quests are shown
+        });
+
+        // For testing: Simulate progress every 2 seconds
+        setInterval(simulateProgress, 2000);
+   </script>
+</body>
+</html>
