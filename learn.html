@@ -1,0 +1,567 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speakifi Learn - Become a Legendary Speaker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary-color: #29ABE2;
+            --secondary-color: #1a4d9a;
+            --text-color: #fff;
+            --bg-opacity: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text-color);
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--bg-opacity);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            width: 80%;
+            max-width: 800px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+
+        .content {
+            text-align: left;
+            width: 100%;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .button {
+            display: inline-block;
+            width: 180px;
+            padding: 15px 0;
+            margin: 10px 10px 10px 0;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 18px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .badges-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 20px;
+            width: 100%;
+            flex-wrap: wrap;
+            display: none;
+        }
+
+        .badge {
+            width: 150px;
+            height: 50px;
+            border-radius: 25px;
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            padding: 5px 10px;
+            gap: 5px;
+        }
+
+        .badge i {
+            margin-right: 5px;
+        }
+
+        .badge-illuminated {
+            box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.5);
+        }
+
+        .quests-container {
+            width: 100%;
+            margin-top: 30px;
+            display: none;
+            flex-direction: column;
+        }
+
+        .quest {
+            background-color: var(--bg-opacity);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .quest h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            display: block;
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0%;
+            transition: width 0.5s ease;
+            float: left;
+        }
+
+        #quiz-container {
+            display: none;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 25px;
+            background-color: var(--bg-opacity);
+            transition: background-color 0.3s ease;
+        }
+
+        .options label:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        #submit-quiz {
+            background-color: #4CAF50;
+            color: var(--text-color);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            margin-top: 20px;
+        }
+
+        #submit-quiz:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        #result-container {
+            margin-top: 30px;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-align: center;
+            text-shadow:
+                -1px -1px #000,
+                -1px +1px #000,
+                +1px -1px #000,
+                +1px +1px #000;
+            padding-bottom: 20px;
+        }
+
+        .share-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .share-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 0 5px;
+            text-decoration: none;
+        }
+
+        .share-button:hover {
+            opacity: 0.8;
+        }
+
+        #copy-button {
+            background-color: #4CAF50;
+            color: var(--text-color);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            margin-top: 20px;
+        }
+
+        #copy-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        #videos-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .video-item {
+            margin-bottom: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .video-item:hover {
+            transform: scale(1.05);
+        }
+
+        .video-item iframe {
+            width: 100%;
+            height: 315px;
+        }
+
+        #drills-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .tongue-twister {
+            background-color: var(--bg-opacity);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            width: 100%;
+            text-align: center;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 2em;
+            }
+
+            .button {
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            .video-item iframe {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="content" id="home-content">
+            <h2>Start learning today with Speakifi!</h2>
+            <a href="#" class="button" id="videos-button">Videos</a>
+            <a href="#" class="button" id="drills-button">Drills</a>
+            <a href="#" class="button" id="puzzles-button">Puzzles</a>
+        </div>
+
+                <div id="videos-container">
+            <h2>Video Series</h2>
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/TqevPG5y854" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/UXFRgMb9TTw" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/AKuv8s00ApE" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/-9Wb3gcOuKM" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/urEh4_fTtao" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/iV0M5l5KhnE" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/wCzuAMVmIZ8" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/b0N0ufRKjKQ" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/IDj1OBG5Tpw" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/ZK3jSXYBNak" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <a href="home.html" class="button back-to-home-button">Back to Home</a>
+        </div>
+
+        <div id="drills-container">
+            <h2>Drills</h2>
+            <div class="tongue-twister">
+                <p>Peter Piper picked a peck of pickled peppers.</p>
+            </div>
+            <div class="tongue-twister">
+                <p>How much wood would a woodchuck chuck if a woodchuck could chuck wood?</p>
+            </div>
+            <div class="tongue-twister">
+                <p>She sells seashells by the seashore.</p>
+            </div>
+            <div class="tongue-twister">
+                <p>Fuzzy Wuzzy was a bear, Fuzzy Wuzzy had no hair, Fuzzy Wuzzy wasn’t fuzzy, was he?</p>
+            </div>
+            <div class="tongue-twister">
+                <p>Can you can a can as a canner can can a can?</p>
+            </div>
+           <a href="home.html" class="button back-to-home-button">Back to Home</a>
+        </div>
+        <div id="quiz-container">
+            <h2>Speech Puzzles</h2>
+            <div class="question" id="question-text"></div>
+            <div class="options" id="options-container">
+            </div>
+            <button id="submit-quiz">Submit</button>
+            <div id="result-container"></div>
+            <a href="home.html" class="button back-to-home-button">Back to Home</a>
+        </div>
+    </div>
+    <script>
+        const homeContent = document.getElementById('home-content');
+        const videosContainer = document.getElementById('videos-container');
+        const drillsContainer = document.getElementById('drills-container');
+        const quizContainer = document.getElementById('quiz-container');
+        const submitQuizButton = document.getElementById('submit-quiz');
+        const resultContainer = document.getElementById('result-container');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+
+        let currentDifficulty = 10;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let questionSet = 0;
+        let answered = false;
+        let puzzlesAnswered = 0; // New variable to track puzzles answered
+
+        const questions = [
+            { question: "What is the term for the fear of public speaking?", options: ["Glossophobia", "Xenophobia", "Arachnophobia", "Claustrophobia"], correctAnswer: "Glossophobia", difficulty: 1 },
+            { question: "Which of the following is NOT a key element of effective communication?", options: ["Clarity", "Conciseness", "Confidence", "Complexity"], correctAnswer: "Complexity", difficulty: 2 },
+            { question: "What does 'ethos' refer to in public speaking?", options: ["Emotional appeal", "Ethical appeal", "Logical appeal", "Aesthetic appeal"], correctAnswer: "Ethical appeal", difficulty: 3 },
+            { question: "What is a 'straw man' fallacy?", options: ["Misrepresenting someone's argument", "Appealing to emotion", "Attacking the person", "Using circular reasoning"], correctAnswer: "Misrepresenting someone's argument", difficulty: 4 },
+            { question: "In a persuasive speech, what is the purpose of a 'call to action'?", options: ["To summarize the main points", "To ask the audience to take a specific step", "To thank the audience", "To introduce the topic"], correctAnswer: "To ask the audience to take a specific step", difficulty: 5 },
+            { question: "What is the 'primacy effect' in speech delivery?", options: ["Remembering the last thing said", "Remembering the first thing said", "Forgetting the middle part", "Ignoring the speaker"], correctAnswer: "Remembering the first thing said", difficulty: 6 },
+            { question: "What is the ideal number of main points in a 5-minute speech?", options: ["1-3", "5-7", "10-12", "20+"], correctAnswer: "1-3", difficulty: 7 },
+            { question: "Which of the following is a good way to handle nervousness before a speech?", options: ["Avoid eye contact", "Pace back and forth", "Take deep breaths", "Drink caffeine"], correctAnswer: "Take deep breaths", difficulty: 8 },
+            { question: "What does 'logos' refer to in persuasive speaking?", options: ["Logic", "Emotion", "Ethics", "Aesthetics"], correctAnswer: "Logic", difficulty: 9 },
+            { question: "What is the 'recency effect'?", options: ["The end is most easily remembered", "The start is most easily remembered", "The middle is most easily remembered", "Nothing is ever remembered"], correctAnswer: "The end is most easily remembered", difficulty: 10 },
+            { question: "What should you do to project your voice?", options: ["Yell", "Mumble", "Whisper", "Use your diaphram"], correctAnswer: "Use your diaphram", difficulty: 11 },
+            { question: "What is the best way to get your audience to remember something?", options: ["Repeat it", "Say it once", "Whisper it", "Sing it"], correctAnswer: "Repeat it", difficulty: 12 },
+            { question: "Who is a famous public speaker?", options: ["Ghandi", "Mother Theresa", "MLK Jr.", "All of the above"], correctAnswer: "All of the above", difficulty: 13 },
+            { question: "What is the best thing to do when you mess up?", options: ["Restart", "Continue", "Run away", "Give up"], correctAnswer: "Continue", difficulty: 14 },
+            { question: "What is one of the things you can do to be a great speaker?", options: ["Practice", "Stare", "Be Mean", "Ignore"], correctAnswer: "Practice", difficulty: 15 },
+            { question: "When speaking, is it okay to move your hands?", options: ["Yes", "No", "Maybe", "What's speaking?"], correctAnswer: "Yes", difficulty: 16 },
+            { question: "When speaking, what kind of language should you use?", options: ["Professional", "Simple", "Complicated", "Irrelevant"], correctAnswer: "Simple", difficulty: 17 },
+            { question: "What's the best way to speak?", options: ["Loudly", "Clearly", "Quietly", "Muddled"], correctAnswer: "Clearly", difficulty: 18 },
+            { question: "What's a great way to get the audince involved?", options: ["Ignore them", "Ask questions", "Intimidate them", "Sing to them"], correctAnswer: "Ask questions", difficulty: 19 },
+            { question: "What is the best way to know your audience?", options: ["Ignore them", "Talk to them", "Stare at them", "Yell at them"], correctAnswer: "Talk to them", difficulty: 20 },
+            { question: "Why does it matter what you're talking about?", options: ["It doesn't", "It's your carreer", "It gets your point across", "So you can eat"], correctAnswer: "It gets your point across", difficulty: 21 },
+            { question: "What is something to avoid when speaking?", options: ["Um", "Uh", "So", "All of the above"], correctAnswer: "All of the above", difficulty: 22 },
+            { question: "What should a speaker prepare for?", options: ["Questions", "Problems", "Interruptions", "All of the above"], correctAnswer: "All of the above", difficulty: 23 },
+            { question: "Which of these isn't a way to grab attention?", options: ["Joke", "Yelling", "Story", "Statistic"], correctAnswer: "Yelling", difficulty: 24 },
+            { question: "When is a good time to speak?", options: ["After someone introduces you", "When you're called on", "When everyone is ready", "All of the above"], correctAnswer: "All of the above", difficulty: 25 },
+            { question: "What's a type of speaking to avoid?", options: ["Mumbling", "Yelling", "Whispering", "All of the above"], correctAnswer: "All of the above", difficulty: 26 },
+            { question: "How should you act while speaking?", options: ["Confident", "Prepared", "Relaxed", "All of the above"], correctAnswer: "All of the above", difficulty: 27 },
+            { question: "What is something you can use while speaking?", options: ["Props", "Pictures", "Slides", "All of the above"], correctAnswer: "All of the above", difficulty: 28 },
+            { question: "How should you end your speech?", options: ["Summarize", "Call to action", "Thank you", "All of the above"], correctAnswer: "All of the above", difficulty: 29 },
+            { question: "Is public speaking a good skill to have?", options: ["Yes", "No", "Maybe", "Depends"], correctAnswer: "Yes", difficulty: 30 },
+            { question: "What is one of the first things to do before giving a speech?", options: ["Practice", "Plan", "Prepare", "All of the above"], correctAnswer: "All of the above", difficulty: 31 },
+            { question: "If the crowd seems bored, what should you do?", options: ["Get angry", "Change pace", "Ignore it", "Give up"], correctAnswer: "Change pace", difficulty: 32 },
+            { question: "What is the best way to be engaged with an audience?", options: ["Eye contact", "Listening", "Moving around", "All of the above"], correctAnswer: "All of the above", difficulty: 33 },
+            { question: "If you don't know the answer, what should you do?", options: ["Lie", "Admit it", "Ignore it", "Change subject"], correctAnswer: "Admit it", difficulty: 34 },
+            { question: "What is a great way to practice?", options: ["Mirror", "Record yourself", "Present to friends", "All of the above"], correctAnswer: "All of the above", difficulty: 35 },
+            { question: "What is a tip for your voice?", options: ["Projection", "Pace", "Tone", "All of the above"], correctAnswer: "All of the above", difficulty: 36 },
+            { question: "When should you ask questions of the audience?", options: ["Beginning", "Middle", "End", "All of the above"], correctAnswer: "All of the above", difficulty: 37 },
+            { question: "Can you use humor while speaking?", options: ["Yes", "No", "Maybe", "Depends"], correctAnswer: "Yes", difficulty: 38 },
+            { question: "How should you dress while speaking?", options: ["Appropriately", "Casually", "Professionally", "Comfortably"], correctAnswer: "Appropriately", difficulty: 39 },
+            { question: "What should you do before speaking?", options: ["Breathe", "Drink water", "Relax", "All of the above"], correctAnswer: "All of the above", difficulty: 40 },
+            { question: "What is an important thing to consider when picking a topic?", options: ["Audience", "Venue", "Time", "All of the above"], correctAnswer: "All of the above", difficulty: 41 },
+            { question: "What is something to avoid when speaking?", options: ["Standing still", "Pacing", "Moving", "Depends"], correctAnswer: "Depends", difficulty: 42 },
+            { question: "When speaking, is it okay to take a pause?", options: ["Yes", "No", "Maybe", "Never"], correctAnswer: "Yes", difficulty: 43 },
+            { question: "What should you do if someone asks a rude question?", options: ["Ignore it", "Be polite", "Answer honestly", "Be professional"], correctAnswer: "Be professional", difficulty: 44 },
+            { question: "How many times should you practice before you give a speech?", options: ["1", "3", "5", "As many as you need"], correctAnswer: "As many as you need", difficulty: 45 },
+            { question: "What is one of the things you can do to be a great speaker?", options: ["Practice", "Stare", "Be Mean", "Ignore"], correctAnswer: "Practice", difficulty: 46 },
+            { question: "What is the purpose of public speaking?", options: ["Inform", "Persuade", "Entertain", "All of the above"], correctAnswer: "All of the above", difficulty: 47 },
+            { question: "What is something you can do before you give a speech?", options: ["Meditate", "Visualize", "Plan", "All of the above"], correctAnswer: "All of the above", difficulty: 48 },
+            { question: "How should you react to positive feedback?", options: ["Humbly", "Confidently", "Gratefully", "All of the above"], correctAnswer: "All of the above", difficulty: 49 },
+            { question: "What should you do if there is a technical issue?", options: ["Ignore it", "Adapt", "Get mad", "Give up"], correctAnswer: "Adapt", difficulty: 50 }
+        ];
+
+        function hideAllSections() {
+            homeContent.style.display = 'none';
+            videosContainer.style.display = 'none';
+            drillsContainer.style.display = 'none';
+            quizContainer.style.display = 'none';
+        }
+
+        function showSection(section) {
+            hideAllSections();
+            section.style.display = 'flex';
+        }
+
+        function loadQuestion() {
+            const possibleQuestions = questions.filter(q => q.difficulty === currentDifficulty);
+            if (possibleQuestions.length === 0) {
+                console.warn(`No questions found for difficulty ${currentDifficulty}. Adjusting difficulty.`);
+                adjustDifficulty(0);
+                loadQuestion();
+                return;
+            }
+            const randomIndex = Math.floor(Math.random() * possibleQuestions.length);
+            const question = possibleQuestions[randomIndex];
+            questionText.textContent = question.question;
+            optionsContainer.innerHTML = '';
+            question.options.forEach(option => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'answer';
+                radio.value = option;
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(option));
+                optionsContainer.appendChild(label);
+            });
+            // Reset result container when loading a new question
+            resultContainer.textContent = `Puzzles Answered: ${puzzlesAnswered}`;
+        }
+
+        function adjustDifficulty(correct) {
+            if (correct === 1) {
+                currentDifficulty = Math.min(currentDifficulty + 1, 50);
+                score++;
+            } else {
+                currentDifficulty = Math.max(currentDifficulty - 1, 1);
+            }
+        }
+
+        function submitQuiz() {
+            if (answered) {
+                return;
+            }
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (!selectedAnswer) {
+                alert("Please select an answer.");
+                return;
+            }
+            answered = true;
+            puzzlesAnswered++; // Increment puzzles answered
+            const answer = selectedAnswer.value;
+            const currentQuestion = questions.find(q => q.question === questionText.textContent);
+            if (currentQuestion && answer === currentQuestion.correctAnswer) {
+                resultContainer.textContent = `Correct! The answer is ${answer}. Puzzles Answered: ${puzzlesAnswered} | Score: ${score}`;
+                adjustDifficulty(1);
+            } else {
+                resultContainer.textContent = `Incorrect. The correct answer is ${currentQuestion.correctAnswer}. Puzzles Answered: ${puzzlesAnswered} | Score: ${score}`;
+                adjustDifficulty(0);
+            }
+            setTimeout(() => {
+                answered = false;
+                loadQuestion();
+            }, 2000);
+        }
+
+        function startQuiz() {
+            showSection(quizContainer);
+            puzzlesAnswered = 0; // Reset when starting a new quiz session
+            score = 0; // Reset score as well
+            loadQuestion();
+        }
+
+        document.getElementById('videos-button').addEventListener('click', function (event) {
+            event.preventDefault();
+            showSection(videosContainer);
+        });
+
+        document.getElementById('drills-button').addEventListener('click', function (event) {
+            event.preventDefault();
+            showSection(drillsContainer);
+        });
+
+        document.getElementById('puzzles-button').addEventListener('click', function (event) {
+            event.preventDefault();
+            startQuiz();
+        });
+
+        submitQuizButton.addEventListener('click', submitQuiz);
+    </script>
+</body>
+
+</html>
