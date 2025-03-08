@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSpeak - Empowering Kids Through Effective Communication</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #e6f2ff, #ffe6cc);
+            color: #333;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #fff;
+            padding: 25px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo .microphone-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .logo .upspeak-up { color: orange; }
+        .logo .upspeak-speak { color: blue; }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu li {
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .nav-menu > li > a {
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-menu > li > a:hover { color: #007bff; }
+
+        .nav-menu .carrot {
+            margin-left: 5px;
+            font-size: 0.8em;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 12px 16px;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 8px 0;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content a:hover { background-color: #ddd; }
+
+        .nav-menu li:hover .dropdown-content { display: block; }
+
+        .profile-icon {
+            font-size: 2rem;
+            color: #777;
+        }
+
+        .quote-section {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 100px);
+            text-align: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .quote-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .quote-text {
+            font-size: 2.5rem;
+            font-style: italic;
+            color: #444;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .quote-author {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .background-icon {
+            position: absolute;
+            font-size: 20rem;
+            color: rgba(0, 0, 0, 0.03);
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <defs>
+                        <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#microphone-gradient)" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                </svg>
+                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
+            </div>
+
+            <ul class="nav-menu">
+                <li>
+                    <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="evaluation.html">Recording Studio</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="learn.html">Videos</a>
+                        <a href="learn.html">Puzzles</a>
+                        <a href="learn.html">Drills</a>
+                    </div>
+                <li>
+                    <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="profile.html">Personality</a>
+                        <a href="profile.html">Badges</a>
+                        <a href="profile.html">Quests</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="watch.html">Speech Archive</a>
+                        <a href="watch.html">Famous Speeches</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="about.html">UpSpeak Credentials</a>
+                    </div>
+                </li>
+            </ul>
+
+            <a href="profile.html"><i class="fas fa-user-circle profile-icon"></i></a>
+        </nav>
+    </header>
+
+    <section class="quote-section">
+        <div class="quote-container">
+            <blockquote class="quote-text"></blockquote>
+            <p class="quote-author"></p>
+        </div>
+        <i class="background-icon"></i>
+    </section>
+
+    <script>
+        const quotes = [
+            { text: "The more that you read, the more things you will know. The more that you learn, the more places you'll go.", author: "Dr. Seuss", icon: "fas fa-book" },
+            { text: "Words are our most inexhaustible source of magic.", author: "Harry Potter Series", icon: "fas fa-wand-magic-sparkles" },
+            { text: "You have brains in your head. You have feet in your shoes. You can steer yourself any direction you choose.", author: "Dr. Seuss", icon: "fas fa-brain" },
+            { text: "No act of kindness, no matter how small, is ever wasted.", author: "Aesop's Fables", icon: "fas fa-hands-helping" },
+            { text: "If you have good thoughts they will shine out of your face like sunbeams and you will always look lovely.", author: "Roald Dahl", icon: "fas fa-sun" },
+            { text: "A person's a person, no matter how small.", author: "Dr. Seuss", icon: "fas fa-user" },
+            { text: "The most important thing a leader needs is words.", author: "Katniss Everdeen", icon: "fas fa-microphone" },
+            { text: "Unless someone like you cares a whole awful lot, nothing is going to get better. It's not.", author: "Dr. Seuss", icon: "fas fa-heart" },
+            { text: "Why fit in when you were born to stand out?", author: "Dr. Seuss", icon: "fas fa-star" },
+            { text: "I think I can, I think I can, I think I can.", author: "The Little Engine That Could", icon: "fas fa-train" },
+            { text: "It's not what happens to you, but how you react to it that matters.", author: "Winnie the Pooh", icon: "fas fa-smile" },
+            { text: "Today you are You, that is truer than true. There is no one alive who is Youer than You.", author: "Dr. Seuss", icon: "fas fa-fingerprint" },
+            { text: "The things that make me different are the things that make me.", author: "Winnie the Pooh", icon: "fas fa-puzzle-piece" },
+            { text: "In every job that must be done, there is an element of fun.", author: "Mary Poppins", icon: "fas fa-umbrella" },
+            { text: "Sometimes the smallest things take up the most room in your heart.", author: "Winnie the Pooh", icon: "fas fa-heart" },
+            { text: "A little consideration, a little thought for others, makes all the difference.", author: "Winnie the Pooh", icon: "fas fa-handshake" },
+            { text: "Imagination is the only weapon in the war against reality.", author: "Alice in Wonderland", icon: "fas fa-lightbulb" },
+            { text: "Even the smallest person can change the course of the future.", author: "The Lord of the Rings", icon: "fas fa-ring" },
+            { text: "Adventure is out there!", author: "Up", icon: "fas fa-hot-air-balloon" },
+            { text: "The flower that blooms in adversity is the rarest and most beautiful of all.", author: "Mulan", icon: "fas fa-seedling" }
+        ];
+
+        function setRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const selectedQuote = quotes[randomIndex];
+
+            document.querySelector('.quote-text').textContent = selectedQuote.text;
+            document.querySelector('.quote-author').textContent = `- ${selectedQuote.author}`;
+            document.querySelector('.background-icon').className = `background-icon ${selectedQuote.icon}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', setRandomQuote);
+    </script>
+</body>
+</html>
