@@ -1,0 +1,466 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSpeak - Empowering Kids Through Effective Communication</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #e6f2ff, #ffe6cc);
+            color: #333;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        a { text-decoration: none; color: #007bff; }
+        a:hover { text-decoration: underline; }
+
+        header {
+            background-color: #fff;
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo .microphone-icon { width: 70px; height: 70px; margin-right: 10px; }
+        .logo .upspeak-up { color: orange; }
+        .logo .upspeak-speak { color: blue; }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links li { margin-left: 20px; }
+        .nav-links li a { color: #555; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links li a:hover { color: #007bff; text-decoration: none; }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .hero-content { max-width: 800px; }
+        .hero-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; }
+        .hero-subtitle { font-size: 1.2rem; color: #555; margin-bottom: 30px; }
+
+        .changing-word {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: inline-block;
+            transition: opacity 0.5s ease;
+        }
+
+        .rainbow-text {
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .btn-primary { background-color: #007bff; }
+        .btn-secondary { background-color: #6c757d; }
+        .btn-primary:hover { background-color: #0056b3; }
+        .btn-secondary:hover { background-color: #545b62; }
+
+        .mission {
+            background-color: #f8f9fa;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .mission-title { font-size: 2rem; font-weight: 600; margin-bottom: 20px; }
+        .mission-content { max-width: 800px; margin: 0 auto; color: #555; }
+
+        .testimonials {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .testimonial-title { font-size: 2rem; font-weight: 600; margin-bottom: 30px; }
+
+        .testimonial-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            height: 100px;
+        }
+
+        .testimonial {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        .testimonial.active { opacity: 1; }
+
+        .features {
+            background-color: #fff;
+            padding: 50px 20px;
+        }
+
+        .features-title { font-size: 2rem; font-weight: 600; text-align: center; margin-bottom: 40px; }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .feature-item i { font-size: 3rem; margin-bottom: 15px; color: #007bff; }
+        .feature-item h3 { font-size: 1.5rem; margin-bottom: 10px; }
+        .feature-item p { color: #555; }
+
+        .contact {
+            background-color: #f5f5dc; /* Beige color */
+            padding: 50px 20px;
+            text-align: center;
+            margin: 50px auto;
+            max-width: 1000px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact .title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .contact p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .contact a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+
+        input {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .name-fields { display: flex; justify-content: space-between; }
+        .name-fields input { width: 48%; }
+
+        .popup-content .btn {
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            display: block;
+            margin: 1rem auto;
+            width: fit-content;
+        }
+        .contact {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .contact-title { font-size: 2rem; font-weight: 600; margin-bottom: 40px; }
+        .contact-details { max-width: 800px; margin: 0 auto; }
+
+        footer 
+        .contact {
+            background-color: #343a40;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; align-items: flex-start; }
+            .nav-links { margin-top: 10px; flex-direction: column; }
+            .nav-links li { margin-left: 0; margin-bottom: 10px; }
+            .hero { min-height: auto; padding: 30px 20px; }
+            .hero-title { font-size: 2rem; }
+            .feature-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <defs>
+                        <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
+                        </linearGradient> 
+                    </defs>
+                    <path fill="url(#microphone-gradient)" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                </svg>
+                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><button class="btn btn-primary" onclick="showLoginPopup()">Log In</button></li>
+                <li><button class="btn btn-secondary" onclick="showSignupPopup()">Sign Up</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">The most effective platform for kids to <span class="changing-word">speak</span></h1>
+            <p class="hero-subtitle">Empowering young voices through fun and engaging communication practice.</p>
+        </div>
+    </section>
+
+    <section class="mission">
+        <h2 class="mission-title">Our Mission</h2>
+        <p class="mission-content">To provide a safe, engaging, and effective platform for children to develop their communication skills, build confidence, and unlock their full potential.</p>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <h2 class="testimonial-title">What Parents & Kids Are Saying</h2>
+        <div class="testimonial-container">
+            <div class="testimonial active">"UpSpeak has been a game-changer for my child! Their confidence has soared." - Happy Parent</div>
+            <div class="testimonial">"I love how fun and interactive UpSpeak is!" - Excited Kid</div>
+            <div class="testimonial">"UpSpeak is helping my child become a confident communicator." - Another Parent</div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <h2 class="features-title">Unlock the Power of Communication with UpSpeak</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <i class="fas fa-microphone"></i>
+                <h3>Practice</h3>
+                <p>Engage in interactive speaking exercises and activities designed to improve clarity and fluency.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-book-open"></i>
+                <h3>Learn</h3>
+                <p>Access a library of resources and lessons on effective communication techniques and strategies.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-user-circle"></i>
+                <h3>Profile</h3>
+                <p>Track progress, personalize learning paths, and showcase achievements in a dedicated profile.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-video"></i>
+                <h3>Watch</h3>
+                <p>Learn from videos that are designed to help kids improve on their speaking skills</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <h2 class="contact-title">Contact Us</h2>
+        <div class="contact-details">
+            <p><a href="mailto:sameer@prezentium.com">sameer@prezentium.com</a></p>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 UpSpeak. All rights reserved.</p>
+    </footer>
+
+    <div id="loginPopup" class="popup">
+        <div class="popup-content">
+            <h2>Log In</h2>
+            <input type="text" id="loginUsername" placeholder="Username" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button class="btn btn-primary" onclick="login()">Log In</button>
+        </div>
+    </div>
+
+    <div id="signupPopup" class="popup">
+        <div class="popup-content">
+            <h2>Sign Up</h2>
+            <div class="name-fields">
+                <input type="text" id="firstName" placeholder="First Name" required>
+                <input type="text" id="lastName" placeholder="Last Name" required>
+            </div>
+            <input type="text" id="signupUsername" placeholder="Username" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            <button class="btn btn-secondary" onclick="signup()">Sign Up</button>
+        </div>
+    </div>
+
+    <div id="message"></div>
+
+    <script>
+        function showLoginPopup() { document.getElementById('loginPopup').style.display = 'flex'; }
+        function showSignupPopup() { document.getElementById('signupPopup').style.display = 'flex'; }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            if (username && password) {
+                window.location.href = "home.html";
+            } else {
+                document.getElementById('message').textContent = "Please enter both username and password.";
+                document.getElementById('message').style.color = "#dc3545";
+            }
+        }
+
+        function signup() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const username = document.getElementById('signupUsername').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (firstName && lastName && username && email && password && confirmPassword) {
+                if (password !== confirmPassword) {
+                    document.getElementById('message').textContent = "Passwords do not match.";
+                    document.getElementById('message').style.color = "#dc3545";
+                    return;
+                }
+                if (password.length < 8) {
+                    document.getElementById('message').textContent = "Password must be at least 8 characters long.";
+                    document.getElementById('message').style.color = "#dc3545";
+                    return;
+                }
+                document.getElementById('message').textContent = "Welcome to UpSpeak, " + firstName + "! Your account has been created successfully.";
+                document.getElementById('message').style.color = "#28a745";
+                document.getElementById('signupPopup').style.display = 'none';
+            } else {
+                document.getElementById('message').textContent = "Please fill in all fields.";
+                document.getElementById('message').style.color = "#dc3545";
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target.className === 'popup') {
+                event.target.style.display = "none";
+            }
+        }
+
+        function cycleTestimonials() {
+            const testimonials = document.querySelectorAll('.testimonial');
+            let currentIndex = 0;
+
+            setInterval(() => {
+                testimonials[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % testimonials.length;
+                testimonials[currentIndex].classList.add('active');
+            }, 3000);
+        }
+
+        function animateWords() {
+            const words = ["connect", "communicate", "ideate", "engage", "reflect", "speak"];
+            const colors = ["red", "blue", "green", "purple", "turquoise", "black"];
+            let wordIndex = 0;
+            const changingWord = document.querySelector('.changing-word');
+
+            function updateWord() {
+                changingWord.style.opacity = 0;
+                setTimeout(() => {
+                    changingWord.textContent = words[wordIndex];
+                    if (colors[wordIndex] === "rainbow") {
+                        changingWord.classList.add("rainbow-text");
+                        changingWord.style.color = "";
+                    } else {
+                        changingWord.classList.remove("rainbow-text");
+                        changingWord.style.color = colors[wordIndex];
+                    }
+                    changingWord.style.opacity = 1;
+                    wordIndex = (wordIndex + 1) % words.length;
+                }, 500);
+            }
+
+            setInterval(updateWord, 3000);
+        }
+
+        window.onload = function() {
+            cycleTestimonials();
+            animateWords();
+        };
+    </script>
+</body>
+</html>
