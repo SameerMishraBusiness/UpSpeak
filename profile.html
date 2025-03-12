@@ -1,63 +1,248 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UpSpeak Profile</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Speakifi Profile</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
-            background-color: #1a4d1a;
             font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #e6f2ff, #ffe6cc);
+            color: #333;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #fff;
+            padding: 25px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo .microphone-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .logo .upspeak-up {
+            color: orange;
+        }
+
+        .logo .upspeak-speak {
+            color: blue;
+        }
+
+        .nav-menu {
+            list-style: none;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            padding: 0;
             margin: 0;
-            color: white;
         }
-        .container {
+
+        .nav-menu li {
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .nav-menu>li>a {
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s ease;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            min-width: 320px;
-            max-width: 800px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .content {
-            text-align: left;
-            width: 100%;
-        }
-        h2 {
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        .button {
-            display: inline-block;
-            width: 180px;
-            padding: 15px 0;
-            margin: 10px 10px 10px 0;
-            background-color: #4CAF50;
-            color: white;
             text-decoration: none;
-            border-radius: 50px;
-            font-size: 18px;
+        }
+
+        .nav-menu>li>a:hover {
+            color: #007bff;
+        }
+
+        .nav-menu .carrot {
+            margin-left: 5px;
+            font-size: 0.8em;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            cursor: pointer;
+            border-radius: 5px;
         }
-        .button:hover {
+
+        .dropdown-content a {
+            color: #333;
+            padding: 8px 0;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .nav-menu li:hover .dropdown-content {
+            display: block;
+        }
+
+        .profile-icon {
+            font-size: 2rem;
+            color: #777;
+        }
+
+        /* Main Content Styles */
+        .watch-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Animated Background (Example: Bubbles) */
+        .watch-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="15" fill="rgba(76, 175, 80, 0.3)" /></svg>');
+            animation: bubbles 15s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes bubbles {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+
+        .section {
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .watch-content {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .watch-content h2 {
+            font-size: 3em;
+            color: #333;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .watch-button {
+            display: inline-block;
+            padding: 15px 35px;
+            font-size: 1.3em;
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: #fff;
+            border-radius: 8px;
+            margin: 15px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .watch-button:hover {
             background-color: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
+
+        .speeches-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .speeches-list li {
+            margin-bottom: 20px;
+        }
+
+        .speeches-list a {
+            display: block;
+            padding: 15px;
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .speeches-list a:hover {
+            background-color: #ddd;
+            transform: translateX(5px);
+        }
+
+        .speech-description {
+            font-size: 1em;
+            color: #777;
+            margin-top: 8px;
+        }
+
+        body::after {
+            content: '';
+            display: block;
+            height: 50px;
+        }
+
         /* Badges Styles */
         .badges-container {
             display: flex;
@@ -66,8 +251,8 @@
             margin-top: 20px;
             width: 100%;
             flex-wrap: wrap;
-            display: none; /* Hidden by default */
         }
+
         .badge {
             width: 150px;
             height: 50px;
@@ -84,32 +269,40 @@
             padding: 5px 10px;
             gap: 5px;
         }
+
         .badge i {
-            margin-right: 5px; /* Space between icon and text */
+            margin-right: 5px;
+            /* Space between icon and text */
         }
+
         .badge-illuminated {
-            box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.5); /* Yellow glow effect */
+            box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.5);
+            /* Yellow glow effect */
         }
+
         /* Quest Styles */
         .quests-container {
             width: 100%;
             margin-top: 30px;
-            display: none; /* Hidden by default */
             flex-direction: column;
         }
+
         .quest {
             background-color: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 15px;
             margin-bottom: 15px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 100%; /* Make quests longer */
+            width: 100%;
+            /* Make quests longer */
         }
+
         .quest h3 {
             font-size: 1.2em;
             margin-bottom: 10px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
+
         .progress-bar {
             width: 100%;
             height: 20px;
@@ -117,25 +310,30 @@
             border-radius: 10px;
             overflow: hidden;
         }
+
         .progress {
             display: block;
             height: 100%;
             background-color: #4CAF50;
-            width: 0%; /* Will be updated dynamically */
+            width: 0%;
+            /* Will be updated dynamically */
             transition: width 0.5s ease;
-            float: left; /* Ensure progress starts from the beginning */
+            float: left;
+            /* Ensure progress starts from the beginning */
         }
+
         #quiz-container {
-            display: none;
             flex-direction: column;
             align-items: flex-start;
             width: 100%;
         }
+
         .question {
             font-size: 1.4em;
             margin-bottom: 15px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
+
         .options label {
             display: block;
             margin-bottom: 10px;
@@ -146,12 +344,15 @@
             background-color: rgba(255, 255, 255, 0.05);
             transition: background-color 0.3s ease;
         }
+
         .options label:hover {
             background-color: rgba(255, 255, 255, 0.15);
         }
+
         input[type="radio"] {
             margin-right: 8px;
         }
+
         #next-question {
             background-color: #4CAF50;
             color: white;
@@ -163,33 +364,39 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
-            align-self: center; /* Center the button */
-            display: block; /* Ensure margin works correctly */
+            align-self: center;
+            /* Center the button */
+            display: block;
+            /* Ensure margin works correctly */
             margin-left: auto;
             margin-right: auto;
         }
+
         #next-question:hover {
             background-color: #45a049;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
+
         #result-container {
             margin-top: 30px;
             font-size: 1.3em;
             font-weight: bold;
             text-align: center;
-          text-shadow:
-          -1px -1px #000,
-          -1px +1px #000,
-          +1px -1px #000,
-          +1px +1px #000; /* Add shadow to make it more readable */
-          padding-bottom :20 px; /* Add space below the result */
-          display: none;
+            text-shadow:
+                -1px -1px #000,
+                -1px +1px #000,
+                +1px +1px #000;
+            /* Add shadow to make it more readable */
+            padding-bottom: 20px;
+            /* Add space below the result */
         }
+
         .share-buttons {
             margin-top: 20px;
             text-align: center;
         }
+
         .share-button {
             display: inline-block;
             background-color: #007bff;
@@ -202,9 +409,11 @@
             margin: 0 5px;
             text-decoration: none;
         }
+
         .share-button:hover {
             opacity: 0.8;
         }
+
         #copy-button {
             background-color: #4CAF50;
             color: white;
@@ -217,9 +426,10 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
         }
+
         #copy-button:hover {
             background-color: #45a049;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
 
@@ -259,15 +469,18 @@
         }
 
         .twitter-button {
-            background-color: #1da1f2; /* Twitter's blue */
+            background-color: #1da1f2;
+            /* Twitter's blue */
         }
 
         .facebook-button {
-            background-color: #1877f2; /* Facebook's blue */
+            background-color: #1877f2;
+            /* Facebook's blue */
         }
 
         .instagram-button {
-            background-color: #e4405f; /* Instagram's pink/purple */
+            background-color: #e4405f;
+            /* Instagram's pink/purple */
         }
 
         .copy-button {
@@ -285,55 +498,124 @@
 
         .copy-button:hover {
             background-color: #45a049;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="content" id="home-content">
-           <h2>Start profiling today with UpSpeak!</h2>
-           <a href="#" class="button" id="personality-button">Personality</a>
-           <a href="#" class="button" id="badges-button">Badges</a>
-           <a href="#" class="button" id="quests-button">Quests</a>
-       </div>
+    <header>
+        <nav class="navbar">
+            <div class="logo" onclick="goToHome()">
+                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <defs>
+                        <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#microphone-gradient)"
+                        d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                </svg>
+                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
+            </div>
 
-           <!-- Badges Section -->
-           <div class="badges-container" id="badges-container">
-               <div class="badge badge-illuminated" style="background-color: gold;"><i class="fas fa-rocket"></i>Starter</div>
-               <div class="badge" style="background-color: grey;"><i class="fas fa-trophy"></i>Achiever</div>
-               <div class="badge" style="background-color: grey;"><i class="fas fa-comment-dots"></i>Communicator</div>
-               <div class="badge" style="background-color: grey;"><i class="fas fa-compass"></i>Explorer</div>
-               <div class="badge" style="background-color: grey;"><i class="fas fa-crown"></i>Master</div>
-               <a href="home.html" class="button" style="background-color: darkgreen;">Back to Home</a>
-           </div>
+            <ul class="nav-menu">
+                <li>
+                    <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="evaluation.html">Recording Studio</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="learn.html">Videos</a>
+                        <a href="learn.html">Puzzles</a>
+                        <a href="learn.html">Drills</a>
+                    </div>
+                <li>
+                    <a href="#">Profile <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="showSection('personality-section'); return false;">Personality</a>
+                        <a href="#" onclick="showSection('badges-section'); return false;">Badges</a>
+                        <a href="#" onclick="showSection('quests-section'); return false;">Quests</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="watch.html">Speech Archive</a>
+                        <a href="watch.html">Famous Speeches</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="about.html">UpSpeak Credentials</a>
+                    </div>
+                </li>
+            </ul>
 
-           <!-- Quests Section -->
-           <!-- Quests Section -->
-          <div class="quests-container" id="quests-container">
-              <div class="quest">
-                  <h3>Deliver 3 Speeches</h3>
-                  <div class="progress-bar">
-                      <span class="progress" id="speech-progress"></span>
-                  </div>
-              </div>
-              <div class="quest">
-                  <h3>Complete 5 Puzzles</h3>
-                  <div class="progress-bar">
-                      <span class="progress" id="puzzle-progress"></span>
-                  </div>
-              </div>
-              <div class="quest">
-                  <h3>Watch 10 Speeches</h3>
-                  <div class="progress-bar">
-                      <span class="progress" id="watch-progress"></span>
-                  </div>
-              </div>
-              <a href="home.html" class="button" style="background-color: darkgreen;">Back to Home</a>
-           </div>
+            <a href="profile.html"><i class="fas fa-user-circle profile-icon"></i></a>
+        </nav>
+    </header>
 
-           <div id="quiz-container">
+    <div class="watch-container">
+        <div class="watch-content section active" id="home-section">
+            <h2>Speakifi Profile</h2>
+            <p style="font-size: 1.2em; color:#555; margin-bottom: 30px;">Welcome to Speakifi Profile – Your gateway to a
+                universe
+                where you can start your profiling journey!</p>
+            <a href="#" class="watch-button" onclick="loadPersonalityQuiz(); return false;">Personality</a>
+            <a href="#" class="watch-button" onclick="showSection('badges-section'); return false;">Badges</a>
+            <a href="#" class="watch-button" onclick="showSection('quests-section'); return false;">Quests</a>
+        </div>
+
+        <!-- Badges Section -->
+        <div class="watch-content section" id="badges-section">
+            <h2>Your Badges</h2>
+            <div class="badges-container" id="badges-container">
+                <div class="badge badge-illuminated" style="background-color: gold;"><i
+                        class="fas fa-rocket"></i>Starter</div>
+                <div class="badge" style="background-color: grey;"><i class="fas fa-trophy"></i>Achiever</div>
+                <div class="badge" style="background-color: grey;"><i
+                        class="fas fa-comment-dots"></i>Communicator</div>
+                <div class="badge" style="background-color: grey;"><i class="fas fa-compass"></i>Explorer</div>
+                <div class="badge" style="background-color: grey;"><i class="fas fa-crown"></i>Master</div>
+            </div>
+        </div>
+
+        <!-- Quests Section -->
+        <div class="watch-content section" id="quests-section">
+            <h2>Your Quests</h2>
+            <div class="quests-container" id="quests-container">
+                <div class="quest">
+                    <h3>Deliver 3 Speeches</h3>
+                    <div class="progress-bar">
+                        <span class="progress" id="speech-progress"></span>
+                    </div>
+                </div>
+                <div class="quest">
+                    <h3>Complete 5 Puzzles</h3>
+                    <div class="progress-bar">
+                        <span class="progress" id="puzzle-progress"></span>
+                    </div>
+                </div>
+                <div class="quest">
+                    <h3>Watch 10 Speeches</h3>
+                    <div class="progress-bar">
+                        <span class="progress" id="watch-progress"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personality Section (Quiz) -->
+        <div class="watch-content section" id="personality-section">
+            <h2>Personality Quiz</h2>
+            <div id="quiz-container">
                 <div class="progress-dots" id="progress-dots">
                     <div class="dot" data-question="1"></div>
                     <div class="dot" data-question="2"></div>
@@ -345,54 +627,163 @@
                 <div id="question-container">
                     <!-- Quiz questions will be injected here -->
                 </div>
-                <button id="next-question">Next Question</button>
-                <a href="home.html" class="button" style="background-color: darkgreen;">Back to Home</a>
-           </div>
+                <button id="next-question" class="watch-button">Next Question</button>
+            </div>
+        </div>
 
-       <div id="result-container">
-           <!-- Result will be displayed here -->
-           <div class="share-buttons">
-               <div id="result-message"></div>
-               <div class="social-buttons">
-                    <a href="https://twitter.com/" class="social-button twitter-button" target="_blank">Share on X</a>
-                    <a href="https://www.facebook.com/" class="social-button facebook-button" target="_blank">Share on Facebook</a>
-                    <a href="https://www.instagram.com/" class="social-button instagram-button" target="_blank">Share on Instagram</a>
-               </div>
-               <button id="copy-button" class="copy-button">Copy</button>
-           </div>
-       </div>
-   </div>
+        <div class="watch-content section" id="result-section">
+            <h2>Your Result</h2>
+            <div id="result-container">
+                <!-- Result will be displayed here -->
+                <div class="share-buttons">
+                    <div id="result-message"></div>
+                    <div class="social-buttons">
+                        <a href="https://twitter.com/" class="social-button twitter-button" target="_blank">Share on
+                            X</a>
+                        <a href="https://www.facebook.com/" class="social-button facebook-button"
+                            target="_blank">Share on Facebook</a>
+                        <a href="https://www.instagram.com/" class="social-button instagram-button"
+                            target="_blank">Share on Instagram</a>
+                    </div>
+                    <button id="copy-button" class="copy-button watch-button">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-   <script>
-        document.getElementById('personality-button').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('home-content').style.display = 'none';
-            document.getElementById('quiz-container').style.display = 'flex';
-            document.getElementById('badges-container').style.display = 'none';
-            document.getElementById('quests-container').style.display = 'none';
-            loadQuestion(1); // Load the first question
-        });
+    <script>
+        function goToHome() {
+            window.location.href = 'home.html';
+        }
 
-        document.getElementById('badges-button').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('home-content').style.display = 'none';
-            document.getElementById('quiz-container').style.display = 'none';
-            document.getElementById('badges-container').style.display = 'flex';
-            document.getElementById('quests-container').style.display = 'none';
-        });
+        document.querySelector('.logo').addEventListener('click', goToHome);
 
-        document.getElementById('quests-button').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('home-content').style.display = 'none';
-            document.getElementById('quiz-container').style.display = 'none';
-            document.getElementById('badges-container').style.display = 'none';
-            document.getElementById('quests-container').style.display = 'flex';
-        });
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
 
-        let currentQuestion = 1;
-        let answers = {};
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            } else {
+                console.error('Section with id "' + sectionId + '" not found.');
+            }
+        }
 
-        const questions = {
+        function loadQuestion(questionNumber) {
+    const questionContainer = document.getElementById('question-container');
+    const questionData = questions[questionNumber];
+
+    if (!questionData) {
+        // Quiz is complete
+        return showResults();
+    }
+
+    let questionHTML = `
+        <div class="question">${questionData.question}</div>
+        <div class="options">
+    `;
+
+    for (const option in questionData.options) {
+        questionHTML += `
+            <label>
+                <input type="radio" name="q${questionNumber}" value="${option}" ${answers[questionNumber] === option ? 'checked' : ''}>
+                ${questionData.options[option]}
+            </label>
+        `;
+    }
+
+    questionHTML += `</div>`;
+    questionContainer.innerHTML = questionHTML;
+
+    // Update Progress Dots
+    updateProgressDots();
+}
+
+function updateProgressDots() {
+    const dots = document.querySelectorAll('.progress-dots .dot');
+    dots.forEach(dot => {
+        const questionNumber = parseInt(dot.dataset.question);
+        if (questionNumber < currentQuestion) {
+            dot.classList.add('completed');
+        } else {
+            dot.classList.remove('completed');
+        }
+    });
+}
+
+function showResults() {
+    showSection('result-section');
+
+    let aCount = 0;
+    for (const question in answers) {
+        if (answers[question] === 'a') {
+            aCount++;
+        }
+    }
+
+    // Assign personality based on the number of A's selected
+    let personality = "";
+    if (aCount >= 5) {
+        personality = "Dolphin"; // Very enthusiastic and engaging listeners
+    } else if (aCount === 4) {
+        personality = "Eagle"; // Visionary listeners who appreciate big ideas
+    } else if (aCount === 3) {
+        personality = "Elephant"; // Empathetic listeners who connect emotionally
+    } else if (aCount === 2) {
+        personality = "Owl"; // Analytical listeners who prefer structured talks
+    } else if (aCount === 1) {
+        personality = "Fox"; // Critical thinkers who enjoy debates
+    } else {
+        personality = "Bear"; // Practical listeners focused on actionable information
+    } // Determine result message
+    let resultMessage = "";
+    switch (personality) {
+        case "Dolphin":
+            resultMessage = "Congratulations! You are the Dolphin! You thrive in dynamic presentations and enjoy engaging with energetic speakers who inspire you!";
+            break;
+        case "Eagle":
+            resultMessage = "Congratulations! You are the Eagle! You are inspired by big ideas and motivational speeches.";
+            break;
+        case "Elephant":
+            resultMessage = "Congratulations! You are the Elephant! You connect emotionally and value personal stories.";
+            break;
+        case "Owl":
+            resultMessage = "Congratulations! You are the Owl! You appreciate structured talks and analytical speakers.";
+            break;
+        case "Fox":
+            resultMessage = "Congratulations! You are the Fox! You enjoy debates and critical thinking.";
+            break;
+        case "Bear":
+            resultMessage = "Congratulations! You are the Bear! You are practical and focus on actionable information.";
+            break;
+    }
+
+    // Display the result message
+    document.getElementById('result-message').textContent = resultMessage;
+
+    // Add event listener to the copy button
+    document.getElementById('copy-button').addEventListener('click', function () {
+        const copyText = `I'm the ${personality}! What are you? Test at speaky.tiiny.site`;
+
+        navigator.clipboard.writeText(copyText)
+            .then(() => {
+                alert('Copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+    });
+}
+ // Global variable for the current question
+ let currentQuestion = 1;
+
+// Global variable to store the user's answers
+let answers = {};
+
+const questions = {
             1: {
                 question: "Which speech excerpt intrigues you more?",
                 options: {
@@ -437,299 +828,54 @@
             }
         };
 
+        // Attach event listeners after the page loads
+document.addEventListener('DOMContentLoaded', function () {
+            // Function to add the the Personality Quiz when the button is clicked
+         function loadPersonalityQuiz() {
+        showSection('personality-section');
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.style.display = 'block';
+        loadQuestion(1);
+        document.getElementById('next-question').addEventListener('click', function () {
+        // Get the selected answer
+        const selectedAnswer = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
 
-       function loadQuestion(questionNumber) {
-           const questionContainer = document.getElementById('question-container');
-           const questionData = questions[questionNumber];
-
-           if (!questionData) {
-               // Quiz is complete
-               return showResults();
-           }
-
-           let questionHTML = `
-               <div class="question">${questionData.question}</div>
-               <div class="options">
-           `;
-
-           for (const option in questionData.options) {
-               questionHTML += `
-                   <label>
-                       <input type="radio" name="q${questionNumber}" value="${option}" ${answers[questionNumber] === option ? 'checked' : ''}>
-                       ${questionData.options[option]}
-                   </label>
-               `;
-           }
-
-           questionHTML += `</div>`;
-           questionContainer.innerHTML = questionHTML;
-
-           // Update Progress Dots
-           updateProgressDots();
+        if (selectedAnswer) {
+            answers[currentQuestion] = selectedAnswer.value;
+            // Move to the next question
+            currentQuestion++;
+            loadQuestion(currentQuestion);
+        } else {
+            alert("Please select an answer.");
         }
-
-        document.getElementById('next-question').addEventListener('click', function() {
-            // Get the selected answer
-            const selectedAnswer = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
-
-            if (selectedAnswer) {
-                answers[currentQuestion] = selectedAnswer.value;
-                // Move to the next question
-                currentQuestion++;
-                loadQuestion(currentQuestion);
-            } else {
-                alert("Please select an answer.");
-            }
-        });
-
-        function updateProgressDots() {
-            const dots = document.querySelectorAll('.progress-dots .dot');
-            dots.forEach(dot => {
-                const questionNumber = parseInt(dot.dataset.question);
-                if (questionNumber < currentQuestion) {
-                    dot.classList.add('completed');
-                } else {
-                    dot.classList.remove('completed');
-                }
-            });
-        }
-
-       function showResults() {
-           document.getElementById('quiz-container').style.display = 'none';
-           document.getElementById('result-container').style.display = 'flex';
-
-           let aCount = 0;
-           for (const question in answers) {
-               if (answers[question] === 'a') {
-                   aCount++;
-               }
-           }
-
-            // Assign personality based on the number of A's selected
-            let personality = "";
-            if (aCount >= 5) {
-                personality = "Dolphin"; // Very enthusiastic and engaging listeners
-            } else if (aCount === 4) {
-                personality = "Eagle"; // Visionary listeners who appreciate big ideas
-            } else if (aCount === 3) {
-                personality = "Elephant"; // Empathetic listeners who connect emotionally
-            } else if (aCount === 2) {
-                personality = "Owl"; // Analytical listeners who prefer structured talks
-            } else if (aCount === 1) {
-                personality = "Fox"; // Critical thinkers who enjoy debates
-            } else {
-                personality = "Bear"; // Practical listeners focused on actionable information
-            }
-
-            // Determine result message
-            let resultMessage = "";
-            switch (personality) {
-                case "Dolphin":
-                    resultMessage = "Congratulations! You are the Dolphin! You thrive in dynamic presentations and enjoy engaging with energetic speakers who inspire you!";
-                    break;
-                case "Eagle":
-                    resultMessage = "Congratulations! You are the Eagle! You are inspired by big ideas and motivational speeches.";
-                    break;
-                case "Elephant":
-                    resultMessage = "Congratulations! You are the Elephant! You connect emotionally and value personal stories.";
-                    break;
-                case "Owl":
-                    resultMessage = "Congratulations! You are the Owl! You appreciate structured talks and analytical speakers.";
-                    break;
-                case "Fox":
-                    resultMessage = "Congratulations! You are the Fox! You enjoy debates and critical thinking.";
-                    break;
-                case "Bear":
-                    resultMessage = "Congratulations! You are the Bear! You are practical and focus on actionable information.";
-                    break;
-            }
-
-            // Display the result message
-            document.getElementById('result-message').textContent = resultMessage;
-
-           // Add event listener to the copy button
-           document.getElementById('copy-button').addEventListener('click', function() {
-               const copyText = `I'm the ${personality}! What are you? Test at upspeak.onrender.com`;
-
-               navigator.clipboard.writeText(copyText)
-                   .then(() => {
-                       alert('Copied to clipboard!');
-                   })
-                   .catch(err => {
-                       console.error('Failed to copy: ', err);
-                   });
-           });
-       }
-       // Define variables for quest progress
-       let speechesDelivered = 0;
-       let puzzlesAnswered = 0;
-       let speechesWatched = 0;
-
-       // Function to update quest progress
-       function updateQuestProgress() {
-           // Retrieve the latest counts from localStorage
-           speechesDelivered = parseInt(localStorage.getItem('speechesDelivered')) || 0;
-           puzzlesAnswered = parseInt(localStorage.getItem('puzzlesAnswered')) || 0;
-           speechesWatched = parseInt(localStorage.getItem('speechesWatched')) || 0;
-
-           // Calculate progress percentages
-           const speechProgress = (speechesDelivered / 3) * 100;
-           const puzzleProgress = (puzzlesAnswered / 5) * 100;
-           const watchProgress = (speechesWatched / 10) * 100;
-
-           // Update progress bars
-           updateProgressBar('speech-progress', speechProgress);
-           updateProgressBar('puzzle-progress', puzzleProgress);
-           updateProgressBar('watch-progress', watchProgress);
-
-           // Check for completion and trigger fireworks
-           if (speechProgress >= 100) triggerFireworks(document.getElementById('speech-progress').parentElement);
-           if (puzzleProgress >= 100) triggerFireworks(document.getElementById('puzzle-progress').parentElement);
-           if (watchProgress >= 100) triggerFireworks(document.getElementById('watch-progress').parentElement);
-       }
-
-       // Helper function to update a single progress bar
-       function updateProgressBar(id, progress) {
-           const progressBar = document.getElementById(id);
-           if (progressBar) {
-               progressBar.style.width = `${Math.min(progress, 100)}%`;
-               progressBar.setAttribute('aria-valuenow', Math.min(progress, 100));
-           }
-       }
-
-       // Functions to increment progress
-       function incrementSpeeches() {
-           speechesDelivered++;
-           localStorage.setItem('speechesDelivered', speechesDelivered);
-           updateQuestProgress();
-       }
-
-       function incrementPuzzles() {
-           puzzlesAnswered++;
-           localStorage.setItem('puzzlesAnswered', puzzlesAnswered);
-           updateQuestProgress();
-       }
-
-       function incrementWatched() {
-           speechesWatched++;
-           localStorage.setItem('speechesWatched', speechesWatched);
-           updateQuestProgress();
-       }
-
-       // Call updateQuestProgress when the page loads
-       document.addEventListener('DOMContentLoaded', updateQuestProgress);
-
-       // Example usage:
-       // Add these buttons to your HTML
-       // <button onclick="incrementSpeeches()">Deliver Speech</button>
-       // <button onclick="incrementPuzzles()">Answer Puzzle</button>
-       // <button onclick="incrementWatched()">Watch Speech</button>
-
-        function triggerFireworks(element) {
-    // Add fireworks container class
-    element.classList.add('fireworks-container');
-    
-    // Create and append the stylesheet
-    const styleSheet = document.createElement('style');
-    styleSheet.textContent = `
-        .fireworks-container {
-            position: relative;
-            overflow: hidden;
-            pointer-events: none;
-        }
-        
-        .firework-particle {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            animation: explode 1.2s ease-out forwards;
-        }
-        
-        @keyframes explode {
-            0% {
-                transform: scale(0.1);
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(1.5);
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(styleSheet);
-
-    // Colors for fireworks
-    const colors = [
-        '#ff4444', '#ffbb33', '#00ff00',
-        '#00ffff', '#ff00ff', '#4444ff'
-    ];
-
-    // Create multiple firework bursts
-    function createBurst() {
-        const burstCount = 3 + Math.floor(Math.random() * 3); // 3-5 bursts
-        
-        for (let b = 0; b < burstCount; b++) {
-            setTimeout(() => {
-                // Generate particles for each burst
-                const particleCount = 15 + Math.floor(Math.random() * 10);
-                const centerX = 20 + Math.random() * (element.offsetWidth - 40);
-                const centerY = 20 + Math.random() * (element.offsetHeight - 40);
-
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement('div');
-                    particle.className = 'firework-particle';
-                    
-                    // Random color
-                    const color = colors[Math.floor(Math.random() * colors.length)];
-                    
-                    // Random angle and distance
-                    const angle = Math.random() * Math.PI * 2;
-                    const distance = Math.random() * 60 + 20;
-                    
-                    particle.style.backgroundColor = color;
-                    particle.style.left = `${centerX}px`;
-                    particle.style.top = `${centerY}px`;
-                    particle.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
-                    particle.style.animationDuration = `${0.8 + Math.random() * 0.6}s`;
-
-                    element.appendChild(particle);
-                    
-                    // Clean up
-                    particle.addEventListener('animationend', () => {
-                        particle.remove();
-                    });
-                }
-            }, b * 200); // Stagger bursts by 200ms
-        }
-    }
-
-    // Trigger multiple burst sequences
-    createBurst();
-    setTimeout(createBurst, 1000);
-
-    // Clean up
-    setTimeout(() => {
-        element.classList.remove('fireworks-container');
-        styleSheet.remove();
-    }, 3000);
+    });
 }
+window.loadPersonalityQuiz = loadPersonalityQuiz;
+        // Initialize the quiz to start at the home section
+    showSection('home-section');
+});
+        // Define variables for quest progress
+        let SpeechesDelivered = 0;
+        let PuzzlesAnswered = 0;
+        let SpeechesWatched = 0;
 
-        // Call updateQuestProgress when the quests section is shown
-        document.getElementById('quests-button').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('home-content').style.display = 'none';
-            document.getElementById('quiz-container').style.display = 'none';
-            document.getElementById('badges-container').style.display = 'none';
-            document.getElementById('quests-container').style.display = 'flex';
-            updateQuestProgress(); // Update progress when quests are shown
-        });
+        // Function to update quest progress
+        function updateQuestProgress() {
+            // Calculate progress percentages
+            const speechProgress = (SpeechesDelivered / 3) * 100;
+            const puzzleProgress = (PuzzlesAnswered / 5) * 100;
+            const watchProgress = (SpeechesWatched / 10) * 100;
 
-        // For testing: Simulate progress every 2 seconds
-        setInterval(simulateProgress, 2000);
-   </script>
+            // Update progress bars
+            const speechBar = document.getElementById('speech-progress');
+            const puzzleBar = document.getElementById('puzzle-progress');
+            const watchBar = document.getElementById('watch-progress');
+
+            speechBar.style.width = `${Math.min(speechProgress, 100)}%`;
+            puzzleBar.style.width = `${Math.min(puzzleProgress, 100)}%`;
+            watchBar.style.width = `${Math.min(watchProgress, 100)}%`;
+        }
+    </script>
 </body>
+
 </html>
