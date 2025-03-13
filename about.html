@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +13,7 @@
             --dark-text: #343a40;
             --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             --border-radius: 0.25rem;
-             --box-shadow-hover: 0 0.75rem 1.25rem rgba(0, 0, 0, 0.2);
+            --box-shadow-hover: 0 0.75rem 1.25rem rgba(0, 0, 0, 0.2);
         }
 
         body {
@@ -104,15 +105,6 @@
             gap: 1.5rem;
         }
 
-        .endorsement {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-
-        .endorsement:hover {
-            transform: scale(1.05);
-            box-shadow: var(--box-shadow-hover);
-        }
-
         .achievement {
             background-color: rgba(255, 255, 255, 0.1);
             padding: 1.5rem;
@@ -153,6 +145,12 @@
             box-shadow: var(--box-shadow);
             max-width: 300px;
             text-align: left;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .endorsement:hover {
+            transform: scale(1.05);
+            box-shadow: var(--box-shadow-hover);
         }
 
         .endorsement__image {
@@ -217,7 +215,18 @@
             <div class="founder__info">
                 <h2 class="founder__name">Sameer Mishra</h2>
                 <h3 class="founder__title">Founder & CEO</h3>
-                <p class="founder__bio">Sameer is a champion in impromptu speaking, with multiple tournament victories.  Driven by a passion to help others, he's dedicated his career to building confidence in public speaking.  His leadership roles in education have shaped UpSpeak's mission to democratize access to effective communication skills.</p>
+                <p class="founder__bio">Sameer is a champion in impromptu speaking, with multiple tournament victories. Driven by a passion to help others, he's dedicated his career to building confidence in public speaking. His leadership roles in education have shaped UpSpeak's mission to democratize access to effective communication skills.</p>
+            </div>
+        </section>
+
+        <section class="founder">
+            <div class="founder__image">
+                <img src="dmishra.jpg" alt="Deeya Mishra">
+            </div>
+            <div class="founder__info">
+                <h2 class="founder__name">Deeya Mishra</h2>
+                <h3 class="founder__title">Head Editor</h3>
+                <p class="founder__bio">Deeya is a former student council member who ran for treasurer in 4th grade. She has had great ideas for UpSpeak that have made a tremendous impact on the app. She is still impacting UpSpeak in a way that will not be forgotten.</p>
             </div>
         </section>
     </div>
@@ -228,7 +237,7 @@
             <div class="achievements__grid">
                 <div class="achievement">
                     <h3 class="achievement__title">Tournament Victories</h3>
-                    <p class="achievement__description">Won multiple prestigious impromptu speaking competitions at the local and national level.</p>
+                    <p class="achievement__description">Won multiple prestigious impromptu speaking competitions.</p>
                 </div>
                 <div class="achievement">
                     <h3 class="achievement__title">Leadership Impact</h3>
@@ -236,7 +245,7 @@
                 </div>
                 <div class="achievement">
                     <h3 class="achievement__title">App Success</h3>
-                    <p class="achievement__description">Empowered hundreds of users to improve their speaking skills with UpSpeak.</p>
+                    <p class="achievement__description">Empowered thousands of users to improve their speaking skills with UpSpeak.</p>
                 </div>
             </div>
         </div>
@@ -252,7 +261,7 @@
                     </div>
                     <h3 class="endorsement__name">Pete Dailey</h3>
                     <p class="endorsement__title">Los Altos Mayor</p>
-                    <p class="endorsement__quote">"UpSpeak is revolutionizing kids approach to public speaking!"</p>
+                    <p class="endorsement__quote">"UpSpeak is revolutionizing how we approach public speaking."</p>
                 </div>
                 <div class="endorsement">
                     <div class="endorsement__image">
@@ -261,6 +270,14 @@
                     <h3 class="endorsement__name">Aftab Belal</h3>
                     <p class="endorsement__title">Saratoga Mayor</p>
                     <p class="endorsement__quote">"An essential tool for developing strong communication skills."</p>
+                </div>
+                <div class="endorsement">
+                    <div class="endorsement__image">
+                        <img src="grover.jpg" alt="Krish Grover">
+                    </div>
+                    <h3 class="endorsement__name">Krish Grover</h3>
+                    <p class="endorsement__title">Champion Congressional Debater</p>
+                    <p class="endorsement__quote">"UpSpeak has helped me win tournaments on the national level!"</p>
                 </div>
             </div>
         </div>
