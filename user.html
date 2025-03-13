@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSpeak - User Profile</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Include SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #e6f2ff, #ffe6cc);
+            color: #333;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s, color 0.3s, filter 0.3s; /* Smooth transition */
+            filter: brightness(100%); /* Default brightness */
+        }
+
+        a { text-decoration: none; color: #007bff; }
+        a:hover { text-decoration: underline; }
+
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo .microphone-icon { width: 70px; height: 70px; margin-right: 10px; }
+        .logo .upspeak-up { color: orange; }
+        .logo .upspeak-speak { color: blue; }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links li { margin-left: 20px; }
+        .nav-links li a { color: #555; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links li a:hover { color: #007bff; text-decoration: none; }
+
+        /* Hero Section Styles */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .hero-content { max-width: 800px; }
+        .hero-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; }
+        .hero-subtitle { font-size: 1.2rem; color: #555; margin-bottom: 30px; }
+
+        /* Button Styles */
+        .btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .btn-primary { background-color: #007bff; }
+        .btn-secondary { background-color: #6c757d; }
+        .btn-primary:hover { background-color: #0056b3; }
+        .btn-secondary:hover { background-color: #545b62; }
+
+        /* Mission Section Styles */
+        .mission {
+            background-color: #f8f9fa;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .mission-title { font-size: 2rem; font-weight: 600; margin-bottom: 20px; }
+        .mission-content { max-width: 800px; margin: 0 auto; color: #555; }
+
+        /* Testimonials Section Styles */
+        .testimonials {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .testimonial-title { font-size: 2rem; font-weight: 600; margin-bottom: 30px; }
+
+        .testimonial-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            height: 100px;
+        }
+
+        .testimonial {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        .testimonial.active { opacity: 1; }
+
+        /* Features Section Styles */
+        .features {
+            background-color: #fff;
+            padding: 50px 20px;
+        }
+
+        .features-title { font-size: 2rem; font-weight: 600; text-align: center; margin-bottom: 40px; }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .feature-item i { font-size: 3rem; margin-bottom: 15px; color: #007bff; }
+        .feature-item h3 { font-size: 1.5rem; margin-bottom: 10px; }
+        .feature-item p { color: #555; }
+
+        /* Contact Section Styles */
+        .contact {
+            background-color: #fff;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .contact-title { font-size: 2rem; font-weight: 600; margin-bottom: 40px; }
+        .contact-details { max-width: 800px; margin: 0 auto; }
+
+        /* Footer Styles */
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+        }
+
+        /* Updated Navbar Styles */
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+        }
+
+        .nav-menu li {
+            position: relative;
+            margin-left: 20px; /* Consistent spacing between items */
+        }
+
+        .nav-menu li:first-child {
+            margin-left: 0; /* No left margin for the first item */
+        }
+
+        .nav-menu li a {
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: block;
+            padding: 10px 0; /* Maintain vertical padding */
+        }
+
+        .nav-menu li a:hover {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        /* Centralized Dropdown Styles */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            padding: 5px 0;
+            top: 100%;
+            left: 50%; /* Center the dropdown horizontally */
+            transform: translateX(-50%); /* Adjust for the dropdown width */
+            text-align: center; /* Center text within the dropdown */
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .nav-menu li:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Profile Icon */
+        .profile-icon {
+            font-size: 2em;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            color: #007bff;
+        }
+
+        /* Responsive adjustments for Navbar */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-menu {
+                margin-top: 10px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-menu li {
+                margin-left: 0;
+                margin-bottom: 10px;
+            }
+
+            .nav-menu li a {
+                padding: 8px 0;
+            }
+
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                border-radius: 0;
+                transform: none;
+                left: 0;
+                text-align: left;
+            }
+
+            .dropdown-content a {
+                padding: 10px 16px;
+            }
+        }
+
+        /* Custom Styles for User Profile Page */
+        .user-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .profile-info {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 80%;
+            max-width: 600px;
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+        }
+
+        .profile-info h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .profile-info p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .profile-actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .profile-actions button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-signout { background-color: #dc3545; }
+        .btn-settings { background-color: #007bff; }
+        .btn-account { background-color: #28a745; }
+        .btn-signout:hover { background-color: #c82333; }
+        .btn-settings:hover { background-color: #0056b3; }
+        .btn-account:hover { background-color: #218838; }
+
+        /* Enhanced Settings Popup Styles */
+        .swal2-container {
+            z-index: 2000; /* Ensure it's above everything */
+        }
+
+        .swal2-popup {
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            background: #f8f9fa; /* A softer background */
+        }
+
+        .swal2-title {
+            font-size: 2rem;
+            color: #495057; /* Darker, more readable title */
+        }
+
+        .swal2-content {
+            color: #6c757d; /* A slightly lighter text for the content */
+        }
+
+        .swal2-input {
+            border-radius: 8px;
+            border: 2px solid #ced4da; /* More defined input border */
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .swal2-input:focus {
+            border-color: #007bff; /* Highlight on focus */
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle shadow for focus */
+        }
+
+        /* Style for slider labels */
+        .slider-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #495057;
+            text-align: left; /* Align labels to the left */
+        }
+
+        /* Custom slider styles */
+        .slider-container {
+            margin-bottom: 20px;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #007bff;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #007bff;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Button Styles in SweetAlert */
+        .swal2-styled.swal2-confirm {
+            background-color: #28a745;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            box-shadow: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .swal2-styled.swal2-cancel {
+            background-color: #dc3545;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            box-shadow: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .swal2-styled.swal2-confirm:focus,
+        .swal2-styled.swal2-cancel:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Highlight on focus */
+        }
+
+        .swal2-styled.swal2-confirm:hover {
+            background-color: #218838;
+        }
+
+        .swal2-styled.swal2-cancel:hover {
+            background-color: #c82333;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: #333;
+            color: #fff;
+        }
+
+        header.dark-mode {
+            background-color: #444;
+            color: #fff;
+        }
+
+        .profile-info.dark-mode {
+            background-color: #444;
+            color: #fff;
+        }
+
+        footer.dark-mode {
+            background-color: #222;
+            color: #fff;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; align-items: flex-start; }
+            .nav-links { margin-top: 10px; flex-direction: column; }
+            .nav-links li { margin-left: 0; margin-bottom: 10px; }
+            .hero { min-height: auto; padding: 30px 20px; }
+            .hero-title { font-size: 2rem; }
+            .feature-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo" onclick="goToHome()">
+                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <defs>
+                        <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#microphone-gradient)"
+                        d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                </svg>
+                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
+            </div>
+            <ul class="nav-menu">
+                <li>
+                    <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="evaluation.html">Recording Studio</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="learn.html">Videos</a>
+                        <a href="learn.html">Puzzles</a>
+                        <a href="learn.html">Drills</a>
+                    </div>
+                <li>
+                    <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="profile.html">Personality</a>
+                        <a href="profile.html">Badges</a>
+                        <a href="profile.html">Quests</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="watch.html">Speech Archive</a>
+                        <a href="watch.html">Famous Speeches</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="about.html">UpSpeak Credentials</a>
+                    </div>
+                </li>
+            </ul>
+
+            <a href="profile.html"><i class="fas fa-user-circle profile-icon"></i></a>
+        </nav>
+    </header>
+
+    <section class="user-profile">
+        <div class="profile-info">
+            <h2 id="welcome-message">Welcome, User!</h2>
+            <p id="username-display">Username: User</p>
+            <p id="email-display">Email: user@example.com</p>
+
+            <div class="profile-actions">
+                <button class="btn btn-settings" onclick="showSettings()">Settings</button>
+                <button class="btn btn-account" onclick="showAccountSettings()">Account</button>
+                <button class="btn btn-signout" onclick="signOut()">Sign Out</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 UpSpeak. All rights reserved.</p>
+    </footer>
+
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+    <script>
+        // Function to handle dark mode
+        function applyDarkMode(mode) {
+            const body = document.body;
+            const header = document.querySelector('header');
+            const profileInfo = document.querySelector('.profile-info');
+            const footer = document.querySelector('footer');
+
+            if (mode === 'on') {
+                body.classList.add('dark-mode');
+                header.classList.add('dark-mode');
+                profileInfo.classList.add('dark-mode');
+                footer.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+                header.classList.remove('dark-mode');
+                profileInfo.classList.remove('dark-mode');
+                footer.classList.remove('dark-mode');
+            }
+        }
+
+        function setInitialTheme() {
+            // Default to light mode if no preference is stored
+            if (localStorage.getItem('darkMode') === null) {
+                localStorage.setItem('darkMode', 'off');
+            }
+
+            let initialDarkMode = localStorage.getItem('darkMode');
+            applyDarkMode(initialDarkMode);
+
+            let initialBrightness = localStorage.getItem('brightness') || 100;
+            document.body.style.filter = `brightness(${initialBrightness}%)`;
+        }
+
+        // Set initial theme on page load
+        setInitialTheme();
+
+        function goToHome() {
+            window.location.href = 'index.html'; // Navigate to home page
+        }
+
+        function showSettings() {
+            let currentVolume = localStorage.getItem('volume') || 50;
+            let currentBrightness = localStorage.getItem('brightness') || 100;
+            let currentDarkMode = localStorage.getItem('darkMode') || 'off';
+
+            Swal.fire({
+                title: 'Settings',
+                html:
+                    '<div class="slider-container">' +
+                    '<label for="volume" class="slider-label">Volume:</label>' +
+                    '<input type="range" id="volume" class="slider" min="0" max="100" value="' + currentVolume + '">' +
+                    '</div>' +
+                    '<div class="slider-container">' +
+                    '<label for="brightness" class="slider-label">Brightness:</label>' +
+                    '<input type="range" id="brightness" class="slider" min="0" max="100" value="' + currentBrightness + '">' +
+                    '</div>' +
+                    '<div class="slider-container">' +
+                    '<label for="darkMode" class="slider-label">Dark Mode:</label>' +
+                    '<select id="darkMode" class="swal2-input">' +
+                    '<option value="off" ' + (currentDarkMode === 'off' ? 'selected' : '') + '>Off</option>' +
+                    '<option value="on" ' + (currentDarkMode === 'on' ? 'selected' : '') + '>On</option>' +
+                    '</select>' +
+                    '</div>',
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                cancelButtonText: 'Cancel',
+                didOpen: () => {
+                    const volumeSlider = document.getElementById('volume');
+                    const brightnessSlider = document.getElementById('brightness');
+                    const darkModeSelect = document.getElementById('darkMode');
+
+                    volumeSlider.addEventListener('input', function() {
+                        // Apply volume change, if applicable (e.g., for audio elements)
+                    });
+
+                    brightnessSlider.addEventListener('input', function() {
+                        let brightnessValue = this.value;
+                        document.body.style.filter = `brightness(${brightnessValue}%)`;
+                    });
+
+                    darkModeSelect.addEventListener('change', function() {
+                        applyDarkMode(this.value);
+                    });
+                },
+                preConfirm: () => {
+                    const volume = document.getElementById('volume').value;
+                    const brightness = document.getElementById('brightness').value;
+                    const darkMode = document.getElementById('darkMode').value;
+
+                    localStorage.setItem('volume', volume);
+                    localStorage.setItem('brightness', brightness);
+                    localStorage.setItem('darkMode', darkMode);
+
+                    applyDarkMode(darkMode);
+                    document.body.style.filter = `brightness(${brightness}%)`;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Settings Saved!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    // Restore previous values on cancel
+                    let previousBrightness = localStorage.getItem('brightness') || 100;
+                    let previousDarkMode = localStorage.getItem('darkMode') || 'off';
+
+                    document.body.style.filter = `brightness(${previousBrightness}%)`;
+                    applyDarkMode(previousDarkMode);
+                }
+            });
+        }
+
+        function showAccountSettings() {
+            Swal.fire({
+                title: 'Account Settings',
+                html: '<input id="swal-input1" class="swal2-input" placeholder="Update Username">' +
+                    '<input type="email" id="swal-input2" class="swal2-input" placeholder="Update Email">' +
+                    '<input id="swal-input3" class="swal2-input" placeholder="New Password">' +
+                    '<input id="swal-input4" class="swal2-input" placeholder="Confirm New Password">',
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                cancelButtonText: 'Cancel',
+                preConfirm: () => {
+                    // Get values from input fields
+                    const username = document.getElementById('swal-input1').value;
+                    const email = document.getElementById('swal-input2').value;
+                    const password = document.getElementById('swal-input3').value;
+                    const confirmPassword = document.getElementById('swal-input4').value;
+
+                    // Perform validations
+                    if (password !== confirmPassword) {
+                        Swal.showValidationMessage('Passwords do not match');
+                        return false; // Prevent the dialog from closing
+                    }
+
+                    // Save settings to local storage
+                    if (username) localStorage.setItem('username', username);
+                    if (email) localStorage.setItem('email', email);
+                    if (password) localStorage.setItem('password', password);
+
+                    // Update display if needed
+                    document.getElementById('username-display').innerText = 'Username: ' + (username || localStorage.getItem('username') || 'User');
+                    document.getElementById('email-display').innerText = 'Email: ' + (email || localStorage.getItem('email') || 'user@example.com');
+
+                    // You can add additional logic to update the UI or send data to a server
+
+                    return true; // Allow the dialog to close
+                }
+            });
+        }
+
+        function signOut() {
+            Swal.fire({
+                title: 'Signing Out...',
+                text: 'See you soon!',
+                icon: 'info',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = 'index.html';
+            });
+        }
+    </script>
+</body>
+</html>
