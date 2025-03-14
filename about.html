@@ -200,7 +200,711 @@
             }
         }
     </style>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSpeak Learn</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* General Body Styles - App Ready */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: #f5f7fa;
+            color: #333;
+            overflow-x: hidden;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header Styles - Clean and Modern */
+        header {
+            background-color: #fff;
+            padding: 15px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo .microphone-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 8px;
+        }
+
+        .logo .upspeak-up {
+            color: #007bff;
+        }
+
+        .logo .upspeak-speak {
+            color: #6c757d;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu li {
+            margin: 0 15px;
+            position: relative;
+        }
+
+        .nav-menu > li > a {
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        .nav-menu > li > a:hover {
+            color: #007bff;
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+
+        .nav-menu .carrot {
+            margin-left: 5px;
+            font-size: 0.8em;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .nav-menu li:hover .dropdown-content {
+            display: block;
+        }
+
+        .profile-icon {
+            font-size: 1.8rem;
+            color: #777;
+        }
+
+        /* Main Content Styles - App Ready */
+        .watch-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Move content to the top */
+        }
+
+        /* Section Styles - Consistent Padding */
+        .section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            padding: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Move content to the top */
+        }
+
+        .section.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Home Section Styles */
+        .watch-content {
+            text-align: center;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Move content to the top */
+        }
+
+        .watch-content h2 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .watch-button {
+            display: inline-block;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 8px;
+            margin: 10px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .watch-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* List Styles */
+        .speeches-list {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        .speeches-list li {
+            margin-bottom: 15px;
+        }
+
+        .speeches-list a {
+            display: block;
+            padding: 12px;
+            background-color: #f8f9fa;
+            color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .speeches-list a:hover {
+            background-color: #e9ecef;
+            transform: translateX(3px);
+        }
+
+        .speech-description {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        /* Video Styles */
+        #videos-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            text-align: center;
+            justify-content: flex-start; /* Move content to the top */
+        }
+
+        #videos-container h2 {
+            text-align: center;
+        }
+
+        .video-item {
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 560px;
+        }
+
+        .video-item iframe {
+            width: 100%;
+            height: 315px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Drills Styling */
+        #drills-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            text-align: center;
+            justify-content: flex-start; /* Move content to the top */
+        }
+
+        #drills-container h2 {
+            text-align: center;
+        }
+
+        .tongue-twister {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        /* Puzzles Styling */
+        #quiz-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            text-align: center;
+            justify-content: flex-start; /* Move content to the top */
+        }
+
+        #quiz-container h2 {
+            text-align: center;
+        }
+
+        .question {
+            font-size: 1.4em;
+            color: #555;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .options {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .options label {
+            display: block;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .options label:hover {
+            background-color: #f0f0f0;
+            border-color: #bbb;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        #submit-quiz {
+            padding: 12px 25px;
+            font-size: 1em;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #submit-quiz:hover {
+            background-color: #4cae4c;
+        }
+
+        #result-container {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #e6f2ff, #ffe6cc);
+            color: #333;
+            overflow-x: hidden;
+            /* Prevent horizontal scroll */
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #fff;
+            padding: 25px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+            /* Ensure header stays on top */
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            /* Make it clickable */
+        }
+
+        .logo .microphone-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .logo .upspeak-up {
+            color: orange;
+        }
+
+        .logo .upspeak-speak {
+            color: blue;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu li {
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .nav-menu>li>a {
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-menu>li>a:hover {
+            color: #007bff;
+        }
+
+        .nav-menu .carrot {
+            margin-left: 5px;
+            font-size: 0.8em;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 8px 0;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .nav-menu li:hover .dropdown-content {
+            display: block;
+        }
+
+        .profile-icon {
+            font-size: 2rem;
+            color: #777;
+        }
+
+        /* Main Content Styles */
+        .watch-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            position: relative;
+            /* For positioning the animated background */
+            overflow: hidden;
+            /* Clip the animated background */
+            border-radius: 15px;
+            /* Optional: round the corners of the container */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.85);
+            /* Add a semi-transparent background */
+            backdrop-filter: blur(10px);
+            /* Apply a blur effect to the background */
+        }
+
+        /* Animated Background (Example: Bubbles) */
+        .watch-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="15" fill="rgba(0,118,191, 0.3)" /></svg>');
+            /* Change to your bubble image */
+            animation: bubbles 15s linear infinite;
+            z-index: -1;
+            /* Place behind the content */
+        }
+
+        @keyframes bubbles {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+
+        .section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            /* Smooth transition */
+        }
+
+        .section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .watch-content {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .watch-content h2 {
+            font-size: 3em;
+            color: #333;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow */
+        }
+
+        .watch-button {
+            display: inline-block;
+            padding: 15px 35px;
+            font-size: 1.3em;
+            text-decoration: none;
+            background-color: #007bff;
+            /* Blue color */
+            color: #fff;
+            border-radius: 8px;
+            margin: 15px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .watch-button:hover {
+            background-color: #0056b3;
+            /* Darker blue on hover */
+            transform: translateY(-3px);
+            /* Slight lift effect */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .speeches-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .speeches-list li {
+            margin-bottom: 20px;
+        }
+
+        .speeches-list a {
+            display: block;
+            padding: 15px;
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            /* Subtle shadow */
+        }
+
+        .speeches-list a:hover {
+            background-color: #ddd;
+            transform: translateX(5px);
+            /* Slight slide effect */
+        }
+
+        .speech-description {
+            font-size: 1em;
+            color: #777;
+            margin-top: 8px;
+        }
+
+        /* Add some spacing to the bottom */
+        body::after {
+            content: '';
+            display: block;
+            height: 50px;
+            /* Adjust the height as needed */
+        }
+
+        /* Styles for Videos, Drills, Puzzles */
+        #videos-container,
+        #drills-container,
+        #quiz-container {
+            display: none;
+            text-align: left;
+        }
+
+        .video-item {
+            margin-bottom: 20px;
+        }
+
+        .video-item iframe {
+            width: 100%;
+            max-width: 560px;
+            height: 315px;
+        }
+
+        .tongue-twister {
+            background-color: #f0f0f0;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 8px;
+        }
+    </style>
 </head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo" onclick="goToHome()">
+                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <defs>
+                        <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#microphone-gradient)"
+                        d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                </svg>
+                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
+            </div>
+
+            <ul class="nav-menu">
+                <li>
+                    <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="evaluation.html">Recording Studio</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="learn.html">Videos</a>
+                        <a href="learn.html">Puzzles</a>
+                        <a href="learn.html">Drills</a>
+                    </div>
+                <li>
+                    <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="profile.html">Personality</a>
+                        <a href="profile.html">Badges</a>
+                        <a href="profile.html">Quests</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="watch.html">Speech Archive</a>
+                        <a href="watch.html">Famous Speeches</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="about.html">UpSpeak Credentials</a>
+                    </div>
+                </li>
+            </ul>
+
+            <a href="user.html"><i class="fas fa-user-circle profile-icon"></i></a>
+        </nav>
+    </header>
+    
 <body>
     <div class="container">
         <header class="page-header">
@@ -245,7 +949,7 @@
                 </div>
                 <div class="achievement">
                     <h3 class="achievement__title">App Success</h3>
-                    <p class="achievement__description">Empowered thousands of users to improve their speaking skills with UpSpeak.</p>
+                    <p class="achievement__description">Empowered hundreds of users to improve their speaking skills with UpSpeak.</p>
                 </div>
             </div>
         </div>
@@ -277,14 +981,12 @@
                     </div>
                     <h3 class="endorsement__name">Krish Grover</h3>
                     <p class="endorsement__title">Champion Congressional Debater</p>
-                    <p class="endorsement__quote">"UpSpeak has helped me win tournaments on the national level!"</p>
+                    <p class="endorsement__quote">"UpSpeak has helped me improve my skills and taken me to new heights!"</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <div style="text-align: center; margin-top: 2rem; margin-bottom: 4rem;">
-        <a href="home.html" style="background: linear-gradient(to right, #007bff, #ffa500); color: white; padding: 1rem 2rem; border-radius: 0.25rem; text-decoration: none; font-weight: bold; transition: background 0.3s ease;">Back to Home</a>
     </div>
 </body>
 </html>
