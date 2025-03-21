@@ -376,6 +376,7 @@
             overflow: hidden;
             max-height: 200px;
         }
+        
 
         .strengths-box {
             border: 3px solid #28a745;
@@ -581,297 +582,469 @@
         </div>
     </div>
     <script>
-        let mediaRecorder;
-        let recordedChunks = [];
-        let videoElement = document.getElementById("video");
-        let startBtn = document.getElementById("startBtn");
-        let stopBtn = document.getElementById("stopBtn");
-        let restartBtn = document.getElementById("restartBtn");
-        let transcriptionBox = document.getElementById("transcription");
-        let fillerFeedback = document.getElementById("filler-feedback");
-        let strengthsFeedback = document.getElementById("strengths-feedback");
-        let improvementFeedback = document.getElementById("improvement-feedback");
+      let mediaRecorder;
+      let recordedChunks = [];
+      let videoElement = document.getElementById("video");
+      let startBtn = document.getElementById("startBtn");
+      let stopBtn = document.getElementById("stopBtn");
+      let restartBtn = document.getElementById("restartBtn");
+      let transcriptionBox = document.getElementById("transcription");
+      let fillerFeedback = document.getElementById("filler-feedback");
+      let strengthsFeedback = document.getElementById("strengths-feedback");
+      let improvementFeedback = document.getElementById("improvement-feedback");
 
-        let stream;
-        let recognition;
-        let isRecording = false;
-        let finalTranscript = "";
-        let silenceTimeout;
+      let stream;
+      let recognition;
+      let isRecording = false;
+      let finalTranscript = "";
+      let silenceTimeout;
 
-        let previousFrame = null;
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+      let previousFrame = null;
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
 
-        function goToHome() {
-            window.location.href = 'home.html';
+      function goToHome() {
+        window.location.href = 'home.html';
+      }
+
+      function setupTheHome() {
+        document.querySelector('.container').classList.add('speech-finished');
+      }
+
+      async function startVideoStream() {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: true
+          });
+          videoElement.srcObject = stream;
+          videoElement.play();
+        } catch (error) {
+          console.error("Error accessing webcam:", error);
+        }
+      }
+
+      function setupSpeechRecognition() {
+        if (!('webkitSpeechRecognition' in window)) {
+          alert("Your browser does not support speech recognition.");
+          return;
         }
 
-        function setupTheHome() {
-            document.querySelector('.container').classList.add('speech-finished');
-        }
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
 
-        async function startVideoStream() {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({
-                    video: true
-                });
-                videoElement.srcObject = stream;
-                videoElement.play();
-            } catch (error) {
-                console.error("Error accessing webcam:", error);
+        recognition.onresult = function(event) {
+          let interimTranscript = "";
+
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+
+            if (event.results[i].isFinal) {
+              clearTimeout(silenceTimeout);
+              finalTranscript += transcript + ". ";
+            } else {
+              interimTranscript += transcript;
             }
-        }
+          }
 
-        function setupSpeechRecognition() {
-            if (!('webkitSpeechRecognition' in window)) {
-                alert("Your browser does not support speech recognition.");
-                return;
+          transcriptionBox.textContent = finalTranscript + interimTranscript;
+
+          clearTimeout(silenceTimeout);
+          silenceTimeout = setTimeout(() => {
+            if (interimTranscript) {
+              finalTranscript += interimTranscript + ". ";
+              transcriptionBox.textContent = finalTranscript;
             }
+          }, 1000);
+        };
 
-            recognition = new webkitSpeechRecognition();
-            recognition.continuous = true;
-            recognition.interimResults = true;
+        recognition.onerror = function(event) {
+          console.error("Speech Recognition Error:", event.error);
+        };
 
-            recognition.onresult = function(event) {
-                let interimTranscript = "";
-
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    const transcript = event.results[i][0].transcript;
-
-                    if (event.results[i].isFinal) {
-                        clearTimeout(silenceTimeout);
-                        finalTranscript += transcript + ". ";
-                    } else {
-                        interimTranscript += transcript;
-                    }
-                }
-
-                transcriptionBox.textContent = finalTranscript + interimTranscript;
-
-                clearTimeout(silenceTimeout);
-                silenceTimeout = setTimeout(() => {
-                    if (interimTranscript) {
-                        finalTranscript += interimTranscript + ". ";
-                        transcriptionBox.textContent = finalTranscript;
-                    }
-                }, 1000);
-            };
-
-            recognition.onerror = function(event) {
-                console.error("Speech Recognition Error:", event.error);
-            };
-
-            recognition.onend = function() {
-                if (isRecording) {
-                    recognition.start();
-                } else {
-                    evaluateSpeech();
-                }
-            };
-        }
-
-        function startRecording() {
-            recordedChunks = [];
-            mediaRecorder = new MediaRecorder(stream);
-
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    recordedChunks.push(event.data);
-                }
-            };
-
-            mediaRecorder.onstop = () => {
-                const blob = new Blob(recordedChunks, {
-                    type: "video/webm"
-                });
-                const videoUrl = URL.createObjectURL(blob);
-
-                videoElement.srcObject = null;
-                videoElement.src = videoUrl;
-                videoElement.controls = true;
-                videoElement.play();
-            };
-
-            mediaRecorder.start();
+        recognition.onend = function() {
+          if (isRecording) {
             recognition.start();
-            isRecording = true;
+          } else {
+            evaluateSpeech();
+          }
+        };
+      }
 
-            startBtn.disabled = true;
-            stopBtn.disabled = false;
-            restartBtn.disabled = false;
+      function startRecording() {
+        recordedChunks = [];
+        mediaRecorder = new MediaRecorder(stream);
 
-            previousFrame = null;
-            detectHandMotions();
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            recordedChunks.push(event.data);
+          }
+        };
+
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(recordedChunks, {
+            type: "video/webm"
+          });
+          const videoUrl = URL.createObjectURL(blob);
+
+          videoElement.srcObject = null;
+          videoElement.src = videoUrl;
+          videoElement.controls = true;
+          videoElement.play();
+        };
+
+        mediaRecorder.start();
+        recognition.start();
+        isRecording = true;
+
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        restartBtn.disabled = false;
+
+        previousFrame = null;
+        detectHandMotions();
+      }
+
+      function stopRecording() {
+        if (isRecording) {
+          mediaRecorder.stop();
+          recognition.stop();
+          isRecording = false;
+
+          stopBtn.disabled = true;
+          restartBtn.disabled = false;
+        }
+      }
+
+      function restartRecording() {
+        finalTranscript = "";
+        transcriptionBox.textContent = "Transcription will appear here...";
+        fillerFeedback.style.display = "none";
+        strengthsFeedback.style.display = "none";
+        improvementFeedback.style.display = "none";
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        restartBtn.disabled = true;
+
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
         }
 
-        function stopRecording() {
-            if (isRecording) {
-                mediaRecorder.stop();
-                recognition.stop();
-                isRecording = false;
-
-                stopBtn.disabled = true;
-                restartBtn.disabled = false;
-            }
+        if (recognition && isRecording) {
+          recognition.stop();
         }
-
-        function restartRecording() {
-            finalTranscript = "";
-            transcriptionBox.textContent = "Transcription will appear here...";
-            fillerFeedback.style.display = "none";
-            strengthsFeedback.style.display = "none";
-            improvementFeedback.style.display = "none";
-            startBtn.disabled = false;
-            stopBtn.disabled = true;
-            restartBtn.disabled = true;
-
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
-
-            if (recognition && isRecording) {
-                recognition.stop();
-            }
-
-            startVideoStream();
-            setupSpeechRecognition();
-        }
-
-        function detectHandMotions() {
-            if (!videoElement.videoWidth || !videoElement.videoHeight) {
-                requestAnimationFrame(detectHandMotions);
-                return;
-            }
-
-            canvas.width = videoElement.videoWidth;
-            canvas.height = videoElement.videoHeight;
-            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-            const currentFrame = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-            if (previousFrame) {
-                let motionCount = 0;
-                for (let i = 0; i < currentFrame.data.length; i += 4) {
-                    const diff = Math.abs(currentFrame.data[i] - previousFrame.data[i]) +
-                        Math.abs(currentFrame.data[i + 1] - previousFrame.data[i + 1]) +
-                        Math.abs(currentFrame.data[i + 2] - previousFrame.data[i + 2]);
-                    if (diff > 50) motionCount++;
-                }
-                return motionCount;
-            }
-            previousFrame = currentFrame;
-            requestAnimationFrame(detectHandMotions);
-        }
-
-        async function evaluateSpeech() {
-            const strengths = [];
-            const improvement = [];
-
-            const sentences = finalTranscript.split(/[.!?]/).filter(Boolean);
-            const wordCount = finalTranscript.split(/\s+/).filter(Boolean).length;
-
-            if (sentences.length >= 5 && wordCount > 150) {
-                strengths.push("Content: Constructing thorough and detailed content helped inform the audience when delivering your speech! ");
-            } else {
-                improvement.push("Content: Although brevity is often powerful, expanding upon your key ideas can elevate the speech.");
-            }
-
-            const complexSentences = sentences.filter(sentence => sentence.split(' ').length > 15).length;
-            if (complexSentences > 2) {
-                strengths.push("Complexity: Using advanced words and sentences created a sense of professionalism in your speech!");
-            } else {
-                improvement.push("Complexity: Even though simplicity is often helpful, using advanced vocabulary can create a sense of professionalism in your speech.");
-            }
-
-            if (finalTranscript.includes("Thank you") || finalTranscript.includes("I appreciate")) {
-                strengths.push("Credits: Conveying gratitude in your speech created a positive conclusion for the audience!");
-            } else {
-                improvement.push("Credits: Finishing the speech on a note of gratitude could create an engaging finish for the audience.");
-            }
-
-            const transitionWords = ["however", "therefore", "moreover", "for example", "in addition", "to contrast", "firstly", "secondly", "thirdly", "finally", "resulting in"];
-            const transitionsUsed = transitionWords.filter(word => finalTranscript.includes(word)).length;
-
-            if (transitionsUsed >= 3) {
-                strengths.push("Connection: Connecting ideas with transition words created a smooth feeling during the speech!");
-            } else {
-                improvement.push("Connection: Connecting ideas with transition words would create a more cohesive speech.");
-            }
-
-            const fillerWords = ["um", "uh", "like", "you know", "actually", "basically", "absolutely", "highly", "totally"];
-            const fillerWordCounts = fillerWords.reduce((acc, word) => {
-                const regex = new RegExp(`\\b${word}\\b`, "gi");
-                const count = (finalTranscript.match(regex) || []).length;
-                if (count > 0) {
-                    acc.push(`${word} (${count})`);
-                }
-                return acc;
-            }, []);
-
-            if (fillerWordCounts.length > 0) {
-                improvement.push(`Clarity: Reducing fillers such as ${fillerWordCounts.join(", ")} would allow for a more seamless delivery.`);
-            } else {
-                strengths.push("Clarity: Absence of filler words made the speech feel seamless!");
-            }
-
-            const durationSeconds = recordedChunks.length * 0.03;
-            const wordsPerMinute = Math.floor((wordCount / durationSeconds) * 60);
-
-            if (wordsPerMinute > 200) {
-                improvement.push("Clip: Slowing down will help the audience understand your speech better.");
-            } else if (wordsPerMinute < 110) {
-                improvement.push("Clip: Speeding up will help keep the audience's attention.");
-            } else {
-                strengths.push("Clip: Perfecting the speed of the speech helped the audience understand your points!");
-            }
-
-            let motionCount = detectHandMotions();
-            if (motionCount > 5000) {
-                strengths.push("Charisma: Effective hand gestures enhances your speech and delivery!");
-            } else {
-                improvement.push("Charisma: Consider using more expressive hand gestures to further engage the audience.");
-            }
-
-            const selectedImprovements = [];
-            if (improvement.length > 3) {
-                const shuffled = improvement.sort(() => 0.5 - Math.random());
-                const maxImprovements = 3;
-                for (let i = 0; i < maxImprovements; i++) {
-                    selectedImprovements.push(shuffled[i]);
-                }
-            } else {
-                selectedImprovements.push(...improvement);
-            }
-
-            fillerFeedback.style.display = "block";
-            fillerFeedback.innerHTML = `<strong>Feedback:</strong><br>${strengths.join("<br>")}<br><br><strong>Areas for Improvement:</strong><br>${selectedImprovements.join("<br>")}`;
-
-            strengthsFeedback.style.display = "block";
-            strengthsFeedback.innerHTML = `<strong>Strengths:</strong><br>${strengths.join("<br>")}`;
-
-            improvementFeedback.style.display = "block";
-            improvementFeedback.innerHTML = `<strong>Areas for Improvement:</strong><br>${selectedImprovements.join("<br>")}`;
-
-            startBtn.style.display = "none";
-            stopBtn.style.display = "none";
-            restartBtn.style.display = "none";
-
-            setupTheHome();
-        }
-
-        startBtn.addEventListener("click", () => {
-            startRecording();
-        });
-
-        stopBtn.addEventListener("click", () => {
-            stopRecording();
-        });
-
-        restartBtn.addEventListener("click", () => {
-            restartRecording();
-        });
 
         startVideoStream();
         setupSpeechRecognition();
+      }
+
+      function detectHandMotions() {
+        if (!videoElement.videoWidth || !videoElement.videoHeight) {
+          requestAnimationFrame(detectHandMotions);
+          return;
+        }
+
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+        const currentFrame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        if (previousFrame) {
+          let motionCount = 0;
+          for (let i = 0; i < currentFrame.data.length; i += 4) {
+            const diff = Math.abs(currentFrame.data[i] - previousFrame.data[i]) +
+              Math.abs(currentFrame.data[i + 1] - previousFrame.data[i + 1]) +
+              Math.abs(currentFrame.data[i + 2] - previousFrame.data[i + 2]);
+            if (diff > 50) motionCount++;
+          }
+          return motionCount;
+        }
+        previousFrame = currentFrame;
+        requestAnimationFrame(detectHandMotions);
+      }
+
+      async function evaluateSpeech() {
+        const strengths = [];
+        const improvement = [];
+
+        const sentences = finalTranscript.split(/[.!?]/).filter(Boolean);
+        const wordCount = finalTranscript.split(/\s+/).filter(Boolean).length;
+
+        // Content Analysis
+        if (sentences.length >= 5 && wordCount > 150) {
+          strengths.push("Content: Thorough and detailed content helped inform the audience.");
+          //Specific Example
+          const longestSentence = sentences.reduce((a, b) => a.length > b.length ? a : b, "");
+          strengths.push(`Content: The depth was particularly evident in the sentence, "...${longestSentence.substring(0, 60)}..."!`);
+
+        } else {
+          improvement.push("Content: Expanding upon key ideas could enhance the speech.");
+          // Suggest a missing topic based on keywords
+          if (!finalTranscript.toLowerCase().includes("example")) {
+            improvement.push("Content: Providing real-world examples can make your points more relatable.");
+          }
+        }
+
+        // Vocabulary Analysis
+        const commonWords = ['the', 'a', 'an', 'is', 'are', 'was', 'were', 'and', 'but', 'or', 'in', 'on', 'at', 'to', 'for', 'of'];
+        const allWords = finalTranscript.toLowerCase().split(/\s+/).filter(Boolean);
+        const uniqueWords = [...new Set(allWords)];
+        const advancedWordCount = uniqueWords.filter(word => !commonWords.includes(word) && word.length > 6).length; //Consider words longer than 6 chars as advanced (simplification)
+
+        if (advancedWordCount > uniqueWords.length * 0.2) { // Adjust threshold as needed
+          strengths.push("Vocabulary: Effective use of diverse vocabulary kept the audience engaged.");
+
+          const advancedWord = uniqueWords.find(word => !commonWords.includes(word) && word.length > 8);
+          if (advancedWord) {
+            strengths.push(`Vocabulary: Your use of "${advancedWord}" was particularly effective!`);
+            // Show where it was used:
+            const wordIndex = finalTranscript.indexOf(advancedWord);
+            if (wordIndex !== -1) {
+              let contextStart = Math.max(0, wordIndex - 30);
+              let contextEnd = Math.min(finalTranscript.length, wordIndex + 30);
+              let contextText = finalTranscript.substring(contextStart, contextEnd);
+              strengths.push(`Vocabulary: The word "${advancedWord}" was used effectively in the context: "...${contextText}...".`);
+            }
+          }
+
+        } else {
+          improvement.push("Vocabulary: Incorporating more varied vocabulary could make the speech more compelling.");
+
+          const frequentWord = findMostFrequentWord(allWords);
+          if (frequentWord && !commonWords.includes(frequentWord)) {
+            improvement.push(`Vocabulary: Consider using synonyms for the word "${frequentWord}", which you used extensively.`);
+          }
+        }
+
+        //Sentiment Analysis
+        const sentimentScore = analyzeSentiment(finalTranscript);
+        if (sentimentScore > 0.2) {
+          strengths.push("Sentiment: Positive tone created an upbeat connection with the audience.");
+
+          // Find a positive sentence
+          const positiveSentence = sentences.find(sentence => analyzeSentiment(sentence) > 0.3);
+          if (positiveSentence) {
+            strengths.push(`Sentiment: Your positive tone shines through in the sentence, "...${positiveSentence.substring(0, 50)}...".`);
+          }
+
+        } else if (sentimentScore < -0.2) {
+          improvement.push("Sentiment: Injecting more positivity could improve audience engagement.");
+          const negativeSentence = sentences.find(sentence => analyzeSentiment(sentence) < -0.3);
+          if (negativeSentence) {
+            improvement.push(`Sentiment: Consider revising the tone of the sentence, "...${negativeSentence.substring(0, 50)}...", to be more upbeat.`);
+          }
+        }
+
+        // Filler Word Analysis - More Specific
+        const fillerWords = ["um", "uh", "like", "you know", "actually", "basically", "absolutely", "highly", "totally", "so"];
+        const fillerWordCounts = fillerWords.reduce((acc, word) => {
+          const regex = new RegExp(`\\b${word}\\b`, "gi");
+          const count = (finalTranscript.match(regex) || []).length;
+          if (count > 0) {
+            acc[word] = count; // Store count for each word
+          }
+          return acc;
+        }, {});
+
+        let specificFillerFeedback = "";
+        for (const word in fillerWordCounts) {
+          specificFillerFeedback += `<li>Avoid using "${word}" ${fillerWordCounts[word]} times.</li>`;
+
+          // Find instance of the filler word and give specific critique
+          let fillerIndex = finalTranscript.indexOf(word);
+          if (fillerIndex !== -1) {
+            let contextStart = Math.max(0, fillerIndex - 25);
+            let contextEnd = Math.min(finalTranscript.length, fillerIndex + 25);
+            let contextText = finalTranscript.substring(contextStart, contextEnd);
+            specificFillerFeedback += `<li>Try replacing "${word}" in the phrase "...${contextText}..." with a pause or a more precise word.</li>`;
+          }
+        }
+
+        if (Object.keys(fillerWordCounts).length > 0) {
+          improvement.push(`Clarity: Reducing fillers could allow for a more seamless delivery. Specific areas to improve: <ul>${specificFillerFeedback}</ul>`);
+        } else {
+          strengths.push("Clarity: Absence of filler words made the speech feel seamless!");
+          // Compliment a specific sentence.
+          const clearSentence = sentences.find(sentence => sentence.length > 20);
+          if (clearSentence) {
+            strengths.push(`Clarity: The clarity of the sentence, "...${clearSentence.substring(0, 40)}...",  contributed to a strong and focused presentation!`);
+          }
+        }
+        //Grammar check
+        const grammarMistakes = await checkGrammar(finalTranscript);
+        if (grammarMistakes.length > 0) {
+          improvement.push("Grammar: Correcting grammar mistakes would make the speech more impactful.")
+        }
+        // Transition Words Analysis
+        const transitionWords = ["however", "therefore", "moreover", "for example", "in addition", "to contrast", "firstly", "secondly", "thirdly", "finally", "resulting in"];
+        const transitionsUsed = transitionWords.filter(word => finalTranscript.toLowerCase().includes(word)).length;
+
+        if (transitionsUsed >= 3) {
+          strengths.push("Connection: Connecting ideas with transition words created a smooth flow.");
+          const usedTransition = transitionWords.find(word => finalTranscript.toLowerCase().includes(word));
+          if (usedTransition) {
+            strengths.push(`Connection: The use of "${usedTransition}" effectively linked ideas.`);
+          }
+
+        } else {
+          improvement.push("Connection: Enhancing transitions could create a more cohesive speech.");
+          const suggestedTransitions = transitionWords.slice(0, 3).join(", ");
+          improvement.push(`Consider using transition words such as: ${suggestedTransitions}.`);
+        }
+
+        const durationSeconds = recordedChunks.length * 0.03;
+        const wordsPerMinute = Math.floor((wordCount / durationSeconds) * 60);
+
+        if (wordsPerMinute > 200) {
+          improvement.push("Pace: Slowing down will improve audience comprehension.");
+          // Find a long sentence and give specific critique
+          const longSentence = sentences.find(sentence => sentence.length > 30);
+          if (longSentence) {
+            improvement.push(`Pace: The section "...${longSentence.substring(0, 40)}..." might benefit from a slightly slower delivery to allow the audience to fully grasp the information.`);
+          }
+
+        } else if (wordsPerMinute < 110) {
+          improvement.push("Pace: Speeding up will help maintain audience attention.");
+          //Suggest removing redundant phrases
+          improvement.push("Pace: Try to eliminate unnecessary repetitions to maintain a brisker pace.");
+
+        } else {
+          strengths.push("Pace: Excellent pace kept the audience engaged and informed.");
+          // Compliment on clarity due to good pace
+          strengths.push("Pace: Your well-maintained pace enhanced the clarity of your arguments.");
+        }
+
+        let motionCount = detectHandMotions();
+        if (motionCount > 5000) {
+          strengths.push("Delivery: Effective hand gestures enhanced the speech.");
+          // Compliment a specific type of hand gesture(placeholder)
+          strengths.push("Delivery: Your confident hand movements mirrored the conviction in your words.");
+
+        } else {
+          improvement.push("Delivery: More expressive hand gestures could further engage the audience.");
+          // Suggest specific gestures (placeholder)
+          improvement.push("Delivery: Incorporating gestures that emphasize key points can make your message more impactful.");
+        }
+
+        const selectedImprovements = [];
+        if (improvement.length > 3) {
+          const shuffled = improvement.sort(() => 0.5 - Math.random());
+          const maxImprovements = 3;
+          for (let i = 0; i < maxImprovements; i++) {
+            selectedImprovements.push(shuffled[i]);
+          }
+        } else {
+          selectedImprovements.push(...improvement);
+        }
+
+        // Function to create scrollable container
+        function createScrollableContainer(element, content) {
+          element.style.display = "block";
+          element.style.overflow = "auto";
+          element.style.maxHeight = "200px"; // Set a fixed height for scrollable content
+          element.style.padding = "10px";
+          element.style.border = "1px solid #ccc";
+
+          element.innerHTML = content;
+        }
+
+        // Updated feedback display with Font Awesome icons and scrollable containers
+        createScrollableContainer(fillerFeedback, `
+                <strong>Feedback:</strong>
+                ${strengths.map(s => `<p><i class="fas fa-check-circle"></i> ${s}</p>`).join("")}
+                <br>
+                <strong>Areas for Improvement:</strong>
+                ${selectedImprovements.map(i => `<p><i class="fas fa-exclamation-triangle"></i> ${i}</p>`).join("")}
+            `);
+
+        createScrollableContainer(strengthsFeedback, `
+                <strong>Strengths:</strong>
+                ${strengths.map(s => `<p><i class="fas fa-check-circle"></i> ${s}</p>`).join("")}
+            `);
+
+        createScrollableContainer(improvementFeedback, `
+                <strong>Areas for Improvement:</strong>
+                ${selectedImprovements.map(i => `<p><i class="fas fa-exclamation-triangle"></i> ${i}</p>`).join("")}
+            `);
+
+        startBtn.style.display = "none";
+        stopBtn.style.display = "none";
+        restartBtn.style.display = "none";
+
+        setupTheHome();
+      }
+
+      async function suggestSimplerAlternatives(sentence) {
+        // Placeholder implementation - replace with actual API call to a vocabulary suggestion service
+        // This is just a mock to demonstrate how it would work
+        return new Promise(resolve => {
+          setTimeout(() => {
+            if (sentence.includes("elevate")) {
+              resolve("Improve or enhance");
+            } else {
+              resolve("Consider rewording for clarity");
+            }
+          }, 500);
+        });
+      }
+
+      function analyzeSentiment(text) {
+        // Placeholder implementation - replace with an actual sentiment analysis library or API
+        // This is just a mock to demonstrate how it would work
+        let score = 0;
+        if (text.includes("happy") || text.includes("great") || text.includes("positive")) {
+          score = 0.5;
+        } else if (text.includes("sad") || text.includes("bad") || text.includes("negative")) {
+          score = -0.5;
+        }
+        return score;
+      }
+      async function checkGrammar(text) {
+        // Placeholder implementation - replace with an actual grammar check library or API
+        // This is just a mock to demonstrate how it would work
+        return new Promise(resolve => {
+          setTimeout(() => {
+            const mistakes = [];
+            if (text.includes("is are")) {
+              mistakes.push("Incorrect verb conjugation");
+            }
+            resolve(mistakes);
+          }, 500);
+        });
+      }
+
+      function findMostFrequentWord(words) {
+        const wordCounts = {};
+        words.forEach(word => {
+          wordCounts[word] = (wordCounts[word] || 0) + 1;
+        });
+
+        let mostFrequent = null;
+        let highestCount = 0;
+
+        for (const word in wordCounts) {
+          if (wordCounts[word] > highestCount) {
+            mostFrequent = word;
+            highestCount = wordCounts[word];
+          }
+        }
+        return mostFrequent;
+      }
+
+      startBtn.addEventListener("click", () => {
+        startRecording();
+      });
+
+      stopBtn.addEventListener("click", () => {
+        stopRecording();
+      });
+
+      restartBtn.addEventListener("click", () => {
+        restartRecording();
+      });
+
+      startVideoStream();
+      setupSpeechRecognition();
     </script>
 </body>
 
