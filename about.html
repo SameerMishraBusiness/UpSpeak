@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About UpSpeak</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* General Styles */
         :root {
             --primary-color: #007bff;
             --secondary-color: #6c757d;
@@ -14,6 +17,9 @@
             --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             --border-radius: 0.25rem;
             --box-shadow-hover: 0 0.75rem 1.25rem rgba(0, 0, 0, 0.2);
+            --transition-speed: 0.3s;
+            --text-color: #333;
+            /* Set a default text color */
         }
 
         body {
@@ -23,35 +29,51 @@
             background-color: var(--light-bg);
             color: var(--dark-text);
             line-height: 1.6;
+            overflow-x: hidden;
+            /* Prevent horizontal scroll */
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 3rem 1rem;
+            /* Reduced padding */
         }
 
+        /* Ensure the page-header is REMOVED */
         .page-header {
-            text-align: center;
-            margin-bottom: 3rem;
+            display: none;
         }
 
-        .page-header__title {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .page-header__subtitle {
-            font-size: 1.2rem;
-            color: var(--secondary-color);
-        }
-
+        /* Parallax Section Styles */
         .founder {
             display: flex;
             align-items: center;
             margin-bottom: 3rem;
             gap: 2rem;
+            position: relative;
+            overflow: hidden;
+            height: 500px;
+            /* Set a fixed height */
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .founder::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('background.jpg');
+            /* Replace with your image */
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transform: scale(1.1);
+            /* Slight zoom for effect */
+            filter: blur(5px);
         }
 
         .founder__image {
@@ -59,16 +81,36 @@
             border-radius: 50%;
             box-shadow: var(--box-shadow);
             overflow: hidden;
+            transition: transform var(--transition-speed) ease-in-out;
+            position: relative;
+            /* Required for parallax effect */
+            top: 0;
+            /* Initial position */
+        }
+
+        .founder__image:hover {
+            transform: scale(1.05);
         }
 
         .founder__image img {
             width: 100%;
             height: auto;
             display: block;
+            object-fit: cover;
+            /* Make the image fill the container */
         }
 
         .founder__info {
             flex: 1;
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Semi-transparent background */
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            /* Required for parallax effect */
+            top: 0;
+            /* Initial position */
         }
 
         .founder__name {
@@ -88,15 +130,38 @@
         }
 
         .achievements {
-            background-color: var(--primary-color);
+            background: linear-gradient(45deg, #007bff, #0056b3, #003380);
+            /* Enhanced gradient */
             color: white;
             padding: 4rem 0;
             text-align: center;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievements::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .achievements:hover::before {
+            opacity: 1;
         }
 
         .achievements__title {
             font-size: 2.5rem;
             margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+            /* Slight letter spacing */
         }
 
         .achievements__grid {
@@ -109,6 +174,13 @@
             background-color: rgba(255, 255, 255, 0.1);
             padding: 1.5rem;
             border-radius: var(--border-radius);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.75rem 1rem rgba(0, 0, 0, 0.2);
         }
 
         .achievement__title {
@@ -129,28 +201,75 @@
             font-size: 2.5rem;
             color: var(--dark-text);
             margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+            letter-spacing: 1px;
+            /* Slight letter spacing */
+        }
+
+        .endorsements__title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
         }
 
         .endorsements__cards {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 7rem;
+            /* Increased gap for spacing */
             flex-wrap: wrap;
         }
 
+        /* Flip Card Styles */
         .endorsement {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            max-width: 300px;
-            text-align: left;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            background-color: transparent;
+            width: 300px;
+            height: 250px;
+            perspective: 1000px;
+            margin-bottom: 20px;
         }
 
-        .endorsement:hover {
-            transform: scale(1.05);
-            box-shadow: var(--box-shadow-hover);
+        .endorsement__inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .endorsement:hover .endorsement__inner {
+            transform: rotateY(180deg);
+        }
+
+        .endorsement__front,
+        .endorsement__back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            background-color: white;
+        }
+
+        .endorsement__front {
+            /* Styles for the front side */
+        }
+
+        .endorsement__back {
+            transform: rotateY(180deg);
+            text-align: left;
         }
 
         .endorsement__image {
@@ -199,40 +318,17 @@
                 align-items: center;
             }
         }
-    </style>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UpSpeak Learn</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* General Body Styles - App Ready */
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background: #f5f7fa;
-            color: #333;
-            overflow-x: hidden;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Header Styles - Clean and Modern */
+        /* Header Styles */
         header {
-            background-color: #fff;
-            padding: 15px 0;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 25px 0;
+            box-shadow: var(--box-shadow);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            /* Glassmorphism effect */
         }
 
         .navbar {
@@ -245,370 +341,34 @@
         }
 
         .logo {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #333;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
             display: flex;
             align-items: center;
             cursor: pointer;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.08);
         }
 
         .logo .microphone-icon {
-            width: 40px;
-            height: 40px;
-            margin-right: 8px;
+            width: 55px;
+            height: 55px;
+            margin-right: 15px;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+            /* Subtle shadow */
         }
 
         .logo .upspeak-up {
-            color: #007bff;
+            color: #ff9933;
+            /* Make "Up" orange */
         }
 
         .logo .upspeak-speak {
-            color: #6c757d;
-        }
-
-        .nav-menu {
-            list-style: none;
-            display: flex;
-            padding: 0;
-            margin: 0;
-        }
-
-        .nav-menu li {
-            margin: 0 15px;
-            position: relative;
-        }
-
-        .nav-menu > li > a {
-            color: #555;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            padding: 8px 12px;
-            border-radius: 5px;
-        }
-
-        .nav-menu > li > a:hover {
-            color: #007bff;
-            background-color: rgba(0, 123, 255, 0.05);
-        }
-
-        .nav-menu .carrot {
-            margin-left: 5px;
-            font-size: 0.8em;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
-            padding: 10px 0;
-            z-index: 1;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            border-radius: 5px;
-        }
-
-        .dropdown-content a {
-            color: #333;
-            padding: 8px 16px;
-            text-decoration: none;
-            display: block;
-            transition: background-color 0.3s ease;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f0f0f0;
-        }
-
-        .nav-menu li:hover .dropdown-content {
-            display: block;
-        }
-
-        .profile-icon {
-            font-size: 1.8rem;
-            color: #777;
-        }
-
-        /* Main Content Styles - App Ready */
-        .watch-container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            background-color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; /* Move content to the top */
-        }
-
-        /* Section Styles - Consistent Padding */
-        .section {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            padding: 20px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; /* Move content to the top */
-        }
-
-        .section.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        /* Home Section Styles */
-        .watch-content {
-            text-align: center;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; /* Move content to the top */
-        }
-
-        .watch-content h2 {
-            font-size: 2.5em;
-            color: #333;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .watch-button {
-            display: inline-block;
-            padding: 12px 30px;
-            font-size: 1.1em;
-            text-decoration: none;
-            background-color: #007bff;
-            color: #fff;
-            border-radius: 8px;
-            margin: 10px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .watch-button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        /* List Styles */
-        .speeches-list {
-            list-style: none;
-            padding: 0;
-            width: 100%;
-        }
-
-        .speeches-list li {
-            margin-bottom: 15px;
-        }
-
-        .speeches-list a {
-            display: block;
-            padding: 12px;
-            background-color: #f8f9fa;
-            color: #333;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-
-        .speeches-list a:hover {
-            background-color: #e9ecef;
-            transform: translateX(3px);
-        }
-
-        .speech-description {
-            font-size: 0.9em;
-            color: #777;
-            margin-top: 5px;
-        }
-
-        /* Video Styles */
-        #videos-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            text-align: center;
-            justify-content: flex-start; /* Move content to the top */
-        }
-
-        #videos-container h2 {
-            text-align: center;
-        }
-
-        .video-item {
-            margin-bottom: 20px;
-            width: 100%;
-            max-width: 560px;
-        }
-
-        .video-item iframe {
-            width: 100%;
-            height: 315px;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Drills Styling */
-        #drills-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            text-align: center;
-            justify-content: flex-start; /* Move content to the top */
-        }
-
-        #drills-container h2 {
-            text-align: center;
-        }
-
-        .tongue-twister {
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
-            width: 100%;
-        }
-
-        /* Puzzles Styling */
-        #quiz-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            text-align: center;
-            justify-content: flex-start; /* Move content to the top */
-        }
-
-        #quiz-container h2 {
-            text-align: center;
-        }
-
-        .question {
-            font-size: 1.4em;
-            color: #555;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .options {
-            margin-bottom: 20px;
-            width: 100%;
-        }
-
-        .options label {
-            display: block;
-            padding: 12px 20px;
-            margin-bottom: 10px;
-            background-color: #fff;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .options label:hover {
-            background-color: #f0f0f0;
-            border-color: #bbb;
-        }
-
-        .options input[type="radio"] {
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        #submit-quiz {
-            padding: 12px 25px;
-            font-size: 1em;
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #submit-quiz:hover {
-            background-color: #4cae4c;
-        }
-
-        #result-container {
-            margin-top: 20px;
-            font-weight: bold;
-            color: #333;
-            text-align: center;
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background: linear-gradient(135deg, #e6f2ff, #ffe6cc);
-            color: #333;
-            overflow-x: hidden;
-            /* Prevent horizontal scroll */
-            min-height: 100vh;
-        }
-
-        header {
-            background-color: #fff;
-            padding: 25px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 100;
-            /* Ensure header stays on top */
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #333;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            /* Make it clickable */
-        }
-
-        .logo .microphone-icon {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-        }
-
-        .logo .upspeak-up {
-            color: orange;
-        }
-
-        .logo .upspeak-speak {
-            color: blue;
+            color: var(--primary-color);
         }
 
         .nav-menu {
@@ -621,234 +381,93 @@
         }
 
         .nav-menu li {
-            margin: 0 20px;
+            margin: 0 30px;
             position: relative;
         }
 
         .nav-menu>li>a {
             color: #555;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: color var(--transition-speed) ease, padding-bottom
+                var(--transition-speed) ease;
             display: flex;
             align-items: center;
             text-decoration: none;
+            padding-bottom: 4px;
         }
 
         .nav-menu>li>a:hover {
-            color: #007bff;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
         }
 
         .nav-menu .carrot {
-            margin-left: 5px;
-            font-size: 0.8em;
+            margin-left: 7px;
+            font-size: 0.9em;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .nav-menu li:hover .carrot {
+            transform: rotate(180deg);
         }
 
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            padding: 12px 16px;
+            background-color: rgba(255, 255, 255, 0.98);
+            min-width: 240px;
+            box-shadow: var(--box-shadow);
+            padding: 20px 30px;
             z-index: 1;
             top: 100%;
             left: 50%;
             transform: translateX(-50%);
-            text-align: center;
-            border-radius: 5px;
-        }
-
-        .dropdown-content a {
-            color: #333;
-            padding: 8px 0;
-            text-decoration: none;
-            display: block;
-            transition: background-color 0.3s ease;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #ddd;
+            text-align: left;
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease, transform
+                var(--transition-speed) ease;
+            transform-origin: top center;
+            backdrop-filter: blur(10px);
         }
 
         .nav-menu li:hover .dropdown-content {
             display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(10px);
+        }
+
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 12px 0;
+            text-decoration: none;
+            display: block;
+            transition: background-color var(--transition-speed) ease, color
+                var(--transition-speed) ease;
+            border-radius: 8px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            color: var(--primary-color);
         }
 
         .profile-icon {
-            font-size: 2rem;
+            font-size: 3rem;
             color: #777;
+            transition: color var(--transition-speed) ease, transform
+                var(--transition-speed) ease;
         }
 
-        /* Main Content Styles */
-        .watch-container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            position: relative;
-            /* For positioning the animated background */
-            overflow: hidden;
-            /* Clip the animated background */
-            border-radius: 15px;
-            /* Optional: round the corners of the container */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            background-color: rgba(255, 255, 255, 0.85);
-            /* Add a semi-transparent background */
-            backdrop-filter: blur(10px);
-            /* Apply a blur effect to the background */
-        }
-
-        /* Animated Background (Example: Bubbles) */
-        .watch-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="15" fill="rgba(0,118,191, 0.3)" /></svg>');
-            /* Change to your bubble image */
-            animation: bubbles 15s linear infinite;
-            z-index: -1;
-            /* Place behind the content */
-        }
-
-        @keyframes bubbles {
-            0% {
-                background-position: 0 0;
-            }
-
-            100% {
-                background-position: 100% 100%;
-            }
-        }
-
-        .section {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            /* Smooth transition */
-        }
-
-        .section.active {
-            display: block;
-            opacity: 1;
-        }
-
-        .watch-content {
-            text-align: center;
-            padding: 30px;
-        }
-
-        .watch-content h2 {
-            font-size: 3em;
-            color: #333;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            /* Subtle shadow */
-        }
-
-        .watch-button {
-            display: inline-block;
-            padding: 15px 35px;
-            font-size: 1.3em;
-            text-decoration: none;
-            background-color: #007bff;
-            /* Blue color */
-            color: #fff;
-            border-radius: 8px;
-            margin: 15px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .watch-button:hover {
-            background-color: #0056b3;
-            /* Darker blue on hover */
-            transform: translateY(-3px);
-            /* Slight lift effect */
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .speeches-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .speeches-list li {
-            margin-bottom: 20px;
-        }
-
-        .speeches-list a {
-            display: block;
-            padding: 15px;
-            background-color: #f0f0f0;
-            color: #333;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-            /* Subtle shadow */
-        }
-
-        .speeches-list a:hover {
-            background-color: #ddd;
-            transform: translateX(5px);
-            /* Slight slide effect */
-        }
-
-        .speech-description {
-            font-size: 1em;
-            color: #777;
-            margin-top: 8px;
-        }
-
-        /* Add some spacing to the bottom */
-        body::after {
-            content: '';
-            display: block;
-            height: 50px;
-            /* Adjust the height as needed */
-        }
-
-        /* Styles for Videos, Drills, Puzzles */
-        #videos-container,
-        #drills-container,
-        #quiz-container {
-            display: none;
-            text-align: left;
-        }
-
-        .video-item {
-            margin-bottom: 20px;
-        }
-
-        .video-item iframe {
-            width: 100%;
-            max-width: 560px;
-            height: 315px;
-        }
-
-        .tongue-twister {
-            background-color: #f0f0f0;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-        }
-
-        .question {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-
-        .options label {
-            display: block;
-            margin-bottom: 8px;
+        .profile-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.15);
         }
     </style>
 </head>
 
 <body>
-    <header>
+    <header id="mainHeader">
         <nav class="navbar">
             <div class="logo" onclick="goToHome()">
                 <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -904,14 +523,8 @@
             <a href="user.html"><i class="fas fa-user-circle profile-icon"></i></a>
         </nav>
     </header>
-    
-<body>
-    <div class="container">
-        <header class="page-header">
-            <h1 class="page-header__title">About UpSpeak</h1>
-            <p class="page-header__subtitle">Empowering voices, one speech at a time.</p>
-        </header>
 
+    <div class="container">
         <section class="founder">
             <div class="founder__image">
                 <img src="mishra.jpg" alt="Sameer Mishra">
@@ -919,7 +532,10 @@
             <div class="founder__info">
                 <h2 class="founder__name">Sameer Mishra</h2>
                 <h3 class="founder__title">Founder & CEO</h3>
-                <p class="founder__bio">Sameer is a champion in impromptu speaking, with multiple tournament victories. Driven by a passion to help others, he's dedicated his career to building confidence in public speaking. His leadership roles in education have shaped UpSpeak's mission to democratize access to effective communication skills.</p>
+                <p class="founder__bio">Sameer is a champion in impromptu speaking, with multiple tournament
+                    victories. Driven by a passion to help others, he's dedicated his career to building confidence
+                    in public speaking. His leadership roles in education have shaped UpSpeak's mission to democratize
+                    access to effective communication skills.</p>
             </div>
         </section>
 
@@ -930,7 +546,9 @@
             <div class="founder__info">
                 <h2 class="founder__name">Deeya Mishra</h2>
                 <h3 class="founder__title">Head Editor</h3>
-                <p class="founder__bio">Deeya is a former student council member who ran for treasurer in 4th grade. She has had great ideas for UpSpeak that have made a tremendous impact on the app. She is still impacting UpSpeak in a way that will not be forgotten.</p>
+                <p class="founder__bio">Deeya is a former student council member who ran for treasurer in 4th grade.
+                    She has had great ideas for UpSpeak that have made a tremendous impact on the app. She is still
+                    impacting UpSpeak in a way that will not be forgotten.</p>
             </div>
         </section>
     </div>
@@ -940,16 +558,22 @@
             <h2 class="achievements__title">Our Achievements</h2>
             <div class="achievements__grid">
                 <div class="achievement">
+                    <i class="fas fa-trophy fa-3x" style="margin-bottom: 0.5rem;"></i>
                     <h3 class="achievement__title">Tournament Victories</h3>
-                    <p class="achievement__description">Won multiple prestigious impromptu speaking competitions.</p>
+                    <p class="achievement__description">Won multiple prestigious impromptu speaking
+                        competitions.</p>
                 </div>
                 <div class="achievement">
+                    <i class="fas fa-graduation-cap fa-3x" style="margin-bottom: 0.5rem;"></i>
                     <h3 class="achievement__title">Leadership Impact</h3>
-                    <p class="achievement__description">Shaped the future of education through key student leadership positions.</p>
+                    <p class="achievement__description">Shaped the future of education through key student
+                        leadership positions.</p>
                 </div>
                 <div class="achievement">
+                    <i class="fas fa-rocket fa-3x" style="margin-bottom: 0.5rem;"></i>
                     <h3 class="achievement__title">App Success</h3>
-                    <p class="achievement__description">Empowered hundreds of users to improve their speaking skills with UpSpeak.</p>
+                    <p class="achievement__description">Empowered hundreds of users to improve their speaking skills
+                        with UpSpeak.</p>
                 </div>
             </div>
         </div>
@@ -960,33 +584,72 @@
             <h2 class="endorsements__title">Endorsed By</h2>
             <div class="endorsements__cards">
                 <div class="endorsement">
-                    <div class="endorsement__image">
-                        <img src="dailey.png" alt="Mayor Pete Dailey">
+                    <div class="endorsement__inner">
+                        <div class="endorsement__front">
+                            <div class="endorsement__image">
+                                <img src="dailey.png" alt="Mayor Pete Dailey">
+                            </div>
+                            <h3 class="endorsement__name">Pete Dailey</h3>
+                            <p class="endorsement__title">Los Altos Mayor</p>
+                        </div>
+                        <div class="endorsement__back">
+                            <p class="endorsement__quote">"UpSpeak is revolutionizing how we approach public
+                                speaking."</p>
+                        </div>
                     </div>
-                    <h3 class="endorsement__name">Pete Dailey</h3>
-                    <p class="endorsement__title">Los Altos Mayor</p>
-                    <p class="endorsement__quote">"UpSpeak is revolutionizing how we approach public speaking."</p>
                 </div>
+
                 <div class="endorsement">
-                    <div class="endorsement__image">
-                        <img src="belal.png" alt="Mayor Aftab Belal">
+                    <div class="endorsement__inner">
+                        <div class="endorsement__front">
+                            <div class="endorsement__image">
+                                <img src="belal.png" alt="Mayor Aftab Belal">
+                            </div>
+                            <h3 class="endorsement__name">Aftab Belal</h3>
+                            <p class="endorsement__title">Saratoga Mayor</p>
+                        </div>
+                        <div class="endorsement__back">
+                            <p class="endorsement__quote">"An essential tool for developing strong communication
+                                skills."</p>
+                        </div>
                     </div>
-                    <h3 class="endorsement__name">Aftab Belal</h3>
-                    <p class="endorsement__title">Saratoga Mayor</p>
-                    <p class="endorsement__quote">"An essential tool for developing strong communication skills."</p>
                 </div>
+
                 <div class="endorsement">
-                    <div class="endorsement__image">
-                        <img src="grover.jpg" alt="Krish Grover">
+                    <div class="endorsement__inner">
+                        <div class="endorsement__front">
+                            <div class="endorsement__image">
+                                <img src="grover.jpg" alt="Krish Grover">
+                            </div>
+                            <h3 class="endorsement__name">Krish Grover</h3>
+                            <p class="endorsement__title">Champion Debater</p>
+                        </div>
+                        <div class="endorsement__back">
+                            <p class="endorsement__quote">"The best way to make sure your message gets across
+                                clearly."</p>
+                        </div>
                     </div>
-                    <h3 class="endorsement__name">Krish Grover</h3>
-                    <p class="endorsement__title">Champion Congressional Debater</p>
-                    <p class="endorsement__quote">"UpSpeak has helped me improve my skills and taken me to new heights!"</p>
                 </div>
+
             </div>
         </div>
     </section>
 
-    </div>
+    <script>
+        // Parallax scrolling effect
+        document.addEventListener("scroll", function () {
+            const founderImage = document.querySelector(".founder__image");
+            const founderInfo = document.querySelector(".founder__info");
+            const scrollPosition = window.pageYOffset;
+
+            founderImage.style.top = (scrollPosition * 0.3) + "px";
+            founderInfo.style.top = (scrollPosition * 0.1) + "px";
+        });
+        function goToHome() {
+            window.location.href = 'home.html';
+        }
+    </script>
+
 </body>
+
 </html>
