@@ -9,24 +9,48 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
+        /* General Styles */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #ff9933;
+            /* Vibrant orange */
+            --text-color: #2c3e50;
+            --background-gradient: linear-gradient(135deg, #ecf0f1, #d5dbdb);
+            /* Softer gradient */
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            /* Stronger shadow */
+            --transition-speed: 0.3s;
+            /* Standard transition speed */
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            background: linear-gradient(135deg, #e6f2ff, #ffe6cc);
-            color: #333;
+            background: var(--background-gradient);
+            color: var(--text-color);
             overflow-x: hidden;
             min-height: 100vh;
+            line-height: 1.8;
+            /* Improved readability */
+            -webkit-font-smoothing: antialiased;
+            /* Smoother fonts */
         }
 
+        /* Header Styles */
         header {
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.95);
+            /* Slightly transparent white */
             padding: 25px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 100;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            /* Glassmorphism effect */
         }
 
         .navbar {
@@ -39,26 +63,35 @@
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #333;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
             display: flex;
             align-items: center;
             cursor: pointer;
+            transition: transform var(--transition-speed) ease;
+            /* Smooth transform */
+        }
+
+        .logo:hover {
+            transform: scale(1.08);
         }
 
         .logo .microphone-icon {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
+            width: 55px;
+            height: 55px;
+            margin-right: 15px;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+            /* Subtle shadow */
         }
 
         .logo .upspeak-up {
-            color: orange;
+            color: var(--secondary-color);
+            /* Orange */
         }
 
         .logo .upspeak-speak {
-            color: blue;
+            color: var(--primary-color);
         }
 
         .nav-menu {
@@ -71,176 +104,347 @@
         }
 
         .nav-menu li {
-            margin: 0 20px;
+            margin: 0 30px;
             position: relative;
         }
 
         .nav-menu>li>a {
             color: #555;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: color var(--transition-speed) ease, padding-bottom
+                var(--transition-speed) ease;
             display: flex;
             align-items: center;
             text-decoration: none;
+            padding-bottom: 4px;
+            /* Space for underline */
         }
 
         .nav-menu>li>a:hover {
-            color: #007bff;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
         }
 
         .nav-menu .carrot {
-            margin-left: 5px;
-            font-size: 0.8em;
+            margin-left: 7px;
+            font-size: 0.9em;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .nav-menu li:hover .carrot {
+            transform: rotate(180deg);
         }
 
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            padding: 12px 16px;
+            background-color: rgba(255, 255, 255, 0.98);
+            /* Slightly transparent */
+            min-width: 240px;
+            box-shadow: var(--box-shadow);
+            padding: 20px 30px;
             z-index: 1;
             top: 100%;
             left: 50%;
             transform: translateX(-50%);
-            text-align: center;
-            border-radius: 5px;
-        }
-
-        .dropdown-content a {
-            color: #333;
-            padding: 8px 0;
-            text-decoration: none;
-            display: block;
-            transition: background-color 0.3s ease;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #ddd;
+            text-align: left;
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease, transform
+                var(--transition-speed) ease;
+            transform-origin: top center;
+            backdrop-filter: blur(10px);
+            /* Glassmorphism */
         }
 
         .nav-menu li:hover .dropdown-content {
             display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(10px);
+        }
+
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 12px 0;
+            text-decoration: none;
+            display: block;
+            transition: background-color var(--transition-speed) ease, color
+                var(--transition-speed) ease;
+            border-radius: 8px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            color: var(--primary-color);
         }
 
         .profile-icon {
-            font-size: 2rem;
+            font-size: 3rem;
             color: #777;
+            transition: color var(--transition-speed) ease, transform
+                var(--transition-speed) ease;
+        }
+
+        .profile-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.15);
         }
 
         /* Main Content Styles */
         .watch-container {
             max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
+            margin: 50px auto;
+            padding: 50px;
             position: relative;
             overflow: hidden;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: var(--box-shadow);
+            background-color: rgba(255, 255, 255, 0.95);
+            /* Semi-transparent */
+            backdrop-filter: blur(12px);
+            z-index: 1;
+            /* Ensure content is above the background */
         }
 
-        /* Animated Background (Example: Bubbles) */
+        /* Animated Background (Subtle Gradients) */
         .watch-container::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="15" fill="rgba(76, 175, 80, 0.3)" /></svg>');
-            animation: bubbles 15s linear infinite;
+            width: 120%;
+            height: 120%;
+            background: linear-gradient(45deg, rgba(255, 235, 59, 0.3), rgba(0, 176, 255, 0.3), rgba(233, 30, 99, 0.3));
+            background-size: 300% 300%;
+            animation: animatedGradient 15s ease infinite;
             z-index: -1;
+            /* Behind the content */
+            opacity: 0.7;
+            /* Subtle effect */
+            border-radius: 35px;
+            /* Match container radius */
+            transform: translate(-5%, -5%);
         }
 
-        @keyframes bubbles {
+        @keyframes animatedGradient {
             0% {
-                background-position: 0 0;
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
             }
 
             100% {
-                background-position: 100% 100%;
+                background-position: 0% 50%;
             }
         }
 
         .section {
             display: none;
-            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+            transition: opacity 0.7s ease-in-out, transform 0.7s ease-in-out;
+            transform: translateY(40px);
+            /* Start off-screen */
         }
 
         .section.active {
             display: block;
             opacity: 1;
+            transform: translateY(0);
         }
 
         .watch-content {
             text-align: center;
-            padding: 30px;
+            padding: 60px;
         }
 
         .watch-content h2 {
-            font-size: 3em;
-            color: #333;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 4.5em;
+            color: var(--text-color);
+            margin-bottom: 35px;
+            text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.15);
+            letter-spacing: 1.2px;
+            /* Slightly wider spacing */
+        }
+
+        .watch-content p {
+            font-size: 1.4em;
+            color: #555;
+            margin-bottom: 50px;
+            line-height: 1.9;
+            font-weight: 400;
         }
 
         .watch-button {
             display: inline-block;
-            padding: 15px 35px;
-            font-size: 1.3em;
+            padding: 20px 50px;
+            font-size: 1.6em;
             text-decoration: none;
-            background-color: #4CAF50;
+            background-color: var(--secondary-color);
             color: #fff;
-            border-radius: 8px;
-            margin: 15px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            margin: 30px;
+            transition: background-color var(--transition-speed) ease,
+                transform var(--transition-speed) ease, box-shadow
+                var(--transition-speed) ease;
+            box-shadow: var(--box-shadow);
+            border: none;
+            /* Remove default border */
+            cursor: pointer;
+            /* Indicate it's clickable */
+            outline: none;
+            /* Remove focus outline */
         }
 
         .watch-button:hover {
-            background-color: #45a049;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+            background-color: #e68a00;
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
         }
 
+        .watch-button:active {
+            /* Add active state style */
+            transform: translateY(-4px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Speech List Styles */
         .speeches-list {
             list-style: none;
             padding: 0;
         }
 
         .speeches-list li {
-            margin-bottom: 20px;
+            margin-bottom: 35px;
         }
 
         .speeches-list a {
-            display: block;
-            padding: 15px;
-            background-color: #f0f0f0;
-            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px 35px;
+            background-color: rgba(245, 245, 245, 0.8);
+            /* Slightly transparent */
+            color: var(--text-color);
             text-decoration: none;
-            border-radius: 8px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            border-radius: 18px;
+            transition: background-color var(--transition-speed) ease,
+                transform var(--transition-speed) ease, box-shadow
+                var(--transition-speed) ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
 
         .speeches-list a:hover {
-            background-color: #ddd;
-            transform: translateX(5px);
+            background-color: rgba(235, 235, 235, 0.9);
+            transform: translateX(7px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .speech-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: color var(--transition-speed) ease;
         }
 
         .speech-description {
-            font-size: 1em;
+            font-size: 1.1em;
             color: #777;
-            margin-top: 8px;
+            margin-top: 15px;
         }
 
-        body::after {
-            content: '';
-            display: block;
-            height: 50px;
+        .speech-date {
+            font-size: 0.95em;
+            color: #999;
+            font-style: italic;
+        }
+
+        .speeches-list a:hover .speech-title {
+            color: var(--primary-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .logo {
+                margin-bottom: 25px;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-menu li {
+                margin: 15px 0;
+            }
+
+            .watch-content h2 {
+                font-size: 3.5em;
+            }
+
+            .watch-content p {
+                font-size: 1.3em;
+            }
+
+            .watch-button {
+                font-size: 1.4em;
+                padding: 18px 40px;
+            }
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition-speed) ease;
+        }
+
+        footer a:hover {
+            color: #0056b3;
+        }
+
+        /* Scroll to Top Button */
+        #scrollToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            font-size: 24px;
+            border: none;
+            outline: none;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            border-radius: 50%;
+            transition: background-color var(--transition-speed), opacity
+                var(--transition-speed), transform var(--transition-speed);
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #0056b3;
+            transform: translateY(-5px);
+        }
+
+        #scrollToTopBtn:active {
+            background-color: #004085;
+            transform: translateY(-2px);
         }
 
         /* Badges Styles */
@@ -326,6 +530,9 @@
             flex-direction: column;
             align-items: flex-start;
             width: 100%;
+            /* Ensure it fills the container */
+            margin: 0 auto;
+            /* Center the quiz container */
         }
 
         .question {
@@ -565,9 +772,6 @@
     <div class="watch-container">
         <div class="watch-content section active" id="home-section">
             <h2>UpSpeak Profile</h2>
-            <p style="font-size: 1.2em; color:#555; margin-bottom: 30px;">Welcome to UpSpeak Profile – Your gateway to a
-                universe
-                where you can start your profiling journey!</p>
             <a href="#" class="watch-button" onclick="loadPersonalityQuiz(); return false;">Personality</a>
             <a href="#" class="watch-button" onclick="showSection('badges-section'); return false;">Badges</a>
             <a href="#" class="watch-button" onclick="showSection('quests-section'); return false;">Quests</a>
@@ -661,221 +865,236 @@
         function showSection(sectionId) {
             const sections = document.querySelectorAll('.section');
             sections.forEach(section => {
-                section.style.display = 'none';
+                section.classList.remove('active'); // Use classList for safety
+                section.style.display = 'none'; // Explicitly hide
             });
 
             const targetSection = document.getElementById(sectionId);
             if (targetSection) {
-                targetSection.style.display = 'block';
+                targetSection.classList.add('active'); // Use classList for safety
+                targetSection.style.display = 'block'; //Explicitly show
             } else {
                 console.error('Section with id "' + sectionId + '" not found.');
             }
         }
 
         function loadQuestion(questionNumber) {
-    const questionContainer = document.getElementById('question-container');
-    const questionData = questions[questionNumber];
+            const questionContainer = document.getElementById('question-container');
+            const questionData = questions[questionNumber];
 
-    if (!questionData) {
-        // Quiz is complete
-        return showResults();
-    }
+            if (!questionData) {
+                // Quiz is complete
+                return showResults();
+            }
 
-    let questionHTML = `
+            let questionHTML = `
         <div class="question">${questionData.question}</div>
         <div class="options">
     `;
 
-    for (const option in questionData.options) {
-        questionHTML += `
-            <label>
-                <input type="radio" name="q${questionNumber}" value="${option}" ${answers[questionNumber] === option ? 'checked' : ''}>
-                ${questionData.options[option]}
-            </label>
-        `;
-    }
+            for (const option in questionData.options) {
+                questionHTML +=             `<label>
+                        <input type="radio" name="q${questionNumber}" value="${option}" ${answers[questionNumber] === option ? 'checked' : ''}>
+                        ${questionData.options[option]}
+                    </label>
+                    `;
+                    }
 
-    questionHTML += `</div>`;
-    questionContainer.innerHTML = questionHTML;
+                    questionHTML += `</div>`;
+                    questionContainer.innerHTML = questionHTML;
 
-    // Update Progress Dots
-    updateProgressDots();
-}
+                    // Update Progress Dots
+                    updateProgressDots();
+                    }
 
-function updateProgressDots() {
-    const dots = document.querySelectorAll('.progress-dots .dot');
-    dots.forEach(dot => {
-        const questionNumber = parseInt(dot.dataset.question);
-        if (questionNumber < currentQuestion) {
-            dot.classList.add('completed');
-        } else {
-            dot.classList.remove('completed');
-        }
-    });
-}
+                    function updateProgressDots() {
+                    const dots = document.querySelectorAll('.progress-dots .dot');
+                    dots.forEach(dot => {
+                    const questionNumber = parseInt(dot.dataset.question);
+                    if (questionNumber < currentQuestion) {
+                        dot.classList.add('completed');
+                    } else {
+                        dot.classList.remove('completed');
+                    }
+                    });
+                    }
 
-function showResults() {
-    showSection('result-section');
+                    function showResults() {
+                    showSection('result-section');
 
-    let aCount = 0;
-    for (const question in answers) {
-        if (answers[question] === 'a') {
-            aCount++;
-        }
-    }
+                    let aCount = 0;
+                    for (const question in answers) {
+                    if (answers[question] === 'a') {
+                        aCount++;
+                    }
+                    }
 
-    // Assign personality based on the number of A's selected
-    let personality = "";
-    if (aCount >= 5) {
-        personality = "Dolphin"; // Very enthusiastic and engaging listeners
-    } else if (aCount === 4) {
-        personality = "Eagle"; // Visionary listeners who appreciate big ideas
-    } else if (aCount === 3) {
-        personality = "Elephant"; // Empathetic listeners who connect emotionally
-    } else if (aCount === 2) {
-        personality = "Owl"; // Analytical listeners who prefer structured talks
-    } else if (aCount === 1) {
-        personality = "Fox"; // Critical thinkers who enjoy debates
-    } else {
-        personality = "Bear"; // Practical listeners focused on actionable information
-    } // Determine result message
-    let resultMessage = "";
-    switch (personality) {
-        case "Dolphin":
-            resultMessage = "Congratulations! You are the Dolphin! You thrive in dynamic presentations and enjoy engaging with energetic speakers who inspire you!";
-            break;
-        case "Eagle":
-            resultMessage = "Congratulations! You are the Eagle! You are inspired by big ideas and motivational speeches.";
-            break;
-        case "Elephant":
-            resultMessage = "Congratulations! You are the Elephant! You connect emotionally and value personal stories.";
-            break;
-        case "Owl":
-            resultMessage = "Congratulations! You are the Owl! You appreciate structured talks and analytical speakers.";
-            break;
-        case "Fox":
-            resultMessage = "Congratulations! You are the Fox! You enjoy debates and critical thinking.";
-            break;
-        case "Bear":
-            resultMessage = "Congratulations! You are the Bear! You are practical and focus on actionable information.";
-            break;
-    }
+                    // Assign personality based on the number of A's selected
+                    let personality = "";
+                    let animalIcon = ""; // To store the Font Awesome icon class
+                    if (aCount >= 5) {
+                    personality = "Dolphin"; // Very enthusiastic and engaging listeners
+                    animalIcon = "fas fa-fish";
+                    } else if (aCount === 4) {
+                    personality = "Eagle"; // Visionary listeners who appreciate big ideas
+                    animalIcon = "fas fa-eagle";
+                    } else if (aCount === 3) {
+                    personality = "Elephant"; // Empathetic listeners who connect emotionally
+                    animalIcon = "fas fa-elephant";
+                    } else if (aCount === 2) {
+                    personality = "Owl"; // Analytical listeners who prefer structured talks
+                    animalIcon = "fas fa-owl";
+                    } else if (aCount === 1) {
+                    personality = "Fox"; // Critical thinkers who enjoy debates
+                    animalIcon = "fas fa-crow"; // Use a crow icon for Fox
+                    } else {
+                    personality = "Bear"; // Practical listeners focused on actionable information
+                    animalIcon = "fas fa-bear";
+                    } // Determine result message
+                    let resultMessage = "";
+                    switch (personality) {
+                    case "Dolphin":
+                        resultMessage =
+                            "Congratulations! You are the Dolphin! You thrive in dynamic presentations and enjoy engaging with energetic speakers who inspire you!";
+                        break;
+                    case "Eagle":
+                        resultMessage =
+                            "Congratulations! You are the Eagle! You are inspired by big ideas and motivational speeches.";
+                        break;
+                    case "Elephant":
+                        resultMessage =
+                            "Congratulations! You are the Elephant! You connect emotionally and value personal stories.";
+                        break;
+                    case "Owl":
+                        resultMessage =
+                            "Congratulations! You are the Owl! You appreciate structured talks and analytical speakers.";
+                        break;
+                    case "Fox":
+                        resultMessage =
+                            "Congratulations! You are the Fox! You enjoy debates and critical thinking.";
+                        break;
+                    case "Bear":
+                        resultMessage =
+                            "Congratulations! You are the Bear! You are practical and focus on actionable information.";
+                        break;
+                    }
 
-    // Display the result message
-    document.getElementById('result-message').textContent = resultMessage;
+                    // Display the result message
+                    document.getElementById('result-message').innerHTML =
+                    `<i class="${animalIcon}"></i>  ${resultMessage}`;
 
-    // Add event listener to the copy button
-    document.getElementById('copy-button').addEventListener('click', function () {
-        const copyText = `I'm the ${personality}! What are you? Test at speaky.tiiny.site`;
+                    // Add event listener to the copy button
+                    document.getElementById('copy-button').addEventListener('click', function() {
+                    const copyText = `I'm the ${personality}! What are you? Test at speaky.tiiny.site`;
 
-        navigator.clipboard.writeText(copyText)
-            .then(() => {
-                alert('Copied to clipboard!');
-            })
-            .catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-    });
-}
- // Global variable for the current question
- let currentQuestion = 1;
+                    navigator.clipboard.writeText(copyText)
+                        .then(() => {
+                            alert('Copied to clipboard!');
+                        })
+                        .catch(err => {
+                            console.error('Failed to copy: ', err);
+                        });
+                    });
+                    }
+                    // Global variable for the current question
+                    let currentQuestion = 1;
 
-// Global variable to store the user's answers
-let answers = {};
+                    // Global variable to store the user's answers
+                    let answers = {};
 
-const questions = {
-            1: {
-                question: "Which speech excerpt intrigues you more?",
-                options: {
-                    a: "In the face of impossibility, we find our true strength.",
-                    b: "By analyzing patterns, we can predict and shape our future."
-                }
-            },
-            2: {
-                question: "Which presentation title appeals to you most?",
-                options: {
-                    a: "Breaking Boundaries: The Art of the Impossible",
-                    b: "Decoding Success: A Data-Driven Approach"
-                }
-            },
-            3: {
-                question: "When listening to a speech, do you prefer:",
-                options: {
-                    a: "Passionate delivery with dramatic pauses",
-                    b: "Steady pace with clear, logical progression"
-                }
-            },
-            4: {
-                question: "Which type of speaker would you rather listen to?",
-                options: {
-                    a: "An inspiring leader sharing personal experiences",
-                    b: "An expert explaining complex concepts"
-                }
-            },
-            5: {
-                question: "How do you best engage with the content of a presentation?",
-                options: {
-                    a: "Visualizing scenarios and possibilities",
-                    b: "Taking notes and analyzing key points"
-                }
-            },
-            6: {
-                question: "After a thought-provoking talk, would you rather:",
-                options: {
-                    a: "Engage in a lively group discussion about the ideas",
-                    b: "Quietly reflect and research more on the topic"
-                }
-            }
-        };
+                    const questions = {
+                    1: {
+                    question: "Which speech excerpt intrigues you more?",
+                    options: {
+                        a: "In the face of impossibility, we find our true strength.",
+                        b: "By analyzing patterns, we can predict and shape our future."
+                    }
+                    },
+                    2: {
+                    question: "Which presentation title appeals to you most?",
+                    options: {
+                        a: "Breaking Boundaries: The Art of the Impossible",
+                        b: "Decoding Success: A Data-Driven Approach"
+                    }
+                    },
+                    3: {
+                    question: "When listening to a speech, do you prefer:",
+                    options: {
+                        a: "Passionate delivery with dramatic pauses",
+                        b: "Steady pace with clear, logical progression"
+                    }
+                    },
+                    4: {
+                    question: "Which type of speaker would you rather listen to?",
+                    options: {
+                        a: "An inspiring leader sharing personal experiences",
+                        b: "An expert explaining complex concepts"
+                    }
+                    },
+                    5: {
+                    question: "How do you best engage with the content of a presentation?",
+                    options: {
+                        a: "Visualizing scenarios and possibilities",
+                        b: "Taking notes and analyzing key points"
+                    }
+                    },
+                    6: {
+                    question: "After a thought-provoking talk, would you rather:",
+                    options: {
+                        a: "Engage in a lively group discussion about the ideas",
+                        b: "Quietly reflect and research more on the topic"
+                    }
+                    }
+                    };
 
-        // Attach event listeners after the page loads
-document.addEventListener('DOMContentLoaded', function () {
-            // Function to add the the Personality Quiz when the button is clicked
-         function loadPersonalityQuiz() {
-        showSection('personality-section');
-        const quizContainer = document.getElementById('quiz-container');
-        quizContainer.style.display = 'block';
-        loadQuestion(1);
-        document.getElementById('next-question').addEventListener('click', function () {
-        // Get the selected answer
-        const selectedAnswer = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
+                    // Attach event listeners after the page loads
+                    document.addEventListener('DOMContentLoaded', function() {
+                    // Function to add the the Personality Quiz when the button is clicked
+                    function loadPersonalityQuiz() {
+                    showSection('personality-section');
+                    const quizContainer = document.getElementById('quiz-container');
+                    quizContainer.style.display = 'block';
+                    loadQuestion(1);
+                    document.getElementById('next-question').addEventListener('click', function() {
+                        // Get the selected answer
+                        const selectedAnswer = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
 
-        if (selectedAnswer) {
-            answers[currentQuestion] = selectedAnswer.value;
-            // Move to the next question
-            currentQuestion++;
-            loadQuestion(currentQuestion);
-        } else {
-            alert("Please select an answer.");
-        }
-    });
-}
-window.loadPersonalityQuiz = loadPersonalityQuiz;
-        // Initialize the quiz to start at the home section
-    showSection('home-section');
-});
-        // Define variables for quest progress
-        let SpeechesDelivered = 0;
-        let PuzzlesAnswered = 0;
-        let SpeechesWatched = 0;
+                        if (selectedAnswer) {
+                            answers[currentQuestion] = selectedAnswer.value;
+                            // Move to the next question
+                            currentQuestion++;
+                            loadQuestion(currentQuestion);
+                        } else {
+                            alert("Please select an answer.");
+                        }
+                    });
+                    }
+                    window.loadPersonalityQuiz = loadPersonalityQuiz;
+                    // Initialize the quiz to start at the home section
+                    showSection('home-section');
+                    });
+                    // Define variables for quest progress
+                    let SpeechesDelivered = 0;
+                    let PuzzlesAnswered = 0;
+                    let SpeechesWatched = 0;
 
-        // Function to update quest progress
-        function updateQuestProgress() {
-            // Calculate progress percentages
-            const speechProgress = (SpeechesDelivered / 3) * 100;
-            const puzzleProgress = (PuzzlesAnswered / 5) * 100;
-            const watchProgress = (SpeechesWatched / 10) * 100;
+                    // Function to update quest progress
+                    function updateQuestProgress() {
+                    // Calculate progress percentages
+                    const speechProgress = (SpeechesDelivered / 3) * 100;
+                    const puzzleProgress = (PuzzlesAnswered / 5) * 100;
+                    const watchProgress = (SpeechesWatched / 10) * 100;
 
-            // Update progress bars
-            const speechBar = document.getElementById('speech-progress');
-            const puzzleBar = document.getElementById('puzzle-progress');
-            const watchBar = document.getElementById('watch-progress');
+                    // Update progress bars
+                    const speechBar = document.getElementById('speech-progress');
+                    const puzzleBar = document.getElementById('puzzle-progress');
+                    const watchBar = document.getElementById('watch-progress');
 
-            speechBar.style.width = `${Math.min(speechProgress, 100)}%`;
-            puzzleBar.style.width = `${Math.min(puzzleProgress, 100)}%`;
-            watchBar.style.width = `${Math.min(watchProgress, 100)}%`;
-        }
-    </script>
-</body>
+                    speechBar.style.width = `${Math.min(speechProgress, 100)}%`;
+                    puzzleBar.style.width = `${Math.min(puzzleProgress, 100)}%`;
+                    watchBar.style.width = `${Math.min(watchProgress, 100)}%`;
+                    }
+                    </script>
+                    </body>
 
-</html>
+                    </html>
