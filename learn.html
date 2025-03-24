@@ -1,836 +1,1299 @@
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>UpSpeak Learn</title>
-        <link rel="icon" href="favicon.ico" type="image/x-icon">
-        <link rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-        <style>
-            /* General Styles */
-            :root {
-                --primary-color: #007bff;
-                --secondary-color: #ff9933;
-                /* Vibrant orange */
-                --text-color: #2c3e50;
-                --background-gradient: linear-gradient(135deg, #ecf0f1, #d5dbdb);
-                /* Softer gradient */
-                --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-                /* Stronger shadow */
-                --transition-speed: 0.3s;
-                /* Standard transition speed */
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSpeak Learn</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        /* General Styles */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #ff9933;
+            --text-color: #2c3e50;
+            --background-gradient: linear-gradient(135deg, #ecf0f1, #d5dbdb);
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            --transition-speed: 0.3s;
+            --accent-color: #9c27b0;
+            --success-color: #4CAF50;
+            --danger-color: #f44336;
+            --warning-color: #ff9800;
+            --info-color: #00bcd4;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--background-gradient);
+            color: var(--text-color);
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header Styles - Kept the same as requested */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 25px 0;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.08);
+        }
+
+        .logo .microphone-icon {
+            width: 55px;
+            height: 55px;
+            margin-right: 15px;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+        }
+
+        .logo .upspeak-up {
+            color: var(--secondary-color);
+        }
+
+        .logo .upspeak-speak {
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu li {
+            margin: 0 30px;
+            position: relative;
+        }
+
+        .nav-menu>li>a {
+            color: #555;
+            font-weight: 500;
+            transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            padding-bottom: 4px;
+        }
+
+        .nav-menu>li>a:hover {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .nav-menu .carrot {
+            margin-left: 7px;
+            font-size: 0.9em;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .nav-menu li:hover .carrot {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.98);
+            min-width: 240px;
+            box-shadow: var(--box-shadow);
+            padding: 20px 30px;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: left;
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
+            transform-origin: top center;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-menu li:hover .dropdown-content {
+            display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(10px);
+        }
+
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 12px 0;
+            text-decoration: none;
+            display: block;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+            border-radius: 8px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            color: var(--primary-color);
+        }
+
+        .profile-icon {
+            font-size: 3rem;
+            color: #777;
+            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+        }
+
+        .profile-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.15);
+        }
+
+        /* Main Content Styles - Enhanced */
+        .watch-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 50px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 30px;
+            box-shadow: var(--box-shadow);
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 1;
+        }
+
+        /* Enhanced Animation for Background */
+        .watch-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150%;
+            height: 150%;
+            background: linear-gradient(45deg,
+                    rgba(255, 235, 59, 0.2),
+                    rgba(0, 176, 255, 0.2),
+                    rgba(233, 30, 99, 0.2),
+                    rgba(76, 175, 80, 0.2));
+            background-size: 400% 400%;
+            animation: animatedGradient 15s ease infinite alternate;
+            z-index: -1;
+            opacity: 0.7;
+            border-radius: 35px;
+            transform: translate(-5%, -5%);
+        }
+
+        @keyframes animatedGradient {
+            0% {
+                background-position: 0% 50%;
             }
 
-            body {
-                font-family: 'Poppins', sans-serif;
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                background: var(--background-gradient);
-                color: var(--text-color);
-                overflow-x: hidden;
-                min-height: 100vh;
-                line-height: 1.8;
-                /* Improved readability */
-                -webkit-font-smoothing: antialiased;
-                /* Smoother fonts */
+            50% {
+                background-position: 100% 50%;
             }
 
-            /* Header Styles */
-            header {
-                background-color: rgba(255, 255, 255, 0.95);
-                /* Slightly transparent white */
-                padding: 25px 0;
-                box-shadow: var(--box-shadow);
-                position: sticky;
-                top: 0;
-                z-index: 1000;
-                backdrop-filter: blur(10px);
-                /* Glassmorphism effect */
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.7s ease-in-out, transform 0.7s ease-in-out;
+            transform: translateY(40px);
+        }
+
+        .section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .watch-content {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .watch-content h2 {
+            font-size: 4.5em;
+            color: var(--text-color);
+            margin-bottom: 35px;
+            text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.15);
+            letter-spacing: 1.2px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .watch-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+
+        .watch-content p {
+            font-size: 1.4em;
+            color: #555;
+            margin-bottom: 50px;
+            line-height: 1.9;
+            font-weight: 400;
+        }
+
+        /* Enhanced Button Styles */
+        .watch-button {
+            display: inline-block;
+            padding: 20px 50px;
+            font-size: 1.6em;
+            text-decoration: none;
+            background-color: var(--secondary-color);
+            color: #fff;
+            border-radius: 15px;
+            margin: 30px;
+            transition: all var(--transition-speed) ease;
+            box-shadow: var(--box-shadow);
+            border: none;
+            cursor: pointer;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .watch-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.7s ease;
+        }
+
+        .watch-button:hover {
+            background-color: #e68a00;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .watch-button:hover::before {
+            left: 100%;
+        }
+
+        .watch-button:active {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Progress Tracking */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tracker-item {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            width: 30%;
+        }
+
+        .tracker-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tracker-item h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .tracker-count {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--secondary-color);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Enhanced Video Section */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .video-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 0;
+            padding-bottom: 56.25%;
+            /* 16:9 Aspect Ratio */
+        }
+
+        .video-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-item iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-completion {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-item:hover .video-completion {
+            opacity: 1;
+        }
+
+        .video-watched {
+            border: 3px solid var(--success-color);
+        }
+
+        /* Interactive Drills Section */
+        .drills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .tongue-twister {
+            position: relative;
+            padding: 25px;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .tongue-twister:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .tongue-twister p {
+            font-size: 1.2em;
+            color: var(--text-color);
+            text-align: center;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .mic-button {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .mic-button:hover {
+            transform: scale(1.1);
+            background: #0056b3;
+        }
+
+        .mic-button.recording {
+            background: var(--danger-color);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4);
             }
 
-            .navbar {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 20px;
+            70% {
+                box-shadow: 0 0 0 10px rgba(244, 67, 54, 0);
             }
 
-            .logo {
-                font-size: 2rem;
-                font-weight: 700;
-                color: var(--text-color);
-                display: flex;
-                align-items: center;
-                cursor: pointer;
-                transition: transform var(--transition-speed) ease;
-                /* Smooth transform */
+            100% {
+                box-shadow: 0 0 0 0 rgba(244, 67, 54, 0);
             }
+        }
 
-            .logo:hover {
-                transform: scale(1.08);
-            }
+        .drill-completed {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--success-color);
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-            .logo .microphone-icon {
-                width: 55px;
-                height: 55px;
-                margin-right: 15px;
-                filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
-                /* Subtle shadow */
-            }
+        /* Enhanced Quiz Section */
+        #quiz-container {
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
 
-            .logo .upspeak-up {
-                color: var(--secondary-color);
-                /* Orange */
-            }
+        .question {
+            font-size: 1.6em;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            color: var(--text-color);
+            font-weight: 600;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 20px;
+        }
 
-            .logo .upspeak-speak {
-                color: var(--primary-color);
-            }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
 
-            .nav-menu {
-                list-style: none;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 0;
-                margin: 0;
-            }
+        .options label {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
 
-            .nav-menu li {
-                margin: 0 30px;
-                position: relative;
-            }
+        .options label:hover {
+            background-color: rgba(0, 123, 255, 0.05);
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
 
-            .nav-menu>li>a {
-                color: #555;
-                font-weight: 500;
-                transition: color var(--transition-speed) ease, padding-bottom
-                    var(--transition-speed) ease;
-                display: flex;
-                align-items: center;
-                text-decoration: none;
-                padding-bottom: 4px;
-                /* Space for underline */
-            }
+        input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.3);
+            accent-color: var(--primary-color);
+        }
 
-            .nav-menu>li>a:hover {
-                color: var(--primary-color);
-                border-bottom: 2px solid var(--primary-color);
-            }
+        #result-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 1.2em;
+            font-weight: 500;
+            text-align: center;
+        }
 
-            .nav-menu .carrot {
-                margin-left: 7px;
-                font-size: 0.9em;
-                transition: transform var(--transition-speed) ease;
-            }
+        /* Animations and Effects */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
 
-            .nav-menu li:hover .carrot {
-                transform: rotate(180deg);
-            }
-
-            .dropdown-content {
-                display: none;
-                position: absolute;
-                background-color: rgba(255, 255, 255, 0.98);
-                /* Slightly transparent */
-                min-width: 240px;
-                box-shadow: var(--box-shadow);
-                padding: 20px 30px;
-                z-index: 1;
-                top: 100%;
-                left: 50%;
-                transform: translateX(-50%);
-                text-align: left;
-                border-radius: 15px;
+        @keyframes fadeIn {
+            0% {
                 opacity: 0;
-                transition: opacity var(--transition-speed) ease, transform
-                    var(--transition-speed) ease;
-                transform-origin: top center;
-                backdrop-filter: blur(10px);
-                /* Glassmorphism */
+                transform: translateY(20px);
             }
 
-            .nav-menu li:hover .dropdown-content {
-                display: block;
-                opacity: 1;
-                transform: translateX(-50%) translateY(10px);
-            }
-
-            .dropdown-content a {
-                color: var(--text-color);
-                padding: 12px 0;
-                text-decoration: none;
-                display: block;
-                transition: background-color var(--transition-speed) ease, color
-                    var(--transition-speed) ease;
-                border-radius: 8px;
-            }
-
-            .dropdown-content a:hover {
-                background-color: rgba(0, 123, 255, 0.1);
-                color: var(--primary-color);
-            }
-
-            .profile-icon {
-                font-size: 3rem;
-                color: #777;
-                transition: color var(--transition-speed) ease, transform
-                    var(--transition-speed) ease;
-            }
-
-            .profile-icon:hover {
-                color: var(--primary-color);
-                transform: scale(1.15);
-            }
-
-            /* Main Content Styles */
-            .watch-container {
-                max-width: 1200px;
-                margin: 50px auto;
-                padding: 50px;
-                position: relative;
-                overflow: hidden;
-                border-radius: 30px;
-                box-shadow: var(--box-shadow);
-                background-color: rgba(255, 255, 255, 0.95);
-                /* Semi-transparent */
-                backdrop-filter: blur(12px);
-                z-index: 1;
-                /* Ensure content is above the background */
-            }
-
-            /* Animated Background (Subtle Gradients) */
-            .watch-container::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 120%;
-                height: 120%;
-                background: linear-gradient(45deg, rgba(255, 235, 59, 0.3), rgba(0, 176, 255, 0.3), rgba(233, 30, 99, 0.3));
-                background-size: 300% 300%;
-                animation: animatedGradient 15s ease infinite;
-                z-index: -1;
-                /* Behind the content */
-                opacity: 0.7;
-                /* Subtle effect */
-                border-radius: 35px;
-                /* Match container radius */
-                transform: translate(-5%, -5%);
-            }
-
-            @keyframes animatedGradient {
-                0% {
-                    background-position: 0% 50%;
-                }
-
-                50% {
-                    background-position: 100% 50%;
-                }
-
-                100% {
-                    background-position: 0% 50%;
-                }
-            }
-
-            .section {
-                display: none;
-                opacity: 0;
-                transition: opacity 0.7s ease-in-out, transform 0.7s ease-in-out;
-                transform: translateY(40px);
-                /* Start off-screen */
-            }
-
-            .section.active {
-                display: block;
+            100% {
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
 
-            .watch-content {
-                text-align: center;
-                padding: 60px;
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .bounce {
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-20px);
+            }
+
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .logo {
+                margin-bottom: 25px;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-menu li {
+                margin: 15px 0;
             }
 
             .watch-content h2 {
-                font-size: 4.5em;
-                color: var(--text-color);
-                margin-bottom: 35px;
-                text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.15);
-                letter-spacing: 1.2px;
-                /* Slightly wider spacing */
+                font-size: 3.5em;
             }
 
             .watch-content p {
-                font-size: 1.4em;
-                color: #555;
-                margin-bottom: 50px;
-                line-height: 1.9;
-                font-weight: 400;
+                font-size: 1.3em;
             }
 
             .watch-button {
-                display: inline-block;
-                padding: 20px 50px;
-                font-size: 1.6em;
-                text-decoration: none;
-                background-color: var(--secondary-color);
-                color: #fff;
-                border-radius: 15px;
-                margin: 30px;
-                transition: background-color var(--transition-speed) ease,
-                    transform var(--transition-speed) ease, box-shadow
-                    var(--transition-speed) ease;
-                box-shadow: var(--box-shadow);
-                border: none;
-                /* Remove default border */
-                cursor: pointer;
-                /* Indicate it's clickable */
-                outline: none;
-                /* Remove focus outline */
-            }
-
-            .watch-button:hover {
-                background-color: #e68a00;
-                transform: translateY(-8px);
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-            }
-
-            .watch-button:active {
-                /* Add active state style */
-                transform: translateY(-4px);
-                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
-            }
-
-            /* Speech List Styles */
-            .speeches-list {
-                list-style: none;
-                padding: 0;
-            }
-
-            .speeches-list li {
-                margin-bottom: 35px;
-            }
-
-            .speeches-list a {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 30px 35px;
-                background-color: rgba(245, 245, 245, 0.8);
-                /* Slightly transparent */
-                color: var(--text-color);
-                text-decoration: none;
-                border-radius: 18px;
-                transition: background-color var(--transition-speed) ease,
-                    transform var(--transition-speed) ease, box-shadow
-                    var(--transition-speed) ease;
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            }
-
-            .speeches-list a:hover {
-                background-color: rgba(235, 235, 235, 0.9);
-                transform: translateX(7px);
-                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-            }
-
-            .speech-title {
-                font-size: 1.3em;
-                font-weight: 600;
-                color: var(--text-color);
-                transition: color var(--transition-speed) ease;
-            }
-
-            .speech-description {
-                font-size: 1.1em;
-                color: #777;
-                margin-top: 15px;
-            }
-
-            .speech-date {
-                font-size: 0.95em;
-                color: #999;
-                font-style: italic;
-            }
-
-            .speeches-list a:hover .speech-title {
-                color: var(--primary-color);
-            }
-
-            /* Responsive adjustments */
-            @media (max-width: 768px) {
-                .navbar {
-                    flex-direction: column;
-                    align-items: flex-start;
-                }
-
-                .logo {
-                    margin-bottom: 25px;
-                }
-
-                .nav-menu {
-                    flex-direction: column;
-                    align-items: flex-start;
-                }
-
-                .nav-menu li {
-                    margin: 15px 0;
-                }
-
-                .watch-content h2 {
-                    font-size: 3.5em;
-                }
-
-                .watch-content p {
-                    font-size: 1.3em;
-                }
-
-                .watch-button {
-                    font-size: 1.4em;
-                    padding: 18px 40px;
-                }
-            }
-
-            /* Footer Styles */
-            footer {
-                text-align: center;
-                padding: 30px;
-                background-color: #f8f9fa;
-                color: #6c757d;
-                border-top: 1px solid #dee2e6;
-                font-size: 0.9em;
-            }
-
-            footer a {
-                color: var(--primary-color);
-                text-decoration: none;
-                transition: color var(--transition-speed) ease;
-            }
-
-            footer a:hover {
-                color: #0056b3;
-            }
-
-            /* Scroll to Top Button */
-            #scrollToTopBtn {
-                display: none;
-                position: fixed;
-                bottom: 30px;
-                right: 30px;
-                z-index: 99;
-                font-size: 24px;
-                border: none;
-                outline: none;
-                background-color: var(--primary-color);
-                color: white;
-                cursor: pointer;
-                padding: 18px;
-                border-radius: 50%;
-                transition: background-color var(--transition-speed), opacity
-                    var(--transition-speed), transform var(--transition-speed);
-            }
-
-            #scrollToTopBtn:hover {
-                background-color: #0056b3;
-                transform: translateY(-5px);
-            }
-
-            #scrollToTopBtn:active {
-                background-color: #004085;
-                transform: translateY(-2px);
-            }
-
-            /* Badges Styles */
-            .badges-container {
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                margin-top: 20px;
-                width: 100%;
-                flex-wrap: wrap;
-            }
-
-            .badge {
-                width: 150px;
-                height: 50px;
-                border-radius: 25px;
-                margin: 10px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color: white;
-                font-weight: bold;
-                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-                overflow: hidden;
-                padding: 5px 10px;
-                gap: 5px;
-            }
-
-            .badge i {
-                margin-right: 5px;
-                /* Space between icon and text */
-            }
-
-            .badge-illuminated {
-                box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.5);
-                /* Yellow glow effect */
-            }
-
-            /* Quest Styles */
-            .quests-container {
-                width: 100%;
-                margin-top: 30px;
-                flex-direction: column;
-            }
-
-            .quest {
-                background-color: rgba(255, 255, 255, 0.05);
-                border-radius: 15px;
-                padding: 15px;
-                margin-bottom: 15px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                width: 100%;
-                /* Make quests longer */
-            }
-
-            .quest h3 {
-                font-size: 1.2em;
-                margin-bottom: 10px;
-                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-            }
-
-            .progress-bar {
-                width: 100%;
-                height: 20px;
-                background-color: rgba(0, 0, 0, 0.1);
-                border-radius: 10px;
-                overflow: hidden;
-            }
-
-            .progress {
-                display: block;
-                height: 100%;
-                background-color: #4CAF50;
-                width: 0%;
-                /* Will be updated dynamically */
-                transition: width 0.5s ease;
-                float: left;
-                /* Ensure progress starts from the beginning */
-            }
-
-            #quiz-container {
-                flex-direction: column;
-                align-items: flex-start;
-                width: 100%;
-                /* Ensure it fills the container */
-                margin: 0 auto;
-                /* Center the quiz container */
-            }
-
-            .question {
                 font-size: 1.4em;
+                padding: 18px 40px;
+            }
+
+            .progress-tracker {
+                flex-direction: column;
+            }
+
+            .tracker-item {
+                width: auto;
                 margin-bottom: 15px;
-                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
             }
 
-            .options label {
-                display: block;
-                margin-bottom: 10px;
-                font-size: 1.1em;
-                cursor: pointer;
-                padding: 10px;
-                border-radius: 25px;
-                background-color: rgba(255, 255, 255, 0.05);
-                transition: background-color 0.3s ease;
+            .videos-grid {
+                grid-template-columns: 1fr;
             }
 
-            .options label:hover {
-                background-color: rgba(255, 255, 255, 0.15);
+            .drills-container {
+                grid-template-columns: 1fr;
             }
 
-            input[type="radio"] {
-                margin-right: 8px;
+            .options {
+                grid-template-columns: 1fr;
             }
-        </style>
-    </head>
+        }
 
-    <body>
-        <header>
-            <nav class="navbar">
-                <div class="logo" onclick="goToHome()">
-                    <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <defs>
-                            <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <path fill="url(#microphone-gradient)"
-                            d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
-                    </svg>
-                    <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
-                </div>
+        /* Achievement Notification */
+        .achievement-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4a148c, #7b1fa2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transform: translateX(200%);
+            transition: transform 0.5s ease;
+            max-width: 350px;
+        }
 
-                <ul class="nav-menu">
-                    <ul class="nav-menu">
-                    <li>
-                        <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
-                        <div class="dropdown-content">
-                            <a href="evaluation.html">Recording Studio</a>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
-                        <div class="dropdown-content">
-                            <a href="learn.html">Videos</a>
-                            <a href="learn.html">Puzzles</a>
-                            <a href="learn.html">Drills</a>
-                        </div>
-                    <li>
-                        <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
-                        <div class="dropdown-content">
-                            <a href="profile.html">Personality</a>
-                            <a href="profile.html">Badges</a>
-                            <a href="profile.html">Quests</a>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
-                        <div class="dropdown-content">
-                            <a href="watch.html">Speech Archive</a>
-                            <a href="watch.html">Famous Speeches</a>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
-                        <div class="dropdown-content">
-                            <a href="about.html">UpSpeak Credentials</a>
-                        </div>
-                    </li>
-                </ul>
-                </ul>
+        .achievement-popup.show {
+            transform: translateX(0);
+        }
 
-                <a href="profile.html"><i class="fas fa-user-circle profile-icon"></i></a>
-            </nav>
-        </header>
+        .achievement-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+            color: #ffeb3b;
+        }
 
-        <div class="watch-container">
-            <div class="watch-content section active" id="home-section">
-                <h2>UpSpeak Learn</h2>
-                <a href="#" class="watch-button" id="videos-button">Videos</a>
-                <a href="#" class="watch-button" id="drills-button">Drills</a>
-                <a href="#" class="watch-button" id="puzzles-button">Puzzles</a>
+        .achievement-text h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.2em;
+        }
+
+        .achievement-text p {
+            margin: 0;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo" onclick="goToHome()">
+                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <defs>
+                        <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#microphone-gradient)"
+                        d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                </svg>
+                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
             </div>
 
-            <div class="watch-content section" id="videos-container">
-                <h2>Video Series</h2>
-                <div class="video-item">
+            <ul class="nav-menu">
+                <li>
+                    <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="evaluation.html">Recording Studio</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="learn.html">Videos</a>
+                        <a href="learn.html">Puzzles</a>
+                        <a href="learn.html">Drills</a>
+                    </div>
+                <li>
+                    <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="profile.html">Personality</a>
+                        <a href="profile.html">Badges</a>
+                        <a href="profile.html">Quests</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="watch.html">Speech Archive</a>
+                        <a href="watch.html">Famous Speeches</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
+                    <div class="dropdown-content">
+                        <a href="about.html">UpSpeak Credentials</a>
+                    </div>
+                </li>
+            </ul>
+
+            <a href="profile.html"><i class="fas fa-user-circle profile-icon"></i></a>
+        </nav>
+    </header>
+
+    <!-- Achievement Notification -->
+    <div class="achievement-popup" id="achievement">
+        <div class="achievement-icon">
+            <i class="fas fa-award"></i>
+        </div>
+        <div class="achievement-text">
+            <h3>Achievement Unlocked!</h3>
+            <p id="achievement-message">You've completed your first drill!</p>
+        </div>
+    </div>
+
+    <div class="watch-container">
+
+        <div class="watch-content section active" id="home-section">
+            <h2>UpSpeak Learn</h2>
+            <p>Master public speaking with our comprehensive learning tools. Watch informative videos, practice with
+                interactive drills, and test your knowledge with challenging puzzles.</p>
+            <a href="#" class="watch-button" id="videos-button">
+                <i class="fas fa-play-circle"></i> Videos
+            </a>
+            <a href="#" class="watch-button" id="drills-button">
+                <i class="fas fa-microphone-alt"></i> Drills
+            </a>
+            <a href="#" class="watch-button" id="puzzles-button">
+                <i class="fas fa-puzzle-piece"></i> Puzzles
+            </a>
+        </div>
+
+        <div class="watch-content section" id="videos-container">
+            <h2>Video Series</h2>
+            <p>Watch these expert videos to improve your speaking skills. Each video you complete is tracked in your
+                progress.</p>
+            <div class="videos-grid">
+                <div class="video-item" data-index="0">
+                    <div class="video-completion">Completed</div>
                     <iframe src="https://www.youtube.com/embed/TqevPG5y854" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <div class="video-item">
+                <div class="video-item" data-index="1">
+                    <div class="video-completion">Completed</div>
                     <iframe src="https://www.youtube.com/embed/UXFRgMb9TTw" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <div class="video-item">
+                <div class="video-item" data-index="2">
+                    <div class="video-completion">Completed</div>
                     <iframe src="https://www.youtube.com/embed/AKuv8s00ApE" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <div class="video-item">
+                <div class="video-item" data-index="3">
+                    <div class="video-completion">Completed</div>
                     <iframe src="https://www.youtube.com/embed/-9Wb3gcOuKM" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <div class="video-item">
+                <div class="video-item" data-index="4">
+                    <div class="video-completion">Completed</div>
                     <iframe src="https://www.youtube.com/embed/urEh4_fTtao" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <div class="video-item">
+                <div class="video-item" data-index="5">
+                    <div class="video-completion">Completed</div>
                     <iframe src="https://www.youtube.com/embed/iV0M5l5KhnE" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <div class="video-item">
+                <div class="video-item" data-index="6">
+                    <div class="video-completion">Completed</div>
                     <iframe src="https://www.youtube.com/embed/wCzuAMVmIZ8" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <div class="video-item">
+                <div class="video-item" data-index="7">
+                    <div class="video-completion">Completed</div>
                     <iframe src="https://www.youtube.com/embed/b0N0ufRKjKQ" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <div class="video-item">
+                <div class="video-item" data-index="8">
+                    <div class="video-completion">Completed</div>
                     <iframe src="https://www.youtube.com/embed/IDj1OBG5Tpw" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <div class="video-item">
+                <div class="video-item" data-index="9">
+                    <div class="video-completion">Completed</div>
                     <iframe src="https://www.youtube.com/embed/ZK3jSXYBNak" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
+        </div>
 
-            <div class="watch-content section" id="drills-container">
-                <h2>Drills</h2>
-                <div class="tongue-twister">
+        <div class="watch-content section" id="drills-container">
+            <h2>Interactive Speaking Drills</h2>
+            <p>Practice these tongue twisters to improve your pronunciation and articulation. Click the microphone icon
+                to start recording and practice along.</p>
+            <div class="drills-container">
+                <div class="tongue-twister" data-index="0">
                     <p>Peter Piper picked a peck of pickled peppers.</p>
+                    <div class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </div>
                 </div>
-                <div class="tongue-twister">
-                    <p>How much wood would a woodchuck chuck if a woodchuck could chuck wood?</p>
-                </div>
-                <div class="tongue-twister">
+                <div class="tongue-twister" data-index="1">
                     <p>She sells seashells by the seashore.</p>
+                    <div class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </div>
                 </div>
-                <div class="tongue-twister">
-                    <p>Fuzzy Wuzzy was a bear, Fuzzy Wuzzy had no hair, Fuzzy Wuzzy wasn’t fuzzy, was he?</p>
+                <div class="tongue-twister" data-index="2">
+                    <p>How much wood would a woodchuck chuck if a woodchuck could chuck wood?</p>
+                    <div class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </div>
                 </div>
-                <div class="tongue-twister">
-                    <p>Can you can a can as a canner can can a can?</p>
+                <div class="tongue-twister" data-index="3">
+                    <p>Unique New York, you know you need unique New York.</p>
+                    <div class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </div>
                 </div>
-            </div>
-
-            <div class="watch-content section" id="quiz-container">
-                <h2>Speech Puzzles</h2>
-                <div class="question" id="question-text"></div>
-                <div class="options" id="options-container"></div>
-                <button class="watch-button" id="submit-quiz">Submit</button>
-                <div id="result-container"></div>
+                <div class="tongue-twister" data-index="4">
+                    <p>Red lorry, yellow lorry, red lorry, yellow lorry.</p>
+                    <div class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                </div>
+                <div class="tongue-twister" data-index="5">
+                    <p>The sixth sick sheikh's sixth sheep's sick.</p>
+                    <div class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                </div>
+                <div class="tongue-twister" data-index="6">
+                    <p>Betty bought a bit of butter but the butter Betty bought was bitter.</p>
+                    <div class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                </div>
+                <div class="tongue-twister" data-index="7">
+                    <p>I slit the sheet, the sheet I slit, and on the slitted sheet I sit.</p>
+                    <div class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                </div>
+                <div class="tongue-twister" data-index="8">
+                    <p>Lesser leather never weathered wetter weather better.</p>
+                    <div class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                </div>
+                <div class="tongue-twister" data-index="9">
+                    <p>Six slick slim sycamore saplings.</p>
+                    <div class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const videosButton = document.getElementById('videos-button');
-                const drillsButton = document.getElementById('drills-button');
-                const puzzlesButton = document.getElementById('puzzles-button');
-                const homeSection = document.getElementById('home-section');
-                const videosContainer = document.getElementById('videos-container');
-                const drillsContainer = document.getElementById('drills-container');
-                const quizContainer = document.getElementById('quiz-container');
-                const submitQuizButton = document.getElementById('submit-quiz');
-                const questionText = document.getElementById('question-text');
-                const optionsContainer = document.getElementById('options-container');
-                const resultContainer = document.getElementById('result-container');
+        <div class="watch-content section" id="puzzles-container">
+            <h2>Public Speaking Puzzles</h2>
+            <p>Test your knowledge about public speaking techniques and principles with these interactive quizzes.</p>
+            <div id="quiz-container">
+                <div class="question" id="current-question">
+                    What is the most effective way to combat stage fright?
+                </div>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="answer" value="0">
+                        Avoiding eye contact with the audience
+                    </label>
+                    <label>
+                        <input type="radio" name="answer" value="1">
+                        Deep breathing and preparation
+                    </label>
+                    <label>
+                        <input type="radio" name="answer" value="2">
+                        Speaking as quickly as possible
+                    </label>
+                    <label>
+                        <input type="radio" name="answer" value="3">
+                        Reading directly from notes
+                    </label>
+                </div>
+                <button class="watch-button" id="submit-answer">Submit Answer</button>
+                <button class="watch-button" id="next-question" style="display: none;">Next Question</button>
+                <div id="result-container"></div>
+            </div>
+        </div>
+    </div>
 
-                let currentDifficulty = 10;
-                let score = 0;
-                let puzzlesAnswered = 0;
-                let answered = false;
+    <script>
+        // Variables to store user progress
+        let videosWatched = [];
+        let drillsCompleted = [];
+        let puzzlesAnswered = [];
 
-                const questions = [
-                    { question: "What is the term for the fear of public speaking?", options: ["Glossophobia", "Xenophobia", "Arachnophobia", "Claustrophobia"], correctAnswer: "Glossophobia", difficulty: 1 },
-                    { question: "Which of the following is NOT a key element of effective communication?", options: ["Clarity", "Conciseness", "Confidence", "Complexity"], correctAnswer: "Complexity", difficulty: 2 },
-                    { question: "What does 'ethos' refer to in public speaking?", options: ["Emotional appeal", "Ethical appeal", "Logical appeal", "Aesthetic appeal"], correctAnswer: "Ethical appeal", difficulty: 3 },
-                    { question: "What is a 'straw man' fallacy?", options: ["Misrepresenting someone's argument", "Appealing to emotion", "Attacking the person", "Using circular reasoning"], correctAnswer: "Misrepresenting someone's argument", difficulty: 4 },
-                    { question: "In a persuasive speech, what is the purpose of a 'call to action'?", options: ["To summarize the main points", "To ask the audience to take a specific step", "To thank the audience", "To introduce the topic"], correctAnswer: "To ask the audience to take a specific step", difficulty: 5 },
-                    { question: "What is the 'primacy effect' in speech delivery?", options: ["Remembering the last thing said", "Remembering the first thing said", "Forgetting the middle part", "Ignoring the speaker"], correctAnswer: "Remembering the first thing said", difficulty: 6 },
-                    { question: "What is the ideal number of main points in a 5-minute speech?", options: ["1-3", "5-7", "10-12", "20+"], correctAnswer: "1-3", difficulty: 7 },
-                    { question: "Which of the following is a good way to handle nervousness before a speech?", options: ["Avoid eye contact", "Pace back and forth", "Take deep breaths", "Drink caffeine"], correctAnswer: "Take deep breaths", difficulty: 8 },
-                    { question: "What does 'logos' refer to in persuasive speaking?", options: ["Logic", "Emotion", "Ethics", "Aesthetics"], correctAnswer: "Logic", difficulty: 9 },
-                    { question: "What is the 'recency effect'?", options: ["The end is most easily remembered", "The start is most easily remembered", "The middle is most easily remembered", "Nothing is ever remembered"], correctAnswer: "The end is most easily remembered", difficulty: 10 },
-                    { question: "What should you do to project your voice?", options: ["Yell", "Mumble", "Whisper", "Use your diaphragm"], correctAnswer: "Use your diaphragm", difficulty: 11 },
-                    { question: "What is the best way to get your audience to remember something?", options: ["Repeat it", "Say it once", "Whisper it", "Sing it"], correctAnswer: "Repeat it", difficulty: 12 },
-                    { question: "Who is a famous public speaker?", options: ["Gandhi", "Mother Teresa", "MLK Jr.", "All of the above"], correctAnswer: "All of the above", difficulty: 13 },
-                    { question: "What is the best thing to do when you mess up?", options: ["Restart", "Continue", "Run away", "Give up"], correctAnswer: "Continue", difficulty: 14 },
-                    { question: "What is one of the things you can do to be a great speaker?", options: ["Practice", "Stare", "Be Mean", "Ignore"], correctAnswer: "Practice", difficulty: 15 },
-                    { question: "When speaking, is it okay to move your hands?", options: ["Yes", "No", "Maybe", "What's speaking?"], correctAnswer: "Yes", difficulty: 16 },
-                    { question: "When speaking, what kind of language should you use?", options: ["Professional", "Simple", "Complicated", "Irrelevant"], correctAnswer: "Simple", difficulty: 17 },
-                    { question: "What's the best way to speak?", options: ["Loudly", "Clearly", "Quietly", "Muddled"], correctAnswer: "Clearly", difficulty: 18 },
-                    { question: "What's a great way to get the audience involved?", options: ["Ignore them", "Ask questions", "Intimidate them", "Sing to them"], correctAnswer: "Ask questions", difficulty: 19 },
-                    { question: "What is the best way to know your audience?", options: ["Ignore them", "Talk to them", "Stare at them", "Yell at them"], correctAnswer: "Talk to them", difficulty: 20 },
+        // Questions for puzzles
+        const questions = [
+            {
+                question: "What is the most effective way to combat stage fright?",
+                options: [
+                    "Avoiding eye contact with the audience",
+                    "Deep breathing and preparation",
+                    "Speaking as quickly as possible",
+                    "Reading directly from notes"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "Which of these is a recommended technique for voice projection?",
+                options: [
+                    "Speaking from your throat",
+                    "Speaking from your diaphragm",
+                    "Always speaking at maximum volume",
+                    "Raising your pitch"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "What percentage of communication is non-verbal according to research?",
+                options: [
+                    "Around 10%",
+                    "Around 30%",
+                    "Around 55%",
+                    "Around 93%"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "Which technique can help maintain audience engagement?",
+                options: [
+                    "Using complex vocabulary",
+                    "Avoiding pauses",
+                    "Telling personal stories",
+                    "Speaking in a monotone voice"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "What is the 'Rule of Three' in public speaking?",
+                options: [
+                    "Dividing your speech into three sections",
+                    "Having three main points for better retention",
+                    "Speaking for no more than three minutes",
+                    "Making eye contact with three audience members"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "Which of these is NOT a recommended approach for handling Q&A sessions?",
+                options: [
+                    "Repeating the question for everyone to hear",
+                    "Preparing for likely questions in advance",
+                    "Making up an answer if you don't know",
+                    "Taking a moment to think before answering"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "What does the acronym STAR stand for in storytelling?",
+                options: [
+                    "Situation, Task, Action, Result",
+                    "Story, Theme, Audience, Reaction",
+                    "Setup, Tension, Action, Resolution",
+                    "Start, Tell, Analyze, Reflect"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "What is a filler word?",
+                options: [
+                    "A technical term specific to your topic",
+                    "A word used to emphasize key points",
+                    "An unnecessary word like 'um' or 'uh'",
+                    "A word used to connect two parts of a speech"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "What is the best way to conclude a speech?",
+                options: [
+                    "Introducing a new idea to make people think",
+                    "Summarizing key points and adding a call to action",
+                    "Thanking the audience and walking off quickly",
+                    "Asking if there are any questions"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "Which speaking technique involves varying the loudness, rate, and pitch of your voice?",
+                options: [
+                    "Articulation",
+                    "Vocal variety",
+                    "Resonance",
+                    "Modulation"
+                ],
+                correctAnswer: 1
+            }
+        ];
 
+        let currentQuestionIndex = 0;
+        let answeredCorrectly = false;
 
-                ];
+        // Elements
+        const videosButton = document.getElementById('videos-button');
+        const drillsButton = document.getElementById('drills-button');
+        const puzzlesButton = document.getElementById('puzzles-button');
+        const homeSection = document.getElementById('home-section');
+        const videosContainer = document.getElementById('videos-container');
+        const drillsContainer = document.getElementById('drills-container');
+        const puzzlesContainer = document.getElementById('puzzles-container');
+        const submitAnswerButton = document.getElementById('submit-answer');
+        const nextQuestionButton = document.getElementById('next-question');
+        const resultContainer = document.getElementById('result-container');
+        const currentQuestionElement = document.getElementById('current-question');
+        const videoItems = document.querySelectorAll('.video-item');
+        const tongueTwisters = document.querySelectorAll('.tongue-twister');
+        const micButtons = document.querySelectorAll('.mic-button');
+        const achievement = document.getElementById('achievement');
 
-                function hideAllSections() {
-                    [homeSection, videosContainer, drillsContainer, quizContainer].forEach(section => {
-                        section.classList.remove('active');
-                        section.style.display = 'none';
-                    });
+        // Progress counters
+        const videosWatchedCount = document.getElementById('videos-watched-count');
+        const drillsCompletedCount = document.getElementById('drills-completed-count');
+        const puzzlesAnsweredCount = document.getElementById('puzzles-answered-count');
+
+        // Initialize progress from localStorage if available
+        function initializeProgress() {
+            if (localStorage.getItem('videosWatched')) {
+                videosWatched = JSON.parse(localStorage.getItem('videosWatched'));
+                updateVideoDisplay();
+            }
+
+            if (localStorage.getItem('drillsCompleted')) {
+                drillsCompleted = JSON.parse(localStorage.getItem('drillsCompleted'));
+                updateDrillDisplay();
+            }
+
+            if (localStorage.getItem('puzzlesAnswered')) {
+                puzzlesAnswered = JSON.parse(localStorage.getItem('puzzlesAnswered'));
+            }
+
+            updateProgressCounters();
+        }
+
+        // Update progress counters
+        function updateProgressCounters() {
+            videosWatchedCount.textContent = videosWatched.length;
+            drillsCompletedCount.textContent = drillsCompleted.length;
+            puzzlesAnsweredCount.textContent = puzzlesAnswered.length;
+        }
+
+        // Update video display based on watched videos
+        function updateVideoDisplay() {
+            videoItems.forEach((item, index) => {
+                if (videosWatched.includes(index)) {
+                    item.classList.add('video-watched');
+                    item.querySelector('.video-completion').style.opacity = '1';
                 }
+            });
+        }
 
-                function showSection(section) {
-                    hideAllSections();
-                    section.classList.add('active');
-                    section.style.display = 'block';
-                }
+        // Update drill display based on completed drills
+        function updateDrillDisplay() {
+            tongueTwisters.forEach((item, index) => {
+                if (drillsCompleted.includes(index)) {
+                    const checkmark = document.createElement('div');
+                    checkmark.className = 'drill-completed';
+                    checkmark.innerHTML = '<i class="fas fa-check"></i>';
 
-                videosButton.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    showSection(videosContainer);
-                });
-
-                drillsButton.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    showSection(drillsContainer);
-                });
-
-                puzzlesButton.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    showSection(quizContainer);
-                    startQuiz();
-                });
-
-                function loadQuestion() {
-                    const possibleQuestions = questions.filter(q => q.difficulty === currentDifficulty);
-                    if (possibleQuestions.length === 0) {
-                        console.warn(`No questions found for difficulty ${currentDifficulty}. Adjusting difficulty.`);
-                        currentDifficulty = Math.max(1, currentDifficulty - 1);
-                        loadQuestion();
-                        return;
+                    // Only add if it doesn't already have one
+                    if (!item.querySelector('.drill-completed')) {
+                        item.appendChild(checkmark);
                     }
-                    const randomIndex = Math.floor(Math.random() * possibleQuestions.length);
-                    const question = possibleQuestions[randomIndex];
-                    questionText.textContent = question.question;
-                    optionsContainer.innerHTML = '';
-                    question.options.forEach(option => {
-                        const label = document.createElement('label');
-                        const radio = document.createElement('input');
-                        radio.type = 'radio';
-                        radio.name = 'answer';
-                        radio.value = option;
-                        label.appendChild(radio);
-                        label.appendChild(document.createTextNode(option));
-                        optionsContainer.appendChild(label);
-                    });
-                    resultContainer.textContent = `Puzzles Answered: ${puzzlesAnswered}`;
                 }
+            });
+        }
 
-                function submitQuiz() {
-                    if (answered) return;
-                    const selectedAnswer = document.querySelector('input[name="answer"]:checked');
-                    if (!selectedAnswer) {
-                        alert("Please select an answer.");
-                        return;
-                    }
-                    answered = true;
-                    puzzlesAnswered++;
-                    const answer = selectedAnswer.value;
-                    const currentQuestion = questions.find(q => q.question === questionText.textContent);
-                    if (currentQuestion && answer === currentQuestion.correctAnswer) {
-                        resultContainer.textContent = `Correct! The answer is ${answer}. Puzzles Answered: ${puzzlesAnswered} | Score: ${++score}`;
-                        currentDifficulty = Math.min(currentDifficulty + 1, 30);
-                    } else {
-                        resultContainer.textContent = `Incorrect. The correct answer is ${currentQuestion.correctAnswer}. Puzzles Answered: ${puzzlesAnswered} | Score: ${score}`;
-                        currentDifficulty = Math.max(currentDifficulty - 1, 1);
-                    }
-                    setTimeout(() => {
-                        answered = false;
-                        loadQuestion();
-                    }, 2000);
-                }
+        // Navigation functions
+        function showSection(section) {
+            // Hide all sections
+            homeSection.classList.remove('active');
+            videosContainer.classList.remove('active');
+            drillsContainer.classList.remove('active');
+            puzzlesContainer.classList.remove('active');
 
-                function startQuiz() {
-                    puzzlesAnswered = 0;
-                    score = 0;
-                    currentDifficulty = 10;
-                    loadQuestion();
-                }
+            // Show selected section
+            section.classList.add('active');
+        }
 
-                submitQuizButton.addEventListener('click', submitQuiz);
+        // Go to home
+        function goToHome() {
+            showSection(homeSection);
+        }
 
-                // Initialize the home section
-                showSection(homeSection);
+        // Show achievement notification
+        function showAchievement(message) {
+            document.getElementById('achievement-message').textContent = message;
+            achievement.classList.add('show');
+
+            setTimeout(() => {
+                achievement.classList.remove('show');
+            }, 3000);
+        }
+
+        // Load question
+        function loadQuestion(index) {
+            const question = questions[index];
+            currentQuestionElement.textContent = question.question;
+
+            const optionLabels = document.querySelectorAll('.options label');
+            optionLabels.forEach((label, i) => {
+                const input = label.querySelector('input');
+                input.checked = false;
+                input.value = i;
+                label.lastChild.nodeValue = " " + question.options[i];
             });
 
-            function goToHome() {
-                window.location.href = 'home.html';
-            }
-        </script>
-    </body>
+            submitAnswerButton.style.display = 'inline-block';
+            nextQuestionButton.style.display = 'none';
+            resultContainer.textContent = '';
+            answeredCorrectly = false;
+        }
 
-    </html>
+        // Event Listeners
+        videosButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            showSection(videosContainer);
+        });
+
+        drillsButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            showSection(drillsContainer);
+        });
+
+        puzzlesButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            showSection(puzzlesContainer);
+            loadQuestion(currentQuestionIndex);
+        });
+
+        // Video completion simulation
+        videoItems.forEach((item, index) => {
+            item.addEventListener('click', function () {
+                if (!videosWatched.includes(index)) {
+                    videosWatched.push(index);
+                    localStorage.setItem('videosWatched', JSON.stringify(videosWatched));
+                    updateVideoDisplay();
+                    updateProgressCounters();
+
+                    if (videosWatched.length === 1) {
+                        showAchievement("You've watched your first video!");
+                    } else if (videosWatched.length === 5) {
+                        showAchievement("Video Enthusiast: Watched 5 videos!");
+                    } else if (videosWatched.length === 10) {
+                        showAchievement("Video Master: Completed all videos!");
+                    }
+                }
+            });
+        });
+
+        // Drill completion simulation
+        micButtons.forEach((button, index) => {
+            button.addEventListener('click', function () {
+                const parentTwister = button.closest('.tongue-twister');
+
+                // Toggle recording state
+                button.classList.toggle('recording');
+
+                if (button.classList.contains('recording')) {
+                    // Simulate recording in progress
+                    setTimeout(() => {
+                        button.classList.remove('recording');
+
+                        if (!drillsCompleted.includes(index)) {
+                            drillsCompleted.push(index);
+                            localStorage.setItem('drillsCompleted', JSON.stringify(drillsCompleted));
+                            updateDrillDisplay();
+                            updateProgressCounters();
+
+                            if (drillsCompleted.length === 1) {
+                                showAchievement("You've completed your first drill!");
+                            } else if (drillsCompleted.length === 5) {
+                                showAchievement("Drill Enthusiast: Completed 5 drills!");
+                            } else if (drillsCompleted.length === 10) {
+                                showAchievement("Pronunciation Master: Completed all drills!");
+                            }
+                        }
+                    }, 3000);
+                }
+            });
+        });
+
+        // Submit answer
+        submitAnswerButton.addEventListener('click', function () {
+            const selectedOption = document.querySelector('input[name="answer"]:checked');
+
+            if (!selectedOption) {
+                resultContainer.textContent = "Please select an answer!";
+                resultContainer.style.color = "var(--warning-color)";
+                return;
+            }
+
+            const answer = parseInt(selectedOption.value);
+            const correctAnswer = questions[currentQuestionIndex].correctAnswer;
+
+            if (answer === correctAnswer) {
+                resultContainer.textContent = "Correct! Great job!";
+                resultContainer.style.color = "var(--success-color)";
+                answeredCorrectly = true;
+
+                if (!puzzlesAnswered.includes(currentQuestionIndex)) {
+                    puzzlesAnswered.push(currentQuestionIndex);
+                    localStorage.setItem('puzzlesAnswered', JSON.stringify(puzzlesAnswered));
+                    updateProgressCounters();
+
+                    if (puzzlesAnswered.length === 1) {
+                        showAchievement("You've answered your first question correctly!");
+                    } else if (puzzlesAnswered.length === 5) {
+                        showAchievement("Quiz Enthusiast: 5 correct answers!");
+                    } else if (puzzlesAnswered.length === 10) {
+                        showAchievement("Quiz Master: All questions answered correctly!");
+                    }
+                }
+            } else {
+                resultContainer.textContent = `Incorrect. The correct answer was: ${questions[currentQuestionIndex].options[correctAnswer]}`;
+                resultContainer.style.color = "var(--danger-color)";
+            }
+
+            submitAnswerButton.style.display = 'none';
+            nextQuestionButton.style.display = 'inline-block';
+        });
+
+        // Next question
+        nextQuestionButton.addEventListener('click', function () {
+            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            loadQuestion(currentQuestionIndex);
+        });
+
+        // Initialize the page
+        initializeProgress();
+    </script>
+</body>
+
+</html>
