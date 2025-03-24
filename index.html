@@ -78,14 +78,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             display: inline-block;
-            transition: opacity 0.5s ease;
-        }
-
-        .rainbow-text {
-            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            transition: opacity 0.5s ease, color 0.5s ease;
         }
 
         .btn {
@@ -96,7 +89,7 @@
             color: white;
             font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
             display: inline-block;
             margin: 0 10px;
         }
@@ -105,6 +98,7 @@
         .btn-secondary { background-color: #6c757d; }
         .btn-primary:hover { background-color: #0056b3; }
         .btn-secondary:hover { background-color: #545b62; }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
         .mission {
             background-color: #f8f9fa;
@@ -211,6 +205,7 @@
             background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
+            z-index: 1000;
         }
 
         .popup-content {
@@ -219,6 +214,17 @@
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             width: 400px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #555;
         }
 
         input {
@@ -228,6 +234,7 @@
             border-radius: 4px;
             width: 100%;
             box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
 
         .name-fields { display: flex; justify-content: space-between; }
@@ -240,6 +247,7 @@
             margin: 1rem auto;
             width: fit-content;
         }
+        
         .contact {
             text-align: center;
             padding: 50px 20px;
@@ -248,10 +256,64 @@
         .contact-title { font-size: 2rem; font-weight: 600; margin-bottom: 40px; }
         .contact-details { max-width: 800px; margin: 0 auto; }
 
-        footer 
-        .contact {
-            background-color: #343a40;
-            color: white;
+        .error-message, .success-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .loading {
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .loading::after {
+            content: "";
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 3px solid rgba(0, 123, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #007bff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .form-step {
+            transition: opacity 0.3s ease;
+            opacity: 1;
+        }
+
+        .form-step.hidden {
+            display: none;
+            opacity: 0;
+        }
+
+        .password-requirements {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .password-requirements ul {
+            text-align: left;
+            margin-top: 5px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
@@ -261,6 +323,7 @@
             .hero { min-height: auto; padding: 30px 20px; }
             .hero-title { font-size: 2rem; }
             .feature-grid { grid-template-columns: 1fr; }
+            .popup-content { width: 90%; }
         }
     </style>
 </head>
@@ -339,7 +402,7 @@
     <section class="contact" id="contact">
         <h2 class="contact-title">Contact Us</h2>
         <div class="contact-details">
-            <p><a href="mailto:sameer@prezentium.com">sameer@prezentium.com</a></p>
+            <p><a href="mailto:contactupspeak@gmail.com">contactupspeak@gmail.com</a></p>
         </div>
     </section>
 
@@ -347,47 +410,162 @@
         <p>© 2025 UpSpeak. All rights reserved.</p>
     </footer>
 
+    <!-- Login Popup -->
     <div id="loginPopup" class="popup">
         <div class="popup-content">
-            <h2>Log In</h2>
-            <input type="text" id="loginUsername" placeholder="Username" required>
-            <input type="password" id="loginPassword" placeholder="Password" required>
-            <button class="btn btn-primary" onclick="login()">Log In</button>
+            <span class="close-btn" onclick="closePopup('loginPopup')">&times;</span>
+            <div id="loginFormStep" class="form-step">
+                <h2>Log In</h2>
+                <div id="loginError" class="error-message" style="display: none;"></div>
+                <div id="loginSuccess" class="success-message" style="display: none;"></div>
+                <input type="text" id="loginUsername" placeholder="Username or Email" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <div id="loginLoading" class="loading" style="display: none;"></div>
+                <button class="btn btn-primary" id="loginBtn" onclick="login()">Log In</button>
+            </div>
         </div>
     </div>
 
+    <!-- Signup Popup -->
     <div id="signupPopup" class="popup">
         <div class="popup-content">
-            <h2>Sign Up</h2>
-            <div class="name-fields">
-                <input type="text" id="firstName" placeholder="First Name" required>
-                <input type="text" id="lastName" placeholder="Last Name" required>
+            <span class="close-btn" onclick="closePopup('signupPopup')">&times;</span>
+            <div id="signupFormStep" class="form-step">
+                <h2>Sign Up</h2>
+                <div id="signupError" class="error-message" style="display: none;"></div>
+                <div id="signupSuccess" class="success-message" style="display: none;"></div>
+                <div class="name-fields">
+                    <input type="text" id="firstName" placeholder="First Name" required>
+                    <input type="text" id="lastName" placeholder="Last Name" required>
+                </div>
+                <input type="text" id="signupUsername" placeholder="Username" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="signupPassword" placeholder="Password" required>
+                <div class="password-requirements">
+                    Password must have:
+                    <ul>
+                        <li>At least 8 characters</li>
+                        <li>At least one uppercase letter</li>
+                        <li>At least one number</li>
+                        <li>At least one special character</li>
+                    </ul>
+                </div>
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                <div id="signupLoading" class="loading" style="display: none;"></div>
+                <button class="btn btn-secondary" id="signupBtn" onclick="signup()">Sign Up</button>
             </div>
-            <input type="text" id="signupUsername" placeholder="Username" required>
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="signupPassword" placeholder="Password" required>
-            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-            <button class="btn btn-secondary" onclick="signup()">Sign Up</button>
         </div>
     </div>
 
-    <div id="message"></div>
-
     <script>
-        function showLoginPopup() { document.getElementById('loginPopup').style.display = 'flex'; }
-        function showSignupPopup() { document.getElementById('signupPopup').style.display = 'flex'; }
+        // Mock user database - persisting in sessionStorage for this demo
+        let userDatabase = [
+            { username: 'demo', email: 'demo@example.com', password: 'Demo@123', firstName: 'Demo', lastName: 'User' }
+        ];
+        
+        // Try to load from sessionStorage (more persistent than just a variable)
+        if (sessionStorage.getItem('userDatabase')) {
+            try {
+                userDatabase = JSON.parse(sessionStorage.getItem('userDatabase'));
+            } catch (e) {
+                console.error('Failed to parse user database from sessionStorage');
+            }
+        }
+        
+        // Show popups
+        function showLoginPopup() { 
+            document.getElementById('loginPopup').style.display = 'flex';
+            document.getElementById('loginFormStep').classList.remove('hidden');
+            resetForm('login');
+        }
+        
+        function showSignupPopup() { 
+            document.getElementById('signupPopup').style.display = 'flex'; 
+            document.getElementById('signupFormStep').classList.remove('hidden');
+            resetForm('signup');
+        }
 
-        function login() {
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            if (username && password) {
-                window.location.href = "home.html";
+        // Close popups
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+
+        // Reset form fields and messages
+        function resetForm(formType) {
+            if (formType === 'login') {
+                document.getElementById('loginUsername').value = '';
+                document.getElementById('loginPassword').value = '';
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('loginSuccess').style.display = 'none';
+                document.getElementById('loginBtn').disabled = false;
             } else {
-                document.getElementById('message').textContent = "Please enter both username and password.";
-                document.getElementById('message').style.color = "#dc3545";
+                document.getElementById('firstName').value = '';
+                document.getElementById('lastName').value = '';
+                document.getElementById('signupUsername').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('signupPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+                document.getElementById('signupError').style.display = 'none';
+                document.getElementById('signupSuccess').style.display = 'none';
+                document.getElementById('signupBtn').disabled = false;
             }
         }
 
+        // Login function
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorElement = document.getElementById('loginError');
+            const successElement = document.getElementById('loginSuccess');
+            const loadingElement = document.getElementById('loginLoading');
+
+            // Reset messages
+            errorElement.style.display = 'none';
+            successElement.style.display = 'none';
+
+            // Validate inputs
+            if (!username || !password) {
+                errorElement.textContent = "Please enter both username/email and password.";
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            // Show loading
+            loadingElement.style.display = 'block';
+            document.getElementById('loginBtn').disabled = true;
+
+            // Simulate server verification (timeout simulates network delay)
+            setTimeout(() => {
+                // Check if user exists in database
+                const user = userDatabase.find(u => (u.username === username || u.email === username) && u.password === password);
+
+                loadingElement.style.display = 'none';
+
+                if (user) {
+                    // Set session - directly log in
+                    sessionStorage.setItem('loggedInUser', JSON.stringify({
+                        username: user.username,
+                        firstName: user.firstName,
+                        lastName: user.lastName
+                    }));
+
+                    // Show success message
+                    successElement.textContent = "Login successful! Redirecting...";
+                    successElement.style.display = 'block';
+
+                    // Redirect to home page after successful login
+                    setTimeout(() => {
+                        window.location.href = "home.html";
+                    }, 1500);
+                } else {
+                    document.getElementById('loginBtn').disabled = false;
+                    errorElement.textContent = "Invalid username or password.";
+                    errorElement.style.display = 'block';
+                }
+            }, 1000);
+        }
+
+        // Signup function
         function signup() {
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
@@ -395,72 +573,172 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('signupPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
-            if (firstName && lastName && username && email && password && confirmPassword) {
-                if (password !== confirmPassword) {
-                    document.getElementById('message').textContent = "Passwords do not match.";
-                    document.getElementById('message').style.color = "#dc3545";
-                    return;
-                }
-                if (password.length < 8) {
-                    document.getElementById('message').textContent = "Password must be at least 8 characters long.";
-                    document.getElementById('message').style.color = "#dc3545";
-                    return;
-                }
-                document.getElementById('message').textContent = "Welcome to UpSpeak, " + firstName + "! Your account has been created successfully.";
-                document.getElementById('message').style.color = "#28a745";
-                document.getElementById('signupPopup').style.display = 'none';
-            } else {
-                document.getElementById('message').textContent = "Please fill in all fields.";
-                document.getElementById('message').style.color = "#dc3545";
+            const errorElement = document.getElementById('signupError');
+            const successElement = document.getElementById('signupSuccess');
+            const loadingElement = document.getElementById('signupLoading');
+
+            // Reset messages
+            errorElement.style.display = 'none';
+            successElement.style.display = 'none';
+
+            // Validate all fields are filled
+            if (!firstName || !lastName || !username || !email || !password || !confirmPassword) {
+                errorElement.textContent = "Please fill in all fields.";
+                errorElement.style.display = 'block';
+                return;
             }
-        }
 
-        window.onclick = function(event) {
-            if (event.target.className === 'popup') {
-                event.target.style.display = "none";
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errorElement.textContent = "Please enter a valid email address.";
+                errorElement.style.display = 'block';
+                return;
             }
-        }
 
-        function cycleTestimonials() {
-            const testimonials = document.querySelectorAll('.testimonial');
-            let currentIndex = 0;
+            // Validate password
+            if (password.length < 8) {
+                errorElement.textContent = "Password must be at least 8 characters long.";
+                errorElement.style.display = 'block';
+                return;
+            }
 
-            setInterval(() => {
-                testimonials[currentIndex].classList.remove('active');
-                currentIndex = (currentIndex + 1) % testimonials.length;
-                testimonials[currentIndex].classList.add('active');
-            }, 3000);
-        }
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$/;
+            if (!passwordRegex.test(password)) {
+                errorElement.textContent = "Password must contain at least one uppercase letter, one number, and one special character.";
+                errorElement.style.display = 'block';
+                return;
+            }
 
-        function animateWords() {
-            const words = ["connect", "communicate", "ideate", "engage", "reflect", "speak"];
-            const colors = ["red", "blue", "green", "purple", "turquoise", "black"];
-            let wordIndex = 0;
-            const changingWord = document.querySelector('.changing-word');
+            // Confirm passwords match
+            if (password !== confirmPassword) {
+                errorElement.textContent = "Passwords do not match.";
+                errorElement.style.display = 'block';
+                return;
+            }
 
-            function updateWord() {
-                changingWord.style.opacity = 0;
+            // Check if username already exists
+            if (userDatabase.some(u => u.username === username)) {
+                errorElement.textContent = "Username already exists. Please choose another.";
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            // Check if email already exists
+            if (userDatabase.some(u => u.email === email)) {
+                errorElement.textContent = "Email already in use. Please use another email or log in.";
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            // Show loading
+            loadingElement.style.display = 'block';
+            document.getElementById('signupBtn').disabled = true;
+
+            // Simulate server processing (timeout simulates network delay)
+            setTimeout(() => {
+                loadingElement.style.display = 'none';
+
+                // Add user to database directly without verification
+                userDatabase.push({
+                    firstName,
+                    lastName,
+                    username,
+                    email,
+                    password
+                });
+
+                // Save updated database to sessionStorage
+                sessionStorage.setItem('userDatabase', JSON.stringify(userDatabase));
+
+                // Set user as logged in
+                sessionStorage.setItem('loggedInUser', JSON.stringify({
+                    username: username,
+                    firstName: firstName,
+                    lastName: lastName
+                }));
+
+                // Show success
+                successElement.textContent = "Account created successfully! Redirecting...";
+                successElement.style.display = 'block';
+
+                // Redirect to home page
                 setTimeout(() => {
-                    changingWord.textContent = words[wordIndex];
-                    if (colors[wordIndex] === "rainbow") {
-                        changingWord.classList.add("rainbow-text");
-                        changingWord.style.color = "";
-                    } else {
-                        changingWord.classList.remove("rainbow-text");
-                        changingWord.style.color = colors[wordIndex];
-                    }
-                    changingWord.style.opacity = 1;
-                    wordIndex = (wordIndex + 1) % words.length;
-                }, 500);
-            }
-
-            setInterval(updateWord, 3000);
+                    window.location.href = "home.html";
+                }, 1500);
+            }, 1000);
         }
 
-        window.onload = function() {
-            cycleTestimonials();
-            animateWords();
-        };
+        // Define colors for rotating words
+        const wordColors = [
+            '#FF5733', // Red-orange
+            '#33A8FF', // Blue
+            '#33FF57', // Green
+            '#A633FF', // Purple
+            '#FFBD33', // Amber
+            '#FF33A8'  // Pink
+        ];
+
+        // Words to rotate
+        const wordsToRotate = ['speak', 'connect', 'engage', 'express', 'shine', 'grow'];
+        let currentWordIndex = 0;
+        let currentColorIndex = 0;
+
+        // Function to rotate words with different colors
+        function rotateWords() {
+            const wordElement = document.querySelector('.changing-word');
+
+            // Fade out
+            wordElement.style.opacity = 0;
+
+            setTimeout(() => {
+                // Change word
+                currentWordIndex = (currentWordIndex + 1) % wordsToRotate.length;
+                wordElement.textContent = wordsToRotate[currentWordIndex];
+                
+                // Change color - use a different color for each rotation
+                currentColorIndex = (currentColorIndex + 1) % wordColors.length;
+                wordElement.style.color = wordColors[currentColorIndex];
+
+                // Fade in
+                wordElement.style.opacity = 1;
+            }, 500);
+        }
+
+        // Rotate testimonials
+        let currentTestimonialIndex = 0;
+        const testimonials = document.querySelectorAll('.testimonial');
+
+        function rotateTestimonials() {
+            // Hide all testimonials
+            testimonials.forEach(testimonial => {
+                testimonial.classList.remove('active');
+            });
+
+            // Show next testimonial
+            currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
+            testimonials[currentTestimonialIndex].classList.add('active');
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial color for the first word
+            const wordElement = document.querySelector('.changing-word');
+            wordElement.style.color = wordColors[0];
+            
+            // Start word rotation
+            setInterval(rotateWords, 3000);
+
+            // Start testimonial rotation
+            setInterval(rotateTestimonials, 5000);
+
+            // Check if user is already logged in
+            const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
+            if (loggedInUser.username) {
+                // In a real app, this would redirect to a dashboard or personalized homepage
+                console.log('User already logged in:', loggedInUser.username);
+            }
+        });
     </script>
 </body>
 </html>
