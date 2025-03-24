@@ -15,14 +15,16 @@
         :root {
             --primary-color: #007bff;
             --secondary-color: #ff9933;
-            /* Vibrant orange */
             --text-color: #2c3e50;
             --background-gradient: linear-gradient(135deg, #ecf0f1, #d5dbdb);
-            /* Softer gradient */
             --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            /* Stronger shadow */
             --transition-speed: 0.3s;
-            /* Standard transition speed */
+            --accent-color: #6c5ce7;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #e17055;
+            --light-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.95);
         }
 
         body {
@@ -35,22 +37,18 @@
             overflow-x: hidden;
             min-height: 100vh;
             line-height: 1.8;
-            /* Improved readability */
             -webkit-font-smoothing: antialiased;
-            /* Smoother fonts */
         }
 
-        /* Header Styles */
+        /* Header Styles - Kept intact as requested */
         header {
             background-color: rgba(255, 255, 255, 0.95);
-            /* Slightly transparent white */
             padding: 25px 0;
             box-shadow: var(--box-shadow);
             position: sticky;
             top: 0;
             z-index: 1000;
             backdrop-filter: blur(10px);
-            /* Glassmorphism effect */
         }
 
         .navbar {
@@ -70,7 +68,6 @@
             align-items: center;
             cursor: pointer;
             transition: transform var(--transition-speed) ease;
-            /* Smooth transform */
         }
 
         .logo:hover {
@@ -82,12 +79,10 @@
             height: 55px;
             margin-right: 15px;
             filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
-            /* Subtle shadow */
         }
 
         .logo .upspeak-up {
             color: var(--secondary-color);
-            /* Orange */
         }
 
         .logo .upspeak-speak {
@@ -111,13 +106,11 @@
         .nav-menu>li>a {
             color: #555;
             font-weight: 500;
-            transition: color var(--transition-speed) ease, padding-bottom
-                var(--transition-speed) ease;
+            transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease;
             display: flex;
             align-items: center;
             text-decoration: none;
             padding-bottom: 4px;
-            /* Space for underline */
         }
 
         .nav-menu>li>a:hover {
@@ -139,7 +132,6 @@
             display: none;
             position: absolute;
             background-color: rgba(255, 255, 255, 0.98);
-            /* Slightly transparent */
             min-width: 240px;
             box-shadow: var(--box-shadow);
             padding: 20px 30px;
@@ -150,11 +142,9 @@
             text-align: left;
             border-radius: 15px;
             opacity: 0;
-            transition: opacity var(--transition-speed) ease, transform
-                var(--transition-speed) ease;
+            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
             transform-origin: top center;
             backdrop-filter: blur(10px);
-            /* Glassmorphism */
         }
 
         .nav-menu li:hover .dropdown-content {
@@ -168,8 +158,7 @@
             padding: 12px 0;
             text-decoration: none;
             display: block;
-            transition: background-color var(--transition-speed) ease, color
-                var(--transition-speed) ease;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
             border-radius: 8px;
         }
 
@@ -181,8 +170,7 @@
         .profile-icon {
             font-size: 3rem;
             color: #777;
-            transition: color var(--transition-speed) ease, transform
-                var(--transition-speed) ease;
+            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
         }
 
         .profile-icon:hover {
@@ -190,528 +178,1300 @@
             transform: scale(1.15);
         }
 
-        /* Main Content Styles */
-        .watch-container {
+        /* REVAMPED PROFILE CONTENT STYLES */
+
+        /* Main container styles */
+        .profile-container {
             max-width: 1200px;
-            margin: 50px auto;
-            padding: 50px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 30px;
-            box-shadow: var(--box-shadow);
-            background-color: rgba(255, 255, 255, 0.95);
-            /* Semi-transparent */
-            backdrop-filter: blur(12px);
-            z-index: 1;
-            /* Ensure content is above the background */
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        /* Animated Background (Subtle Gradients) */
-        .watch-container::before {
+        .profile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 120%;
-            height: 120%;
-            background: linear-gradient(45deg, rgba(255, 235, 59, 0.3), rgba(0, 176, 255, 0.3), rgba(233, 30, 99, 0.3));
-            background-size: 300% 300%;
-            animation: animatedGradient 15s ease infinite;
-            z-index: -1;
-            /* Behind the content */
-            opacity: 0.7;
-            /* Subtle effect */
-            border-radius: 35px;
-            /* Match container radius */
-            transform: translate(-5%, -5%);
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            z-index: 1;
         }
 
-        @keyframes animatedGradient {
-            0% {
-                background-position: 0% 50%;
-            }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-            50% {
-                background-position: 100% 50%;
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 4px solid white;
+        }
+
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .profile-tagline {
+            font-size: 1.1rem;
+            color: #666;
+            margin: 5px 0 15px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 15px;
+            background: var(--light-bg);
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+        .edit-profile-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .edit-profile-btn:hover {
+            background: #0062cc;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+        }
+
+        /* Profile Navigation Tabs */
+        .profile-tabs {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 50px;
+            padding: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            color: #666;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-tab.active {
+            color: white;
+        }
+
+        .tab-slider {
+            position: absolute;
+            height: 85%;
+            top: 7.5%;
+            left: 0.5%;
+            width: 25%;
+            /* Adjusted dynamically by JavaScript */
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 50px;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1;
+        }
+
+        /* Section Content Styles */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Personality Section */
+        .personality-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .personality-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(0,123,255,0.05)" stroke-width="8"/></svg>');
+            background-size: 150px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .personality-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .personality-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .personality-description {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .personality-traits {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .trait {
+            background: var(--light-bg);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 500;
+            color: var(--text-color);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .trait:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .take-quiz-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+        }
+
+        .take-quiz-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Badges Section */
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .badge-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge-card::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.5s ease;
+        }
+
+        .badge-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .badge-card:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        .badge-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+            position: relative;
+        }
+
+        .badge-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-color) 0%,
+                    var(--accent-color) 25%,
+                    var(--secondary-color) 50%,
+                    var(--primary-color) 75%,
+                    var(--accent-color) 100%);
+            z-index: -1;
+            animation: rotateBadge 8s linear infinite;
+        }
+
+        @keyframes rotateBadge {
+            0% {
+                transform: rotate(0deg);
             }
 
             100% {
-                background-position: 0% 50%;
+                transform: rotate(360deg);
             }
         }
 
-        .section {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.7s ease-in-out, transform 0.7s ease-in-out;
-            transform: translateY(40px);
-            /* Start off-screen */
+        .badge-locked .badge-icon::before {
+            background: #ddd;
+            animation: none;
         }
 
-        .section.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
+        .badge-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
 
-        .watch-content {
+        .badge-description {
+            color: #666;
             text-align: center;
-            padding: 60px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
         }
 
-        .watch-content h2 {
-            font-size: 4.5em;
-            color: var(--text-color);
-            margin-bottom: 35px;
-            text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.15);
-            letter-spacing: 1.2px;
-            /* Slightly wider spacing */
+        .badge-progress {
+            width: 100%;
+            height: 10px;
+            background: #eee;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            overflow: hidden;
         }
 
-        .watch-content p {
-            font-size: 1.4em;
-            color: #555;
-            margin-bottom: 50px;
-            line-height: 1.9;
-            font-weight: 400;
+        .badge-progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 1s ease;
         }
 
-        .watch-button {
-            display: inline-block;
-            padding: 20px 50px;
-            font-size: 1.6em;
-            text-decoration: none;
-            background-color: var(--secondary-color);
-            color: #fff;
-            border-radius: 15px;
-            margin: 30px;
-            transition: background-color var(--transition-speed) ease,
-                transform var(--transition-speed) ease, box-shadow
-                var(--transition-speed) ease;
+        .badge-status {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .badge-status.complete {
+            color: var(--success-color);
+            font-weight: 600;
+        }
+
+        .badge-locked {
+            filter: grayscale(1);
+            opacity: 0.7;
+        }
+
+        .badge-locked:hover {
+            filter: grayscale(0.5);
+            opacity: 0.85;
+        }
+
+        /* Quests Section */
+        .quests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        .quest-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
             box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .quest-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .quest-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quest-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quest-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            font-size: 1.2rem;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .quest-badge {
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: var(--light-bg);
+            color: var(--primary-color);
+        }
+
+        .quest-badge.active {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success-color);
+        }
+
+        .quest-badge.complete {
+            background: rgba(0, 184, 148, 0.2);
+            color: var(--success-color);
+        }
+
+        .quest-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .quest-progress {
+            width: 100%;
+            height: 10px;
+            background: #eee;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .quest-progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 1s ease;
+        }
+
+        .quest-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quest-counter {
+            font-size: 0.95rem;
+            color: #777;
+        }
+
+        .quest-reward {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            padding: 5px 12px;
+            background: rgba(255, 153, 51, 0.1);
+            border-radius: 50px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .quest-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .quest-btn {
+            padding: 10px 20px;
             border: none;
-            /* Remove default border */
+            border-radius: 50px;
+            font-weight: 600;
             cursor: pointer;
-            /* Indicate it's clickable */
-            outline: none;
-            /* Remove focus outline */
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .watch-button:hover {
-            background-color: #e68a00;
-            transform: translateY(-8px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        .quest-start-btn {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
         }
 
-        .watch-button:active {
-            /* Add active state style */
-            transform: translateY(-4px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        .quest-start-btn:hover {
+            background: #0062cc;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
         }
 
-        /* Speech List Styles */
-        .speeches-list {
+        /* Quiz Styles */
+        .quiz-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--box-shadow);
+            position: relative;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .quiz-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .quiz-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .quiz-step {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f0f0f0;
+            color: #777;
+            margin: 0 5px;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-step.active {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.2);
+            box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .quiz-step.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .quiz-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background: #f0f0f0;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: -1;
+        }
+
+        .quiz-step.completed:not(:last-child)::after {
+            background: var(--success-color);
+        }
+
+        .quiz-question {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .quiz-option {
+            background: var(--light-bg);
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .quiz-option:hover {
+            background: rgba(0, 123, 255, 0.05);
+            transform: translateY(-3px);
+            border-color: rgba(0, 123, 255, 0.3);
+        }
+
+        .quiz-option.selected {
+            background: rgba(0, 123, 255, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .quiz-option-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .quiz-option-label {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .quiz-option-radio {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option.selected .quiz-option-radio {
+            border-color: var(--primary-color);
+        }
+
+        .quiz-option.selected .quiz-option-radio::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-color);
+        }
+
+        .quiz-option-text {
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+
+        .quiz-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .quiz-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-back-btn {
+            background: #f0f0f0;
+            color: #555;
+        }
+
+        .quiz-back-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .quiz-next-btn {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
+        }
+
+        .quiz-next-btn:hover {
+            background: #0062cc;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+        }
+
+        .quiz-next-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Result Section */
+        .result-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M30 5L35 20H50L40 30L45 45L30 35L15 45L20 30L10 20H25L30 5Z" fill="rgba(255,153,51,0.05)"/></svg>');
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .result-icon {
+            font-size: 6rem;
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-explanation {
+            text-align: left;
+            background: var(--light-bg);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-explanation h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .result-explanation p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .result-traits {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .share-result-btn {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .share-result-btn:hover {
+            background: #0062cc;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        .retake-quiz-btn {
+            background: rgba(0, 123, 255, 0.1);
+            color: var(--primary-color);
+        }
+
+        .retake-quiz-btn:hover {
+            background: rgba(0, 123, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* More Personality Types Section */
+        .more-types {
+            margin-top: 50px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .more-types-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .type-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .type-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .type-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .type-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .type-brief {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .type-learn-more {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 50px;
+            background: rgba(0, 123, 255, 0.1);
+        }
+
+        .type-learn-more:hover {
+            background: rgba(0, 123, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Section */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .stats-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .stats-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            font-size: 1.2rem;
+        }
+
+        .stats-period {
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            background: var(--light-bg);
+            color: #777;
+        }
+
+        .stats-chart {
+            height: 200px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .stats-summary {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stats-metric {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stats-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stats-label {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .stats-trend {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .stats-trend.up {
+            color: var(--success-color);
+        }
+
+        .stats-trend.down {
+            color: var(--danger-color);
+        }
+
+        /* Footer */
+        footer {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 50px 0 30px;
+            margin-top: 50px;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .footer-links {
             list-style: none;
             padding: 0;
         }
 
-        .speeches-list li {
-            margin-bottom: 35px;
+        .footer-links li {
+            margin-bottom: 15px;
         }
 
-        .speeches-list a {
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 30px 35px;
-            background-color: rgba(245, 245, 245, 0.8);
-            /* Slightly transparent */
-            color: var(--text-color);
-            text-decoration: none;
-            border-radius: 18px;
-            transition: background-color var(--transition-speed) ease,
-                transform var(--transition-speed) ease, box-shadow
-                var(--transition-speed) ease;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            gap: 10px;
         }
 
-        .speeches-list a:hover {
-            background-color: rgba(235, 235, 235, 0.9);
-            transform: translateX(7px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        .speech-title {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: var(--text-color);
-            transition: color var(--transition-speed) ease;
-        }
-
-        .speech-description {
-            font-size: 1.1em;
-            color: #777;
-            margin-top: 15px;
-        }
-
-        .speech-date {
-            font-size: 0.95em;
-            color: #999;
-            font-style: italic;
-        }
-
-        .speeches-list a:hover .speech-title {
+        .footer-links a:hover {
             color: var(--primary-color);
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .logo {
-                margin-bottom: 25px;
-            }
-
-            .nav-menu {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nav-menu li {
-                margin: 15px 0;
-            }
-
-            .watch-content h2 {
-                font-size: 3.5em;
-            }
-
-            .watch-content p {
-                font-size: 1.3em;
-            }
-
-            .watch-button {
-                font-size: 1.4em;
-                padding: 18px 40px;
-            }
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
         }
 
-        /* Footer Styles */
-        footer {
-            text-align: center;
-            padding: 30px;
-            background-color: #f8f9fa;
-            color: #6c757d;
-            border-top: 1px solid #dee2e6;
-            font-size: 0.9em;
-        }
-
-        footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-            transition: color var(--transition-speed) ease;
-        }
-
-        footer a:hover {
-            color: #0056b3;
-        }
-
-        /* Scroll to Top Button */
-        #scrollToTopBtn {
-            display: none;
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 99;
-            font-size: 24px;
-            border: none;
-            outline: none;
-            background-color: var(--primary-color);
-            color: white;
-            cursor: pointer;
-            padding: 18px;
+        .social-icon {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            transition: background-color var(--transition-speed), opacity
-                var(--transition-speed), transform var(--transition-speed);
-        }
-
-        #scrollToTopBtn:hover {
-            background-color: #0056b3;
-            transform: translateY(-5px);
-        }
-
-        #scrollToTopBtn:active {
-            background-color: #004085;
-            transform: translateY(-2px);
-        }
-
-        /* Badges Styles */
-        .badges-container {
+            background: var(--light-bg);
             display: flex;
-            flex-direction: row;
-            justify-content: center;
-            margin-top: 20px;
-            width: 100%;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            width: 150px;
-            height: 50px;
-            border-radius: 25px;
-            margin: 10px;
-            display: flex;
-            justify-content: center;
             align-items: center;
-            color: white;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            padding: 5px 10px;
-            gap: 5px;
-        }
-
-        .badge i {
-            margin-right: 5px;
-            /* Space between icon and text */
-        }
-
-        .badge-illuminated {
-            box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.5);
-            /* Yellow glow effect */
-        }
-
-        /* Quest Styles */
-        .quests-container {
-            width: 100%;
-            margin-top: 30px;
-            flex-direction: column;
-        }
-
-        .quest {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            /* Make quests longer */
-        }
-
-        .quest h3 {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress {
-            display: block;
-            height: 100%;
-            background-color: #4CAF50;
-            width: 0%;
-            /* Will be updated dynamically */
-            transition: width 0.5s ease;
-            float: left;
-            /* Ensure progress starts from the beginning */
-        }
-
-        #quiz-container {
-            flex-direction: column;
-            align-items: flex-start;
-            width: 100%;
-            /* Ensure it fills the container */
-            margin: 0 auto;
-            /* Center the quiz container */
-        }
-
-        .question {
-            font-size: 1.4em;
-            margin-bottom: 15px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
-        .options label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 25px;
-            background-color: rgba(255, 255, 255, 0.05);
-            transition: background-color 0.3s ease;
-        }
-
-        .options label:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-
-        input[type="radio"] {
-            margin-right: 8px;
-        }
-
-        #next-question {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            align-self: center;
-            /* Center the button */
-            display: block;
-            /* Ensure margin works correctly */
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        #next-question:hover {
-            background-color: #45a049;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        #result-container {
-            margin-top: 30px;
-            font-size: 1.3em;
-            font-weight: bold;
-            text-align: center;
-            text-shadow:
-                -1px -1px #000,
-                -1px +1px #000,
-                +1px +1px #000;
-            /* Add shadow to make it more readable */
-            padding-bottom: 20px;
-            /* Add space below the result */
-        }
-
-        .share-buttons {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .share-button {
-            display: inline-block;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            margin: 0 5px;
-            text-decoration: none;
-        }
-
-        .share-button:hover {
-            opacity: 0.8;
-        }
-
-        #copy-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-
-        #copy-button:hover {
-            background-color: #45a049;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Progress Dots */
-        .progress-dots {
-            display: flex;
             justify-content: center;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .footer-newsletter p {
+            color: #666;
             margin-bottom: 20px;
         }
 
-        .dot {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background-color: #bbb;
-            margin: 0 5px;
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
         }
 
-        .dot.completed {
-            background-color: green;
-        }
-
-        /* New Styles for Share Buttons */
-        .social-buttons {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .social-button {
-            display: inline-block;
-            margin: 0 10px;
-            padding: 10px 15px;
-            border-radius: 5px;
-            color: white;
-            text-decoration: none;
-            font-size: 1em;
-        }
-
-        .twitter-button {
-            background-color: #1da1f2;
-            /* Twitter's blue */
-        }
-
-        .facebook-button {
-            background-color: #1877f2;
-            /* Facebook's blue */
-        }
-
-        .instagram-button {
-            background-color: #e4405f;
-            /* Instagram's pink/purple */
-        }
-
-        .copy-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 25px;
-            border: none;
+        .newsletter-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #eee;
             border-radius: 50px;
-            font-size: 1.2em;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .newsletter-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
         }
 
-        .copy-button:hover {
-            background-color: #45a049;
+        .newsletter-btn:hover {
+            background: #0062cc;
             transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 20px 20px 0;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-copyright {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-legal a {
+            color: #777;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .profile-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .profile-info {
+                width: 100%;
+            }
+
+            .profile-stats {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .quests-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .profile-tabs {
+                flex-direction: column;
+                border-radius: 20px;
+            }
+
+            .profile-tab {
+                text-align: left;
+                padding: 15px;
+            }
+
+            .tab-slider {
+                display: none;
+            }
+
+            .personality-traits {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .result-actions {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-legal {
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        /* JavaScript Functionality */
+        /* Note: This would go in a separate JS file, just including it here for reference */
     </style>
 </head>
 
 <body>
+    <!-- Header -->
     <header>
         <nav class="navbar">
             <div class="logo" onclick="goToHome()">
@@ -743,11 +1503,11 @@
                         <a href="learn.html">Drills</a>
                     </div>
                 <li>
-                    <a href="#">Profile <i class="fas fa-caret-down carrot"></i></a>
+                    <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
                     <div class="dropdown-content">
-                        <a href="#" onclick="showSection('personality-section'); return false;">Personality</a>
-                        <a href="#" onclick="showSection('badges-section'); return false;">Badges</a>
-                        <a href="#" onclick="showSection('quests-section'); return false;">Quests</a>
+                        <a href="profile.html">Personality</a>
+                        <a href="profile.html">Badges</a>
+                        <a href="profile.html">Quests</a>
                     </div>
                 </li>
                 <li>
@@ -769,332 +1529,258 @@
         </nav>
     </header>
 
-    <div class="watch-container">
-        <div class="watch-content section active" id="home-section">
-            <h2>UpSpeak Profile</h2>
-            <a href="#" class="watch-button" onclick="loadPersonalityQuiz(); return false;">Personality</a>
-            <a href="#" class="watch-button" onclick="showSection('badges-section'); return false;">Badges</a>
-            <a href="#" class="watch-button" onclick="showSection('quests-section'); return false;">Quests</a>
-        </div>
-
-        <!-- Badges Section -->
-        <div class="watch-content section" id="badges-section">
-            <h2>Your Badges</h2>
-            <div class="badges-container" id="badges-container">
-                <div class="badge badge-illuminated" style="background-color: gold;"><i
-                        class="fas fa-rocket"></i>Starter</div>
-                <div class="badge" style="background-color: grey;"><i class="fas fa-trophy"></i>Achiever</div>
-                <div class="badge" style="background-color: grey;"><i
-                        class="fas fa-comment-dots"></i>Communicator</div>
-                <div class="badge" style="background-color: grey;"><i class="fas fa-compass"></i>Explorer</div>
-                <div class="badge" style="background-color: grey;"><i class="fas fa-crown"></i>Master</div>
-            </div>
-        </div>
-
-        <!-- Quests Section -->
-        <div class="watch-content section" id="quests-section">
-            <h2>Your Quests</h2>
-            <div class="quests-container" id="quests-container">
-                <div class="quest">
-                    <h3>Deliver 3 Speeches</h3>
-                    <div class="progress-bar">
-                        <span class="progress" id="speech-progress"></span>
-                    </div>
+    <!-- Main Profile Container -->
+    <div class="profile-container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-info">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
                 </div>
-                <div class="quest">
-                    <h3>Complete 5 Puzzles</h3>
-                    <div class="progress-bar">
-                        <span class="progress" id="puzzle-progress"></span>
-                    </div>
-                </div>
-                <div class="quest">
-                    <h3>Watch 10 Speeches</h3>
-                    <div class="progress-bar">
-                        <span class="progress" id="watch-progress"></span>
+                <div class="profile-details">
+                    <h1 class="profile-name">User</h1>
+                    <p class="profile-tagline">Free UpSpeak Member</p>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <span class="stat-number">0</span>
+                            <span class="stat-label">Videos</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">0</span>
+                            <span class="stat-label">Puzzles</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">0</span>
+                            <span class="stat-label">Drills</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">0</span>
+                            <span class="stat-label">Speeches</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Personality Section (Quiz) -->
-        <div class="watch-content section" id="personality-section">
-            <h2>Personality Quiz</h2>
-            <div id="quiz-container">
-                <div class="progress-dots" id="progress-dots">
-                    <div class="dot" data-question="1"></div>
-                    <div class="dot" data-question="2"></div>
-                    <div class="dot" data-question="3"></div>
-                    <div class="dot" data-question="4"></div>
-                    <div class="dot" data-question="5"></div>
-                    <div class="dot" data-question="6"></div>
+        <!-- Profile Navigation Tabs -->
+        <div class="profile-tabs">
+            <div class="profile-tab active" data-tab="personality">Personality</div>
+            <div class="profile-tab" data-tab="badges">Badges</div>
+            <div class="profile-tab" data-tab="quests">Quests</div>
+            <div class="profile-tab" data-tab="stats">Stats</div>
+            <div class="tab-slider"></div>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="personality" class="tab-content active">
+            <div class="personality-card animated">
+                <i class="fas fa-brain personality-icon"></i>
+                <h2 class="personality-title">The Dynamic Presenter</h2>
+                <p class="personality-description">
+                    You are a natural-born presenter with a flair for engaging your audience through dynamic
+                    storytelling
+                    and expressive communication. Your enthusiasm is contagious, and you thrive in spontaneous speaking
+                    situations where you can connect with others through authentic, energetic delivery.
+                </p>
+                <div class="personality-traits">
+                    <div class="trait">Expressive</div>
+                    <div class="trait">Energetic</div>
+                    <div class="trait">Persuasive</div>
+                    <div class="trait">Adaptable</div>
+                    <div class="trait">Creative</div>
                 </div>
-                <div id="question-container">
-                    <!-- Quiz questions will be injected here -->
-                </div>
-                <button id="next-question" class="watch-button">Next Question</button>
+                <button class="take-quiz-btn">
+                    <i class="fas fa-redo"></i> Retake Personality Quiz
+                </button>
             </div>
         </div>
 
-        <div class="watch-content section" id="result-section">
-            <h2>Your Result</h2>
-            <div id="result-container">
-                <!-- Result will be displayed here -->
-                <div class="share-buttons">
-                    <div id="result-message"></div>
-                    <div class="social-buttons">
-                        <a href="https://twitter.com/" class="social-button twitter-button" target="_blank">Share on
-                            X</a>
-                        <a href="https://www.facebook.com/" class="social-button facebook-button"
-                            target="_blank">Share on Facebook</a>
-                        <a href="https://www.instagram.com/" class="social-button instagram-button"
-                            target="_blank">Share on Instagram</a>
+        <div id="badges" class="tab-content">
+            <div class="badges-grid">
+                <div class="badge-card animated">
+                    <div class="badge-icon">
+                        <i class="fas fa-award"></i>
                     </div>
-                    <button id="copy-button" class="copy-button watch-button">Copy</button>
+                    <h3 class="badge-name">Puzzle Decipher</h3>
+                    <p class="badge-description">
+                        Answer 20 Puzzles
+                    </p>
+                    <div class="badge-progress">
+                        <div class="badge-progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <span class="badge-status">0/20 Puzzles Completed</span>
+                </div>
+
+                <div class="badge-card animated">
+                    <div class="badge-icon">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <h3 class="badge-name">Savvy Speaker</h3>
+                    <p class="badge-description">
+                        Complete 10 Structured Speeches
+                    </p>
+                    <div class="badge-progress">
+                        <div class="badge-progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <span class="badge-status">0/10 Speeches Given</span>
+                </div>
+
+                <div class="badge-card animated">
+                    <div class="badge-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="badge-name">Bingewatcher</h3>
+                    <p class="badge-description">
+                        Watch 5 Speeches
+                    </p>
+                    <div class="badge-progress">
+                        <div class="badge-progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <span class="badge-status">0/5 Videos Watched</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="quests" class="tab-content">
+            <div class="quests-grid">
+                <div class="quest-card animated">
+                    <div class="quest-header">
+                        <div class="quest-title">
+                            <div class="quest-icon"><i class="fas fa-bullhorn"></i></div>
+                            Everything Bagel
+                        </div>
+                        <div class="quest-badge active">Active</div>
+                    </div>
+                    <p class="quest-description">
+                        Use all 10 parts of UpSpeak
+                    </p>
+                    <div class="quest-progress">
+                        <div class="quest-progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <div class="quest-status">
+                        <span class="quest-counter">0/10 Portions Visited</span>
+                        <span class="quest-reward"><i class="fas fa-trophy"></i> 500 XP</span>
+                    </div>
+                </div>
+
+                <div class="quest-card animated">
+                    <div class="quest-header">
+                        <div class="quest-title">
+                            <div class="quest-icon"><i class="fas fa-microphone"></i></div>
+                            Quality Speeches
+                        </div>
+                        <div class="quest-badge active">Active</div>
+                    </div>
+                    <p class="quest-description">
+                        Provide 25 speeches with 5+ strengths
+                    </p>
+                    <div class="quest-progress">
+                        <div class="quest-progress-bar" style="width: 0%;"></div>
+                    </div>
+                    <div class="quest-status">
+                        <span class="quest-counter">0/25 Quality Speeches Given</span>
+                        <span class="quest-reward"><i class="fas fa-trophy"></i> 750 XP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="stats" class="tab-content">
+            <div class="stats-container">
+                <div class="stats-card animated">
+                    <div class="stats-header">
+                        <div class="stats-title">
+                            <div class="stats-icon"><i class="fas fa-chart-line"></i></div>
+                            Practice Time
+                        </div>
+                        <div class="stats-period">Last 30 Days</div>
+                    </div>
+                    <div class="stats-summary">
+                        <div class="stats-metric">
+                            <span class="stats-value">0h</span>
+                            <span class="stats-label">Total Time</span>
+                        </div>
+                        <div class="stats-metric">
+                            <span class="stats-trend up">
+                                <i class="fas fa-arrow-up"></i> 0%
+                            </span>
+                            <span class="stats-label">vs Last Month</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-card animated">
+                    <div class="stats-header">
+                        <div class="stats-title">
+                            <div class="stats-icon"><i class="fas fa-star"></i></div>
+                            Feedback Scores
+                        </div>
+                        <div class="stats-period">Last 30 Days</div>
+                    </div>
+                    <div class="stats-summary">
+                        <div class="stats-metric">
+                            <span class="stats-value">0/5</span>
+                            <span class="stats-label">Average Score</span>
+                        </div>
+                        <div class="stats-metric">
+                            <span class="stats-trend up">
+                                <i class="fas fa-arrow-up"></i> 0%
+                            </span>
+                            <span class="stats-label">vs Last Month</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+
     <script>
-        function goToHome() {
-            window.location.href = 'home.html';
-        }
+        // Tab navigation functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.profile-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabSlider = document.querySelector('.tab-slider');
 
-        document.querySelector('.logo').addEventListener('click', goToHome);
+            tabs.forEach((tab, index) => {
+                tab.addEventListener('click', () => {
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
 
-        function showSection(sectionId) {
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => {
-                section.classList.remove('active'); // Use classList for safety
-                section.style.display = 'none'; // Explicitly hide
-            });
+                    // Update tab slider position
+                    tabSlider.style.transform = `translateX(${index * 100}%)`;
 
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.classList.add('active'); // Use classList for safety
-                targetSection.style.display = 'block'; //Explicitly show
-            } else {
-                console.error('Section with id "' + sectionId + '" not found.');
-            }
-        }
-
-        function loadQuestion(questionNumber) {
-            const questionContainer = document.getElementById('question-container');
-            const questionData = questions[questionNumber];
-
-            if (!questionData) {
-                // Quiz is complete
-                return showResults();
-            }
-
-            let questionHTML = `
-        <div class="question">${questionData.question}</div>
-        <div class="options">
-    `;
-
-            for (const option in questionData.options) {
-                questionHTML +=             `<label>
-                        <input type="radio" name="q${questionNumber}" value="${option}" ${answers[questionNumber] === option ? 'checked' : ''}>
-                        ${questionData.options[option]}
-                    </label>
-                    `;
-                    }
-
-                    questionHTML += `</div>`;
-                    questionContainer.innerHTML = questionHTML;
-
-                    // Update Progress Dots
-                    updateProgressDots();
-                    }
-
-                    function updateProgressDots() {
-                    const dots = document.querySelectorAll('.progress-dots .dot');
-                    dots.forEach(dot => {
-                    const questionNumber = parseInt(dot.dataset.question);
-                    if (questionNumber < currentQuestion) {
-                        dot.classList.add('completed');
-                    } else {
-                        dot.classList.remove('completed');
-                    }
-                    });
-                    }
-
-                    function showResults() {
-                    showSection('result-section');
-
-                    let aCount = 0;
-                    for (const question in answers) {
-                    if (answers[question] === 'a') {
-                        aCount++;
-                    }
-                    }
-
-                    // Assign personality based on the number of A's selected
-                    let personality = "";
-                    let animalIcon = ""; // To store the Font Awesome icon class
-                    if (aCount >= 5) {
-                    personality = "Dolphin"; // Very enthusiastic and engaging listeners
-                    animalIcon = "fas fa-fish";
-                    } else if (aCount === 4) {
-                    personality = "Eagle"; // Visionary listeners who appreciate big ideas
-                    animalIcon = "fas fa-eagle";
-                    } else if (aCount === 3) {
-                    personality = "Elephant"; // Empathetic listeners who connect emotionally
-                    animalIcon = "fas fa-elephant";
-                    } else if (aCount === 2) {
-                    personality = "Owl"; // Analytical listeners who prefer structured talks
-                    animalIcon = "fas fa-owl";
-                    } else if (aCount === 1) {
-                    personality = "Fox"; // Critical thinkers who enjoy debates
-                    animalIcon = "fas fa-crow"; // Use a crow icon for Fox
-                    } else {
-                    personality = "Bear"; // Practical listeners focused on actionable information
-                    animalIcon = "fas fa-bear";
-                    } // Determine result message
-                    let resultMessage = "";
-                    switch (personality) {
-                    case "Dolphin":
-                        resultMessage =
-                            "Congratulations! You are the Dolphin! You thrive in dynamic presentations and enjoy engaging with energetic speakers who inspire you!";
-                        break;
-                    case "Eagle":
-                        resultMessage =
-                            "Congratulations! You are the Eagle! You are inspired by big ideas and motivational speeches.";
-                        break;
-                    case "Elephant":
-                        resultMessage =
-                            "Congratulations! You are the Elephant! You connect emotionally and value personal stories.";
-                        break;
-                    case "Owl":
-                        resultMessage =
-                            "Congratulations! You are the Owl! You appreciate structured talks and analytical speakers.";
-                        break;
-                    case "Fox":
-                        resultMessage =
-                            "Congratulations! You are the Fox! You enjoy debates and critical thinking.";
-                        break;
-                    case "Bear":
-                        resultMessage =
-                            "Congratulations! You are the Bear! You are practical and focus on actionable information.";
-                        break;
-                    }
-
-                    // Display the result message
-                    document.getElementById('result-message').innerHTML =
-                    `<i class="${animalIcon}"></i>  ${resultMessage}`;
-
-                    // Add event listener to the copy button
-                    document.getElementById('copy-button').addEventListener('click', function() {
-                    const copyText = `I'm the ${personality}! What are you? Test at speaky.tiiny.site`;
-
-                    navigator.clipboard.writeText(copyText)
-                        .then(() => {
-                            alert('Copied to clipboard!');
-                        })
-                        .catch(err => {
-                            console.error('Failed to copy: ', err);
-                        });
-                    });
-                    }
-                    // Global variable for the current question
-                    let currentQuestion = 1;
-
-                    // Global variable to store the user's answers
-                    let answers = {};
-
-                    const questions = {
-                    1: {
-                    question: "Which speech excerpt intrigues you more?",
-                    options: {
-                        a: "In the face of impossibility, we find our true strength.",
-                        b: "By analyzing patterns, we can predict and shape our future."
-                    }
-                    },
-                    2: {
-                    question: "Which presentation title appeals to you most?",
-                    options: {
-                        a: "Breaking Boundaries: The Art of the Impossible",
-                        b: "Decoding Success: A Data-Driven Approach"
-                    }
-                    },
-                    3: {
-                    question: "When listening to a speech, do you prefer:",
-                    options: {
-                        a: "Passionate delivery with dramatic pauses",
-                        b: "Steady pace with clear, logical progression"
-                    }
-                    },
-                    4: {
-                    question: "Which type of speaker would you rather listen to?",
-                    options: {
-                        a: "An inspiring leader sharing personal experiences",
-                        b: "An expert explaining complex concepts"
-                    }
-                    },
-                    5: {
-                    question: "How do you best engage with the content of a presentation?",
-                    options: {
-                        a: "Visualizing scenarios and possibilities",
-                        b: "Taking notes and analyzing key points"
-                    }
-                    },
-                    6: {
-                    question: "After a thought-provoking talk, would you rather:",
-                    options: {
-                        a: "Engage in a lively group discussion about the ideas",
-                        b: "Quietly reflect and research more on the topic"
-                    }
-                    }
-                    };
-
-                    // Attach event listeners after the page loads
-                    document.addEventListener('DOMContentLoaded', function() {
-                    // Function to add the the Personality Quiz when the button is clicked
-                    function loadPersonalityQuiz() {
-                    showSection('personality-section');
-                    const quizContainer = document.getElementById('quiz-container');
-                    quizContainer.style.display = 'block';
-                    loadQuestion(1);
-                    document.getElementById('next-question').addEventListener('click', function() {
-                        // Get the selected answer
-                        const selectedAnswer = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
-
-                        if (selectedAnswer) {
-                            answers[currentQuestion] = selectedAnswer.value;
-                            // Move to the next question
-                            currentQuestion++;
-                            loadQuestion(currentQuestion);
-                        } else {
-                            alert("Please select an answer.");
+                    // Show active content
+                    const tabId = tab.getAttribute('data-tab');
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === tabId) {
+                            content.classList.add('active');
                         }
                     });
+                });
+            });
+
+            // Add animation class on scroll
+            const animatedElements = document.querySelectorAll('.animated');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
                     }
-                    window.loadPersonalityQuiz = loadPersonalityQuiz;
-                    // Initialize the quiz to start at the home section
-                    showSection('home-section');
-                    });
-                    // Define variables for quest progress
-                    let SpeechesDelivered = 0;
-                    let PuzzlesAnswered = 0;
-                    let SpeechesWatched = 0;
+                });
+            });
 
-                    // Function to update quest progress
-                    function updateQuestProgress() {
-                    // Calculate progress percentages
-                    const speechProgress = (SpeechesDelivered / 3) * 100;
-                    const puzzleProgress = (PuzzlesAnswered / 5) * 100;
-                    const watchProgress = (SpeechesWatched / 10) * 100;
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
 
-                    // Update progress bars
-                    const speechBar = document.getElementById('speech-progress');
-                    const puzzleBar = document.getElementById('puzzle-progress');
-                    const watchBar = document.getElementById('watch-progress');
-
-                    speechBar.style.width = `${Math.min(speechProgress, 100)}%`;
-                    puzzleBar.style.width = `${Math.min(puzzleProgress, 100)}%`;
-                    watchBar.style.width = `${Math.min(watchProgress, 100)}%`;
-                    }
-                    </script>
-                    </body>
-
-                    </html>
+</html>
