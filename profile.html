@@ -6,25 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UpSpeak Profile</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         /* General Styles */
         :root {
-            --primary-color: #007bff;
-            --secondary-color: #ff9933;
+            --primary-color: #007bff; /* Blue */
+            --secondary-color: #ff9933; /* Orange */
             --text-color: #2c3e50;
             --background-gradient: linear-gradient(135deg, #ecf0f1, #d5dbdb);
             --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             --transition-speed: 0.3s;
-            --accent-color: #6c5ce7;
+            --accent-color: #ff8c00; /* Orange accent */
             --success-color: #00b894;
             --warning-color: #fdcb6e;
             --danger-color: #e17055;
             --light-bg: rgba(255, 255, 255, 0.8);
             --card-bg: rgba(255, 255, 255, 0.95);
+            --neutral-gray: #F5F5F5;
+            --dark-gray: #424242;
         }
 
         body {
@@ -40,7 +42,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Header Styles - Kept intact as requested */
+        /* Header Styles */
         header {
             background-color: rgba(255, 255, 255, 0.95);
             padding: 25px 0;
@@ -178,9 +180,7 @@
             transform: scale(1.15);
         }
 
-        /* REVAMPED PROFILE CONTENT STYLES */
-
-        /* Main container styles */
+        /* Profile Container */
         .profile-container {
             max-width: 1200px;
             margin: 40px auto;
@@ -282,27 +282,6 @@
             color: #777;
         }
 
-        .edit-profile-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-        }
-
-        .edit-profile-btn:hover {
-            background: #0062cc;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
-        }
-
         /* Profile Navigation Tabs */
         .profile-tabs {
             display: flex;
@@ -338,14 +317,13 @@
             top: 7.5%;
             left: 0.5%;
             width: 25%;
-            /* Adjusted dynamically by JavaScript */
             background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
             border-radius: 50px;
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: transform 0.3 enduring-cubic-bezier(0.68, -0.55, 0.27, 1.55);
             z-index: 1;
         }
 
-        /* Section Content Styles */
+        /* Tab Content */
         .tab-content {
             display: none;
             opacity: 0;
@@ -367,19 +345,6 @@
             position: relative;
             overflow: hidden;
             margin-bottom: 30px;
-        }
-
-        .personality-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(0,123,255,0.05)" stroke-width="8"/></svg>');
-            background-size: 150px;
-            opacity: 0.3;
-            z-index: 0;
         }
 
         .personality-icon {
@@ -482,28 +447,6 @@
             overflow: hidden;
         }
 
-        .badge-card::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 5px;
-            bottom: 0;
-            left: 0;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            transform: scaleX(0);
-            transform-origin: bottom right;
-            transition: transform 0.5s ease;
-        }
-
-        .badge-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .badge-card:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
-        }
-
         .badge-icon {
             font-size: 3.5rem;
             margin-bottom: 20px;
@@ -514,39 +457,7 @@
             justify-content: center;
             border-radius: 50%;
             color: white;
-            position: relative;
-        }
-
-        .badge-icon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 50%;
-            background: conic-gradient(var(--primary-color) 0%,
-                    var(--accent-color) 25%,
-                    var(--secondary-color) 50%,
-                    var(--primary-color) 75%,
-                    var(--accent-color) 100%);
-            z-index: -1;
-            animation: rotateBadge 8s linear infinite;
-        }
-
-        @keyframes rotateBadge {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .badge-locked .badge-icon::before {
-            background: #ddd;
-            animation: none;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
         }
 
         .badge-name {
@@ -583,21 +494,6 @@
             color: #777;
         }
 
-        .badge-status.complete {
-            color: var(--success-color);
-            font-weight: 600;
-        }
-
-        .badge-locked {
-            filter: grayscale(1);
-            opacity: 0.7;
-        }
-
-        .badge-locked:hover {
-            filter: grayscale(0.5);
-            opacity: 0.85;
-        }
-
         /* Quests Section */
         .quests-grid {
             display: grid;
@@ -612,11 +508,6 @@
             box-shadow: var(--box-shadow);
             transition: all 0.3s ease;
             position: relative;
-        }
-
-        .quest-card:hover {
-            transform: translateY(-7px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
 
         .quest-header {
@@ -644,7 +535,6 @@
             color: white;
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             font-size: 1.2rem;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
         }
 
         .quest-badge {
@@ -654,16 +544,6 @@
             font-weight: 600;
             background: var(--light-bg);
             color: var(--primary-color);
-        }
-
-        .quest-badge.active {
-            background: rgba(0, 184, 148, 0.1);
-            color: var(--success-color);
-        }
-
-        .quest-badge.complete {
-            background: rgba(0, 184, 148, 0.2);
-            color: var(--success-color);
         }
 
         .quest-description {
@@ -711,436 +591,6 @@
             font-weight: 600;
         }
 
-        .quest-actions {
-            margin-top: 20px;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .quest-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .quest-start-btn {
-            background: var(--primary-color);
-            color: white;
-            box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
-        }
-
-        .quest-start-btn:hover {
-            background: #0062cc;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
-        }
-
-        /* Quiz Styles */
-        .quiz-container {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: var(--box-shadow);
-            position: relative;
-        }
-
-        .quiz-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .quiz-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .quiz-subtitle {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        .quiz-progress {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-
-        .quiz-step {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: #f0f0f0;
-            color: #777;
-            margin: 0 5px;
-            font-weight: 600;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .quiz-step.active {
-            background: var(--primary-color);
-            color: white;
-            transform: scale(1.2);
-            box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
-        }
-
-        .quiz-step.completed {
-            background: var(--success-color);
-            color: white;
-        }
-
-        .quiz-step:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            width: 40px;
-            height: 3px;
-            background: #f0f0f0;
-            right: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: -1;
-        }
-
-        .quiz-step.completed:not(:last-child)::after {
-            background: var(--success-color);
-        }
-
-        .quiz-question {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            color: var(--text-color);
-            text-align: center;
-        }
-
-        .quiz-options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .quiz-option {
-            background: var(--light-bg);
-            border-radius: 15px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            position: relative;
-        }
-
-        .quiz-option:hover {
-            background: rgba(0, 123, 255, 0.05);
-            transform: translateY(-3px);
-            border-color: rgba(0, 123, 255, 0.3);
-        }
-
-        .quiz-option.selected {
-            background: rgba(0, 123, 255, 0.1);
-            border-color: var(--primary-color);
-        }
-
-        .quiz-option-input {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .quiz-option-label {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            cursor: pointer;
-        }
-
-        .quiz-option-radio {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            border: 2px solid #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all 0.3s ease;
-        }
-
-        .quiz-option.selected .quiz-option-radio {
-            border-color: var(--primary-color);
-        }
-
-        .quiz-option.selected .quiz-option-radio::after {
-            content: '';
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--primary-color);
-        }
-
-        .quiz-option-text {
-            font-size: 1.1rem;
-            color: var(--text-color);
-        }
-
-        .quiz-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-
-        .quiz-btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .quiz-back-btn {
-            background: #f0f0f0;
-            color: #555;
-        }
-
-        .quiz-back-btn:hover {
-            background: #e0e0e0;
-        }
-
-        .quiz-next-btn {
-            background: var(--primary-color);
-            color: white;
-            box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
-        }
-
-        .quiz-next-btn:hover {
-            background: #0062cc;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
-        }
-
-        .quiz-next-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Result Section */
-        .result-container {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: var(--box-shadow);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .result-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M30 5L35 20H50L40 30L45 45L30 35L15 45L20 30L10 20H25L30 5Z" fill="rgba(255,153,51,0.05)"/></svg>');
-            opacity: 0.5;
-            z-index: 0;
-        }
-
-        .result-icon {
-            font-size: 6rem;
-            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .result-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            position: relative;
-            z-index: 1;
-        }
-
-        .result-message {
-            font-size: 1.2rem;
-            color: #555;
-            max-width: 800px;
-            margin: 0 auto 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .result-explanation {
-            text-align: left;
-            background: var(--light-bg);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .result-explanation h3 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            font-size: 1.4rem;
-        }
-
-        .result-explanation p {
-            margin-bottom: 15px;
-            line-height: 1.8;
-            color: #555;
-        }
-
-        .result-traits {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .result-actions {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .result-btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .share-result-btn {
-            background: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-        }
-
-        .share-result-btn:hover {
-            background: #0062cc;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
-        }
-
-        .retake-quiz-btn {
-            background: rgba(0, 123, 255, 0.1);
-            color: var(--primary-color);
-        }
-
-        .retake-quiz-btn:hover {
-            background: rgba(0, 123, 255, 0.2);
-            transform: translateY(-3px);
-        }
-
-        /* More Personality Types Section */
-        .more-types {
-            margin-top: 50px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .more-types-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--text-color);
-        }
-
-        .types-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .type-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: var(--box-shadow);
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .type-card:hover {
-            transform: translateY(-7px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .type-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: var(--primary-color);
-        }
-
-        .type-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--text-color);
-        }
-
-        .type-brief {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-        }
-
-        .type-learn-more {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-block;
-            padding: 8px 15px;
-            border-radius: 50px;
-            background: rgba(0, 123, 255, 0.1);
-        }
-
-        .type-learn-more:hover {
-            background: rgba(0, 123, 255, 0.2);
-            transform: translateY(-3px);
-        }
-
         /* Stats Section */
         .stats-container {
             display: grid;
@@ -1154,11 +604,6 @@
             padding: 30px;
             box-shadow: var(--box-shadow);
             transition: all 0.3s ease;
-        }
-
-        .stats-card:hover {
-            transform: translateY(-7px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
 
         .stats-header {
@@ -1197,12 +642,6 @@
             color: #777;
         }
 
-        .stats-chart {
-            height: 200px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
         .stats-summary {
             display: flex;
             justify-content: space-between;
@@ -1236,151 +675,145 @@
             color: var(--success-color);
         }
 
-        .stats-trend.down {
-            color: var(--danger-color);
-        }
-
-        /* Footer */
-        footer {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 50px 0 30px;
-            margin-top: 50px;
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 40px;
-        }
-
-        .footer-section h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--text-color);
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 15px;
-        }
-
-        .footer-links a {
-            color: #666;
-            text-decoration: none;
-            transition: color 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-color);
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--light-bg);
-            display: flex;
+        /* Quiz Modal */
+        .quiz-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
             align-items: center;
             justify-content: center;
-            color: #666;
-            transition: all 0.3s ease;
+            overflow-y: auto;
         }
 
-        .social-icon:hover {
+        .quiz-container {
+            background: var(--card-bg);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            max-width: 1000px;
+            width: 95%;
+            padding: 50px;
+            position: relative;
+            transition: var(--transition-speed);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .quiz-container h1 {
+            text-align: center;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 3em;
+            margin-bottom: 30px;
+        }
+
+        .progress-container {
+            margin-bottom: 40px;
+        }
+
+        .progress-bar {
+            height: 12px;
+            width: 100%;
+            background-color: var(--neutral-gray);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.7s ease;
+        }
+
+        .progress-text {
+            text-align: right;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 5px;
+        }
+
+        .question p {
+            font-weight: 600;
+            font-size: 1.3em;
+            color: var(--text-color);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .option {
+            background-color: var(--neutral-gray);
+            padding: 25px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: var(--transition-speed);
+            border: 3px solid transparent;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option:hover {
+            background-color: var(--primary-color);
+            color: white;
             transform: translateY(-5px);
-            background: var(--primary-color);
+        }
+
+        .option.selected {
+            border-color: var(--success-color);
+            background-color: var(--success-color);
             color: white;
         }
 
-        .footer-newsletter p {
-            color: #666;
-            margin-bottom: 20px;
+        .option-icon {
+            font-size: 28px;
+            width: 40px;
+            text-align: center;
         }
 
-        .newsletter-form {
-            display: flex;
-            gap: 10px;
+        .option-text {
+            font-weight: 500;
+            font-size: 1.1em;
         }
 
-        .newsletter-input {
-            flex: 1;
-            padding: 12px 20px;
-            border: 2px solid #eee;
-            border-radius: 50px;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s ease;
-        }
-
-        .newsletter-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        .newsletter-btn {
-            background: var(--primary-color);
+        .quiz-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 50px;
+            padding: 18px 35px;
+            font-size: 1.2em;
             cursor: pointer;
-            transition: all 0.3s ease;
+            border-radius: 10px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 50px;
+            transition: var(--transition-speed);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .newsletter-btn:hover {
-            background: #0062cc;
-            transform: translateY(-3px);
+        .quiz-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
         }
 
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 40px auto 0;
-            padding: 20px 20px 0;
-            border-top: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .footer-copyright {
-            color: #777;
-            font-size: 0.9rem;
-        }
-
-        .footer-legal {
-            display: flex;
-            gap: 20px;
-        }
-
-        .footer-legal a {
-            color: #777;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-legal a:hover {
-            color: var(--primary-color);
+        .quiz-btn:disabled {
+            background: var(--neutral-gray);
+            color: var(--dark-gray);
+            cursor: not-allowed;
+            box-shadow: none;
         }
 
         /* Responsive Adjustments */
@@ -1391,12 +824,7 @@
                 gap: 20px;
             }
 
-            .profile-info {
-                width: 100%;
-            }
-
             .profile-stats {
-                width: 100%;
                 justify-content: flex-start;
             }
 
@@ -1429,23 +857,6 @@
                 flex-direction: column;
                 align-items: center;
             }
-
-            .result-actions {
-                flex-direction: column;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .footer-legal {
-                justify-content: center;
-            }
         }
 
         /* Animations */
@@ -1454,7 +865,6 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -1464,9 +874,6 @@
         .animated {
             animation: fadeIn 0.8s ease forwards;
         }
-
-        /* JavaScript Functionality */
-        /* Note: This would go in a separate JS file, just including it here for reference */
     </style>
 </head>
 
@@ -1478,7 +885,7 @@
                 <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <defs>
                         <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
+                            <stop offset="0%" style="stop-color:#007bff;stop-opacity:1" />
                             <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
                         </linearGradient>
                     </defs>
@@ -1487,51 +894,44 @@
                 </svg>
                 <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
             </div>
-
             <ul class="nav-menu">
-                <li>
-                    <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
+                <li><a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
                     <div class="dropdown-content">
                         <a href="evaluation.html">Recording Studio</a>
                     </div>
                 </li>
-                <li>
-                    <a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
+                <li><a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
                     <div class="dropdown-content">
                         <a href="learn.html">Videos</a>
                         <a href="learn.html">Puzzles</a>
                         <a href="learn.html">Drills</a>
                     </div>
-                <li>
-                    <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
+                </li>
+                <li><a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
                     <div class="dropdown-content">
                         <a href="profile.html">Personality</a>
                         <a href="profile.html">Badges</a>
                         <a href="profile.html">Quests</a>
                     </div>
                 </li>
-                <li>
-                    <a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
+                <li><a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
                     <div class="dropdown-content">
                         <a href="watch.html">Speech Archive</a>
                         <a href="watch.html">Famous Speeches</a>
                     </div>
                 </li>
-                <li>
-                    <a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
+                <li><a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
                     <div class="dropdown-content">
                         <a href="about.html">UpSpeak Credentials</a>
                     </div>
                 </li>
             </ul>
-
             <a href="user.html"><i class="fas fa-user-circle profile-icon"></i></a>
         </nav>
     </header>
 
-    <!-- Main Profile Container -->
+    <!-- Profile Container -->
     <div class="profile-container">
-        <!-- Profile Header -->
         <div class="profile-header">
             <div class="profile-info">
                 <div class="profile-avatar">
@@ -1574,23 +974,16 @@
         <!-- Tab Content -->
         <div id="personality" class="tab-content active">
             <div class="personality-card animated">
-                <i class="fas fa-brain personality-icon"></i>
-                <h2 class="personality-title">The Dynamic Presenter</h2>
+                <i class="fas fa-question-circle personality-icon"></i>
+                <h2 class="personality-title">Mystery Persona</h2>
                 <p class="personality-description">
-                    You are a natural-born presenter with a flair for engaging your audience through dynamic
-                    storytelling
-                    and expressive communication. Your enthusiasm is contagious, and you thrive in spontaneous speaking
-                    situations where you can connect with others through authentic, energetic delivery.
+                    Your speech persona is yet to be revealed. Take the quiz to discover your unique speaking style!
                 </p>
                 <div class="personality-traits">
-                    <div class="trait">Expressive</div>
-                    <div class="trait">Energetic</div>
-                    <div class="trait">Persuasive</div>
-                    <div class="trait">Adaptable</div>
-                    <div class="trait">Creative</div>
+                    <div class="trait">Unknown</div>
                 </div>
-                <button class="take-quiz-btn">
-                    <i class="fas fa-redo"></i> Retake Personality Quiz
+                <button class="take-quiz-btn" onclick="startQuiz()">
+                    <i class="fas fa-redo"></i> Take Personality Quiz
                 </button>
             </div>
         </div>
@@ -1598,41 +991,27 @@
         <div id="badges" class="tab-content">
             <div class="badges-grid">
                 <div class="badge-card animated">
-                    <div class="badge-icon">
-                        <i class="fas fa-award"></i>
-                    </div>
+                    <div class="badge-icon"><i class="fas fa-award"></i></div>
                     <h3 class="badge-name">Puzzle Decipher</h3>
-                    <p class="badge-description">
-                        Answer 20 Puzzles
-                    </p>
+                    <p class="badge-description">Answer 20 Puzzles</p>
                     <div class="badge-progress">
                         <div class="badge-progress-bar" style="width: 0%;"></div>
                     </div>
                     <span class="badge-status">0/20 Puzzles Completed</span>
                 </div>
-
                 <div class="badge-card animated">
-                    <div class="badge-icon">
-                        <i class="fas fa-microphone-alt"></i>
-                    </div>
+                    <div class="badge-icon"><i class="fas fa-microphone-alt"></i></div>
                     <h3 class="badge-name">Savvy Speaker</h3>
-                    <p class="badge-description">
-                        Complete 10 Structured Speeches
-                    </p>
+                    <p class="badge-description">Complete 10 Structured Speeches</p>
                     <div class="badge-progress">
                         <div class="badge-progress-bar" style="width: 0%;"></div>
                     </div>
                     <span class="badge-status">0/10 Speeches Given</span>
                 </div>
-
                 <div class="badge-card animated">
-                    <div class="badge-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
+                    <div class="badge-icon"><i class="fas fa-users"></i></div>
                     <h3 class="badge-name">Bingewatcher</h3>
-                    <p class="badge-description">
-                        Watch 5 Speeches
-                    </p>
+                    <p class="badge-description">Watch 5 Speeches</p>
                     <div class="badge-progress">
                         <div class="badge-progress-bar" style="width: 0%;"></div>
                     </div>
@@ -1651,9 +1030,7 @@
                         </div>
                         <div class="quest-badge active">Active</div>
                     </div>
-                    <p class="quest-description">
-                        Use all 10 parts of UpSpeak
-                    </p>
+                    <p class="quest-description">Use all 10 parts of UpSpeak</p>
                     <div class="quest-progress">
                         <div class="quest-progress-bar" style="width: 0%;"></div>
                     </div>
@@ -1662,7 +1039,6 @@
                         <span class="quest-reward"><i class="fas fa-trophy"></i> 500 XP</span>
                     </div>
                 </div>
-
                 <div class="quest-card animated">
                     <div class="quest-header">
                         <div class="quest-title">
@@ -1671,9 +1047,7 @@
                         </div>
                         <div class="quest-badge active">Active</div>
                     </div>
-                    <p class="quest-description">
-                        Provide 25 speeches with 5+ strengths
-                    </p>
+                    <p class="quest-description">Provide 25 speeches with 5+ strengths</p>
                     <div class="quest-progress">
                         <div class="quest-progress-bar" style="width: 0%;"></div>
                     </div>
@@ -1708,7 +1082,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="stats-card animated">
                     <div class="stats-header">
                         <div class="stats-title">
@@ -1734,9 +1107,23 @@
         </div>
     </div>
 
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="quiz-modal">
+        <div class="quiz-container">
+            <h1>Discover Your Speech Persona</h1>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="progress-text"></div>
+            </div>
+            <div id="quiz"></div>
+            <button onclick="nextQuestion()" id="nextBtn" class="quiz-btn" disabled>Next Question</button>
+        </div>
+    </div>
 
     <script>
-        // Tab navigation functionality
+        // Tab Navigation
         document.addEventListener('DOMContentLoaded', function () {
             const tabs = document.querySelectorAll('.profile-tab');
             const tabContents = document.querySelectorAll('.tab-content');
@@ -1744,14 +1131,9 @@
 
             tabs.forEach((tab, index) => {
                 tab.addEventListener('click', () => {
-                    // Update active tab
                     tabs.forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
-
-                    // Update tab slider position
                     tabSlider.style.transform = `translateX(${index * 100}%)`;
-
-                    // Show active content
                     const tabId = tab.getAttribute('data-tab');
                     tabContents.forEach(content => {
                         content.classList.remove('active');
@@ -1762,7 +1144,7 @@
                 });
             });
 
-            // Add animation class on scroll
+            // Animation on scroll
             const animatedElements = document.querySelectorAll('.animated');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -1780,6 +1162,214 @@
                 observer.observe(el);
             });
         });
+
+        // Quiz Data
+        const questions = [
+            {
+                question: "Which speech-related title intrigues you the most?",
+                options: [
+                    { text: "The Art of Storytelling", icon: "fa-solid fa-book-open", value: "peacock" },
+                    { text: "Mastering Impromptu Speeches", icon: "fa-solid fa-bolt", value: "fox" },
+                    { text: "Data-Driven Presentations", icon: "fa-solid fa-chart-bar", value: "owl" },
+                    { text: "Emotional Connection with Audience", icon: "fa-solid fa-heart", value: "dolphin" }
+                ]
+            },
+            {
+                question: "Which excerpt resonates with you more?",
+                options: [
+                    { text: "Confidence is key.", icon: "fa-solid fa-star", value: "peacock" },
+                    { text: "Energy is contagious.", icon: "fa-solid fa-fire", value: "fox" },
+                    { text: "Accuracy is paramount.", icon: "fa-solid fa-check-circle", value: "owl" },
+                    { text: "Empathy builds bridges.", icon: "fa-solid fa-handshake", value: "dolphin" }
+                ]
+            },
+            {
+                question: "How do you prefer to prepare for a speech?",
+                options: [
+                    { text: "Memorize every word", icon: "fa-solid fa-file-alt", value: "owl" },
+                    { text: "Create a basic outline and improvise", icon: "fa-solid fa-pencil-alt", value: "fox" },
+                    { text: "Focus on key themes and stories", icon: "fa-solid fa-comment-dots", value: "peacock" },
+                    { text: "Understand audience needs and adapt", icon: "fa-solid fa-users", value: "dolphin" }
+                ]
+            },
+            {
+                question: "Which aspect of public speaking do you enjoy most?",
+                options: [
+                    { text: "Crafting a compelling narrative", icon: "fa-solid fa-scroll", value: "peacock" },
+                    { text: "Engaging in Q&A sessions", icon: "fa-solid fa-question-circle", value: "dolphin" },
+                    { text: "Presenting complex information clearly", icon: "fa-solid fa-brain", value: "owl" },
+                    { text: "Adapting to unexpected challenges", icon: "fa-solid fa-wrench", value: "fox" }
+                ]
+            },
+            {
+                question: "What's your preferred method of emphasizing key points?",
+                options: [
+                    { text: "Using vivid metaphors and analogies", icon: "fa-solid fa-lightbulb", value: "peacock" },
+                    { text: "Dramatic pauses and voice inflections", icon: "fa-solid fa-volume-up", value: "fox" },
+                    { text: "Citing credible research and data", icon: "fa-solid fa-chart-pie", value: "owl" },
+                    { text: "Sharing personal anecdotes", icon: "fa-solid fa-id-card", value: "dolphin" }
+                ]
+            }
+        ];
+
+        const personalities = {
+            peacock: {
+                title: "The Peacock",
+                icon: "fa-solid fa-feather-pointed",
+                description: "You captivate audiences with vibrant storytelling and natural flair. Your speeches are an art form, designed to leave a lasting impression through creative metaphors and charisma.",
+                traits: ["Expressive", "Charismatic", "Creative", "Inspiring", "Storyteller"]
+            },
+            fox: {
+                title: "The Fox",
+                icon: "fa-solid fa-paw",
+                description: "You excel in impromptu situations with quick wit and adaptability. Your dynamic energy keeps audiences engaged, turning challenges into opportunities to shine.",
+                traits: ["Witty", "Adaptable", "Energetic", "Quick-Thinking", "Engaging"]
+            },
+            owl: {
+                title: "The Owl",
+                icon: "fa-solid fa-owl",
+                description: "You deliver data-driven presentations with remarkable precision and clarity. Your thorough research and logical structure establish you as a trusted authority.",
+                traits: ["Precise", "Analytical", "Logical", "Credible", "Methodical"]
+            },
+            dolphin: {
+                title: "The Dolphin",
+                icon: "fa-solid fa-water",
+                description: "You connect emotionally with audiences, fostering empathy and trust. Your authentic and collaborative approach makes every speech a meaningful conversation.",
+                traits: ["Empathetic", "Authentic", "Relatable", "Supportive", "Intuitive"]
+            }
+        };
+
+        let currentQuestion = 0;
+        const userAnswers = { peacock: 0, fox: 0, owl: 0, dolphin: 0 };
+
+        // Quiz Functions
+        function startQuiz() {
+            document.getElementById('quizModal').style.display = 'flex';
+            currentQuestion = 0;
+            for (let key in userAnswers) userAnswers[key] = 0;
+            renderQuestion(currentQuestion);
+        }
+
+        function renderQuestion(index) {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = '';
+
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+
+            const questionPara = document.createElement('p');
+            questionPara.textContent = questions[index].question;
+            questionDiv.appendChild(questionPara);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+
+            questions[index].options.forEach(option => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.setAttribute('data-value', option.value);
+                optionDiv.onclick = function () { selectOption(this); };
+
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'option-icon';
+                const icon = document.createElement('i');
+                icon.className = option.icon;
+                iconSpan.appendChild(icon);
+
+                const textSpan = document.createElement('span');
+                textSpan.className = 'option-text';
+                textSpan.textContent = option.text;
+
+                optionDiv.appendChild(iconSpan);
+                optionDiv.appendChild(textSpan);
+                optionsDiv.appendChild(optionDiv);
+            });
+
+            questionDiv.appendChild(optionsDiv);
+            quizContainer.appendChild(questionDiv);
+            updateProgress();
+        }
+
+        function selectOption(selectedOption) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            selectedOption.classList.add('selected');
+            document.getElementById('nextBtn').disabled = false;
+
+            const value = selectedOption.getAttribute('data-value');
+            userAnswers[value]++;
+        }
+
+        function updateProgress() {
+            const progressElement = document.querySelector('.progress');
+            const progressTextElement = document.querySelector('.progress-text');
+            const progressPercentage = ((currentQuestion + 1) / questions.length) * 100;
+            progressElement.style.width = progressPercentage + '%';
+            progressTextElement.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion(currentQuestion);
+                document.getElementById('nextBtn').disabled = true;
+            } else {
+                showQuizResult();
+            }
+        }
+
+        function showQuizResult() {
+            let maxScore = 0;
+            let personalityResult = '';
+            for (const personality in userAnswers) {
+                if (userAnswers[personality] > maxScore) {
+                    maxScore = userAnswers[personality];
+                    personalityResult = personality;
+                }
+            }
+
+            const tiedPersonalities = [];
+            for (const personality in userAnswers) {
+                if (userAnswers[personality] === maxScore) {
+                    tiedPersonalities.push(personality);
+                }
+            }
+
+            if (tiedPersonalities.length > 1) {
+                const randomIndex = Math.floor(Math.random() * tiedPersonalities.length);
+                personalityResult = tiedPersonalities[randomIndex];
+            }
+
+            const resultData = personalities[personalityResult];
+            updatePersonalitySection(resultData);
+
+            document.getElementById('quizModal').style.display = 'none';
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        function updatePersonalitySection(resultData) {
+            const personalityCard = document.querySelector('.personality-card');
+            personalityCard.innerHTML = `
+                <i class="${resultData.icon} personality-icon"></i>
+                <h2 class="personality-title">${resultData.title}</h2>
+                <p class="personality-description">${resultData.description}</p>
+                <div class="personality-traits">
+                    ${resultData.traits.map(trait => `<div class="trait">${trait}</div>`).join('')}
+                </div>
+                <button class="take-quiz-btn" onclick="startQuiz()">
+                    <i class="fas fa-redo"></i> Retake Personality Quiz
+                </button>
+            `;
+        }
+
+        // Dummy function for logo click
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
     </script>
 </body>
 
