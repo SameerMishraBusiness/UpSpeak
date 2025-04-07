@@ -1352,7 +1352,7 @@
       const spokenText = result.toLowerCase().replace(/[.,!?]/g, '').trim();
       const expectedTextClean = expected.toLowerCase().replace(/[.,!?]/g, '').trim();
       const endTime = Date.now();
-      const duration = Math.max(0, (endTime - startTime) / 1000 - 4.5);
+      const duration = Math.max(0, (endTime - startTime) / 1000);
       const expectedWords = expectedTextClean.split(/\s+/);
       const spokenWords = spokenText.split(/\s+/);
       const wordAccuracy = spokenWords.filter((word, i) => i < expectedWords.length && word === expectedWords[i]).length / expectedWords.length * 100;
