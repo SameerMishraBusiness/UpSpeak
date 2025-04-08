@@ -224,7 +224,6 @@
                 </li>
                 <li><a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
                     <div class="dropdown-content">
-                        <a href="learn.html">Videos</a>
                         <a href="learn.html">Puzzles</a>
                         <a href="learn.html">Drills</a>
                     </div>
@@ -262,10 +261,6 @@
                     <h1 id="profileName" class="profile-name"></h1>
                     <p class="profile-tagline">Free UpSpeak Member</p>
                     <div class="profile-stats">
-                        <div class="stat">
-                            <span id="videosWatched" class="stat-number">0</span>
-                            <span class="stat-label">Videos</span>
-                        </div>
                         <div class="stat">
                             <span id="puzzlesCompleted" class="stat-number">0</span>
                             <span class="stat-label">Puzzles</span>
@@ -315,13 +310,13 @@
                     <span id="savvySpeakerStatus" class="badge-status">0/10 Speeches Given</span>
                 </div>
                 <div class="badge-card animated">
-                    <div class="badge-icon"><i class="fas fa-users"></i></div>
-                    <h3 class="badge-name">Bingewatcher</h3>
-                    <p class="badge-description">Watch 5 Speeches</p>
+                    <div class="badge-icon"><i class="fas fa-dumbbell"></i></div>
+                    <h3 class="badge-name">Driller</h3>
+                    <p class="badge-description">Complete 25 Drills</p>
                     <div class="badge-progress">
-                        <div id="bingewatcherProgress" class="badge-progress-bar"></div>
+                        <div id="drillerProgress" class="badge-progress-bar"></div>
                     </div>
-                    <span id="bingewatcherStatus" class="badge-status">0/5 Videos Watched</span>
+                    <span id="drillerStatus" class="badge-status">0/25 Drills Completed</span>
                 </div>
             </div>
         </div>
@@ -336,7 +331,7 @@
                         </div>
                         <div class="quest-badge active">Active</div>
                     </div>
-                    <p class="quest-description">Complete 50 Learning Exercises (Drills + Puzzles)</p>
+                    <p class="quest-description">Complete 50 Learning Exercises</p>
                     <div class="quest-progress">
                         <div id="avidLearnerProgress" class="quest-progress-bar"></div>
                     </div>
@@ -381,29 +376,48 @@
     </div>
 
     <script>
-        // State Management
-        function loadProfileState() {
-            const state = localStorage.getItem('profileState');
+        // State Management with Username
+        function getCurrentUsername() {
+            let username = localStorage.getItem('currentUsername');
+            if (!username) {
+                username = prompt("Please enter your username:");
+                if (!username) username = "Guest_" + Math.random().toString(36).substr(2, 5);
+                localStorage.setItem('currentUsername', username);
+            }
+            return username;
+        }
+
+        function loadProfileState(username) {
+            const key = `profileState_${username}`;
+            const state = localStorage.getItem(key);
             return state ? JSON.parse(state) : { name: null, personality: null };
         }
 
-        function saveProfileState(state) {
-            localStorage.setItem('profileState', JSON.stringify(state));
+        function saveProfileState(username, state) {
+            const key = `profileState_${username}`;
+            localStorage.setItem(key, JSON.stringify(state));
         }
 
-        function loadEvaluationState() {
-            const state = localStorage.getItem('evaluationState');
+        function loadEvaluationState(username) {
+            const key = `evaluationState_${username}`;
+            const state = localStorage.getItem(key);
             return state ? JSON.parse(state) : { speechesGiven: 0, speechesWithFivePlusStrengths: 0 };
         }
 
-        function loadLearnState() {
-            const state = localStorage.getItem('learnState');
-            return state ? JSON.parse(state) : { videosCompleted: 0, puzzlesCompleted: 0, drillsCompleted: 0 };
+        function saveEvaluationState(username, state) {
+            const key = `evaluationState_${username}`;
+            localStorage.setItem(key, JSON.stringify(state));
         }
 
-        function loadWatchState() {
-            const state = localStorage.getItem('watchState');
-            return state ? JSON.parse(state) : { videosWatched: 0 };
+        function loadLearnState(username) {
+            const key = `learnState_${username}`;
+            const state = localStorage.getItem(key);
+            return state ? JSON.parse(state) : { puzzlesCompleted: 0, drillsCompleted: 0 };
+        }
+
+        function saveLearnState(username, state) {
+            const key = `learnState_${username}`;
+            localStorage.setItem(key, JSON.stringify(state));
         }
 
         // Tab Navigation
@@ -449,29 +463,28 @@
         });
 
         function initializeProfile() {
-            const profileState = loadProfileState();
+            const username = getCurrentUsername();
+            let profileState = loadProfileState(username);
             if (!profileState.name) {
                 const name = prompt("Please enter your name:");
-                profileState.name = name || "User";
-                saveProfileState(profileState);
+                profileState.name = name || username;
+                saveProfileState(username, profileState);
             }
             document.getElementById('profileName').textContent = profileState.name;
 
-            const evaluationState = loadEvaluationState();
-            const learnState = loadLearnState();
-            const watchState = loadWatchState();
+            const evaluationState = loadEvaluationState(username);
+            const learnState = loadLearnState(username);
 
-            document.getElementById('videosWatched').textContent = watchState.videosWatched;
             document.getElementById('puzzlesCompleted').textContent = learnState.puzzlesCompleted;
             document.getElementById('drillsCompleted').textContent = learnState.drillsCompleted;
             document.getElementById('speechesGiven').textContent = evaluationState.speechesGiven;
 
-            updatePersonality(profileState.personality);
-            updateBadges(learnState.puzzlesCompleted, evaluationState.speechesGiven, watchState.videosWatched);
-            updateQuests(learnState.puzzlesCompleted + learnState.drillsCompleted, evaluationState.speechesWithFivePlusStrengths);
+            updatePersonality(username, profileState.personality);
+            updateBadges(username, learnState.puzzlesCompleted, evaluationState.speechesGiven, learnState.drillsCompleted);
+            updateQuests(username, learnState.puzzlesCompleted + learnState.drillsCompleted, evaluationState.speechesWithFivePlusStrengths);
         }
 
-        function updatePersonality(personalityKey) {
+        function updatePersonality(username, personalityKey) {
             const personalityCard = document.getElementById('personalityCard');
             if (!personalityKey || !personalities[personalityKey]) {
                 personalityCard.innerHTML = `
@@ -481,7 +494,7 @@
                     <div class="personality-traits">
                         <div class="trait">Unknown</div>
                     </div>
-                    <button class="take-quiz-btn" onclick="startQuiz()">
+                    <button class="take-quiz-btn" onclick="startQuiz('${username}')">
                         <i class="fas fa-redo"></i> Take Personality Quiz
                     </button>
                 `;
@@ -494,7 +507,7 @@
                     <div class="personality-traits">
                         ${resultData.traits.map(trait => `<div class="trait">${trait}</div>`).join('')}
                     </div>
-                    <button class="take-quiz-btn" onclick="startQuiz()">
+                    <button class="take-quiz-btn" onclick="startQuiz('${username}')">
                         <i class="fas fa-redo"></i> Retake Personality Quiz
                     </button>
                     <button class="copy-link-btn" onclick="copyPersonalityLink('${resultData.title}')">
@@ -511,7 +524,7 @@
             });
         }
 
-        function updateBadges(puzzlesCompleted, speechesGiven, videosWatched) {
+        function updateBadges(username, puzzlesCompleted, speechesGiven, drillsCompleted) {
             // Puzzle Decipher
             const puzzleProgress = Math.min((puzzlesCompleted / 20) * 100, 100);
             document.getElementById('puzzleDecipherProgress').style.width = `${puzzleProgress}%`;
@@ -522,13 +535,13 @@
             document.getElementById('savvySpeakerProgress').style.width = `${speechProgress}%`;
             document.getElementById('savvySpeakerStatus').textContent = `${speechesGiven}/10 Speeches Given`;
 
-            // Bingewatcher
-            const videoProgress = Math.min((videosWatched / 5) * 100, 100);
-            document.getElementById('bingewatcherProgress').style.width = `${videoProgress}%`;
-            document.getElementById('bingewatcherStatus').textContent = `${videosWatched}/5 Videos Watched`;
+            // Driller
+            const drillProgress = Math.min((drillsCompleted / 25) * 100, 100);
+            document.getElementById('drillerProgress').style.width = `${drillProgress}%`;
+            document.getElementById('drillerStatus').textContent = `${drillsCompleted}/25 Drills Completed`;
         }
 
-        function updateQuests(learningExercisesCompleted, speechesWithFivePlusStrengths) {
+        function updateQuests(username, learningExercisesCompleted, speechesWithFivePlusStrengths) {
             // Avid Learner
             const learnerProgress = Math.min((learningExercisesCompleted / 50) * 100, 100);
             document.getElementById('avidLearnerProgress').style.width = `${learnerProgress}%`;
@@ -617,9 +630,11 @@
         };
 
         let currentQuestion = 0;
+        let currentUsernameForQuiz = '';
         const userAnswers = { peacock: 0, fox: 0, owl: 0, dolphin: 0 };
 
-        function startQuiz() {
+        function startQuiz(username) {
+            currentUsernameForQuiz = username;
             document.getElementById('quizModal').style.display = 'flex';
             currentQuestion = 0;
             for (let key in userAnswers) userAnswers[key] = 0;
@@ -716,10 +731,10 @@
                 personalityResult = tiedPersonalities[randomIndex];
             }
 
-            const profileState = loadProfileState();
+            const profileState = loadProfileState(currentUsernameForQuiz);
             profileState.personality = personalityResult;
-            saveProfileState(profileState);
-            updatePersonality(personalityResult);
+            saveProfileState(currentUsernameForQuiz, profileState);
+            updatePersonality(currentUsernameForQuiz, personalityResult);
 
             document.getElementById('quizModal').style.display = 'none';
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
