@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -247,11 +248,6 @@
             margin: 1rem auto;
             width: fit-content;
         }
-        
-        .contact {
-            text-align: center;
-            padding: 50px 20px;
-        }
 
         .contact-title { font-size: 2rem; font-weight: 600; margin-bottom: 40px; }
         .contact-details { max-width: 800px; margin: 0 auto; }
@@ -413,15 +409,13 @@
     <!-- Login Popup -->
     <div id="loginPopup" class="popup">
         <div class="popup-content">
-            <span class="close-btn" onclick="closePopup('loginPopup')">&times;</span>
+            <span class="close-btn" onclick="closePopup('loginPopup')">×</span>
             <div id="loginFormStep" class="form-step">
                 <h2>Log In</h2>
-                <div id="loginError" class="error-message" style="display: none;"></div>
-                <div id="loginSuccess" class="success-message" style="display: none;"></div>
-                <input type="text" id="loginUsername" placeholder="Username or Email" required>
+                <div id="loginMessage" class="error-message" style="display: none;"></div>
+                <input type="text" id="loginUsername" placeholder="Username" required>
                 <input type="password" id="loginPassword" placeholder="Password" required>
-                <div id="loginLoading" class="loading" style="display: none;"></div>
-                <button class="btn btn-primary" id="loginBtn" onclick="login()">Log In</button>
+                <button class="btn btn-primary" onclick="login()">Log In</button>
             </div>
         </div>
     </div>
@@ -429,18 +423,19 @@
     <!-- Signup Popup -->
     <div id="signupPopup" class="popup">
         <div class="popup-content">
-            <span class="close-btn" onclick="closePopup('signupPopup')">&times;</span>
+            <span class="close-btn" onclick="closePopup('signupPopup')">×</span>
             <div id="signupFormStep" class="form-step">
                 <h2>Sign Up</h2>
-                <div id="signupError" class="error-message" style="display: none;"></div>
-                <div id="signupSuccess" class="success-message" style="display: none;"></div>
+                <div id="signupMessage" class="error-message" style="display: none;"></div>
                 <div class="name-fields">
-                    <input type="text" id="firstName" placeholder="First Name" required>
-                    <input type="text" id="lastName" placeholder="Last Name" required>
+                    <input type="text" id="signupFirstName" placeholder="First Name" required>
+                    <input type="text" id="signupLastName" placeholder="Last Name" required>
                 </div>
+                <input type="number" id="signupAge" placeholder="Age" required min="1" max="150">
                 <input type="text" id="signupUsername" placeholder="Username" required>
-                <input type="email" id="email" placeholder="Email" required>
+                <input type="email" id="signupEmail" placeholder="Email" required>
                 <input type="password" id="signupPassword" placeholder="Password" required>
+                <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
                 <div class="password-requirements">
                     Password must have:
                     <ul>
@@ -450,224 +445,218 @@
                         <li>At least one special character</li>
                     </ul>
                 </div>
-                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-                <div id="signupLoading" class="loading" style="display: none;"></div>
-                <button class="btn btn-secondary" id="signupBtn" onclick="signup()">Sign Up</button>
+                <button class="btn btn-secondary" onclick="signup()">Sign Up</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Mock user database - persisting in sessionStorage for this demo
-        let userDatabase = [
-            { username: 'demo', email: 'demo@example.com', password: 'Demo@123', firstName: 'Demo', lastName: 'User' }
-        ];
-        
-        // Try to load from sessionStorage (more persistent than just a variable)
-        if (sessionStorage.getItem('userDatabase')) {
-            try {
-                userDatabase = JSON.parse(sessionStorage.getItem('userDatabase'));
-            } catch (e) {
-                console.error('Failed to parse user database from sessionStorage');
-            }
-        }
-        
-        // Show popups
-        function showLoginPopup() { 
-            document.getElementById('loginPopup').style.display = 'flex';
-            document.getElementById('loginFormStep').classList.remove('hidden');
-            resetForm('login');
-        }
-        
-        function showSignupPopup() { 
-            document.getElementById('signupPopup').style.display = 'flex'; 
-            document.getElementById('signupFormStep').classList.remove('hidden');
-            resetForm('signup');
+        // Load and save state using localStorage
+        function loadState() {
+            const state = localStorage.getItem('authState');
+            return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
         }
 
-        // Close popups
+        function saveState(users, session, sessionExpiry = null) {
+            const state = { 
+                users, 
+                session, 
+                sessionExpiry: sessionExpiry || (session ? Date.now() + 24 * 60 * 60 * 1000 : null) // 24h session
+            };
+            localStorage.setItem('authState', JSON.stringify(state));
+        }
+
+        // Improved password hashing
+        function hashPassword(password, salt = Date.now().toString()) {
+            let hash = 0;
+            const combined = password + salt;
+            for (let i = 0; i < combined.length; i++) {
+                hash = ((hash << 5) - hash) + combined.charCodeAt(i);
+                hash = hash >>> 0; // Convert to unsigned 32-bit integer
+            }
+            return { hash: hash.toString(), salt };
+        }
+
+        // Input validation
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function validateUsername(username) {
+            return /^[a-zA-Z0-9_-]{3,20}$/.test(username);
+        }
+
+        function validateName(name) {
+            return /^[a-zA-Z\s]{1,50}$/.test(name);
+        }
+
+        function validateAge(age) {
+            const numAge = parseInt(age);
+            return numAge >= 1 && numAge <= 150;
+        }
+
+        function validatePassword(password) {
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+            return passwordRegex.test(password);
+        }
+
+        // UI helpers
+        function showMessage(elementId, message, isError = false) {
+            const msg = document.getElementById(elementId);
+            msg.textContent = message;
+            msg.className = isError ? 'error-message' : 'success-message';
+            msg.style.display = 'block';
+        }
+
+        function clearMessage(elementId) {
+            const msg = document.getElementById(elementId);
+            msg.style.display = 'none';
+            msg.textContent = '';
+        }
+
+        function showSignupPopup() {
+            document.getElementById('signupPopup').style.display = 'flex';
+            document.getElementById('signupFormStep').classList.remove('hidden');
+            clearInputs('signup');
+        }
+
+        function showLoginPopup() {
+            document.getElementById('loginPopup').style.display = 'flex';
+            document.getElementById('loginFormStep').classList.remove('hidden');
+            clearInputs('login');
+        }
+
         function closePopup(popupId) {
             document.getElementById(popupId).style.display = 'none';
         }
 
-        // Reset form fields and messages
-        function resetForm(formType) {
-            if (formType === 'login') {
+        function clearInputs(formType) {
+            if (formType === 'signup') {
+                document.getElementById('signupFirstName').value = '';
+                document.getElementById('signupLastName').value = '';
+                document.getElementById('signupAge').value = '';
+                document.getElementById('signupUsername').value = '';
+                document.getElementById('signupEmail').value = '';
+                document.getElementById('signupPassword').value = '';
+                document.getElementById('signupConfirmPassword').value = '';
+                clearMessage('signupMessage');
+            } else if (formType === 'login') {
                 document.getElementById('loginUsername').value = '';
                 document.getElementById('loginPassword').value = '';
-                document.getElementById('loginError').style.display = 'none';
-                document.getElementById('loginSuccess').style.display = 'none';
-                document.getElementById('loginBtn').disabled = false;
-            } else {
-                document.getElementById('firstName').value = '';
-                document.getElementById('lastName').value = '';
-                document.getElementById('signupUsername').value = '';
-                document.getElementById('email').value = '';
-                document.getElementById('signupPassword').value = '';
-                document.getElementById('confirmPassword').value = '';
-                document.getElementById('signupError').style.display = 'none';
-                document.getElementById('signupSuccess').style.display = 'none';
-                document.getElementById('signupBtn').disabled = false;
+                clearMessage('loginMessage');
             }
         }
 
-        // Login function
-        function login() {
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            const errorElement = document.getElementById('loginError');
-            const successElement = document.getElementById('loginSuccess');
-            const loadingElement = document.getElementById('loginLoading');
+        // State management
+        let state = loadState();
+        let users = state.users;
+        let currentSession = state.session;
+        let sessionExpiry = state.sessionExpiry;
 
-            // Reset messages
-            errorElement.style.display = 'none';
-            successElement.style.display = 'none';
-
-            // Validate inputs
-            if (!username || !password) {
-                errorElement.textContent = "Please enter both username/email and password.";
-                errorElement.style.display = 'block';
-                return;
-            }
-
-            // Show loading
-            loadingElement.style.display = 'block';
-            document.getElementById('loginBtn').disabled = true;
-
-            // Simulate server verification (timeout simulates network delay)
-            setTimeout(() => {
-                // Check if user exists in database
-                const user = userDatabase.find(u => (u.username === username || u.email === username) && u.password === password);
-
-                loadingElement.style.display = 'none';
-
-                if (user) {
-                    // Set session - directly log in
-                    sessionStorage.setItem('loggedInUser', JSON.stringify({
-                        username: user.username,
-                        firstName: user.firstName,
-                        lastName: user.lastName
-                    }));
-
-                    // Show success message
-                    successElement.textContent = "Login successful! Redirecting...";
-                    successElement.style.display = 'block';
-
-                    // Redirect to home page after successful login
-                    setTimeout(() => {
-                        window.location.href = "home.html";
-                    }, 1500);
-                } else {
-                    document.getElementById('loginBtn').disabled = false;
-                    errorElement.textContent = "Invalid username or password.";
-                    errorElement.style.display = 'block';
-                }
-            }, 1000);
-        }
-
-        // Signup function
+        // Auth functions
         function signup() {
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const username = document.getElementById('signupUsername').value;
-            const email = document.getElementById('email').value;
+            const firstName = document.getElementById('signupFirstName').value.trim();
+            const lastName = document.getElementById('signupLastName').value.trim();
+            const age = document.getElementById('signupAge').value.trim();
+            const username = document.getElementById('signupUsername').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const errorElement = document.getElementById('signupError');
-            const successElement = document.getElementById('signupSuccess');
-            const loadingElement = document.getElementById('signupLoading');
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
 
-            // Reset messages
-            errorElement.style.display = 'none';
-            successElement.style.display = 'none';
-
-            // Validate all fields are filled
-            if (!firstName || !lastName || !username || !email || !password || !confirmPassword) {
-                errorElement.textContent = "Please fill in all fields.";
-                errorElement.style.display = 'block';
+            // Validation
+            if (!validateName(firstName)) {
+                showMessage('signupMessage', 'First name must be 1-50 letters only', true);
                 return;
             }
-
-            // Validate email format
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                errorElement.textContent = "Please enter a valid email address.";
-                errorElement.style.display = 'block';
+            if (!validateName(lastName)) {
+                showMessage('signupMessage', 'Last name must be 1-50 letters only', true);
                 return;
             }
-
-            // Validate password
-            if (password.length < 8) {
-                errorElement.textContent = "Password must be at least 8 characters long.";
-                errorElement.style.display = 'block';
+            if (!validateAge(age)) {
+                showMessage('signupMessage', 'Age must be between 1 and 150', true);
                 return;
             }
-
-            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$/;
-            if (!passwordRegex.test(password)) {
-                errorElement.textContent = "Password must contain at least one uppercase letter, one number, and one special character.";
-                errorElement.style.display = 'block';
+            if (!validateUsername(username)) {
+                showMessage('signupMessage', 'Username must be 3-20 characters (letters, numbers, _, -)', true);
                 return;
             }
-
-            // Confirm passwords match
+            if (!validateEmail(email)) {
+                showMessage('signupMessage', 'Invalid email format', true);
+                return;
+            }
+            if (!validatePassword(password)) {
+                showMessage('signupMessage', 'Password must be at least 8 characters with one uppercase, one number, and one special character', true);
+                return;
+            }
             if (password !== confirmPassword) {
-                errorElement.textContent = "Passwords do not match.";
-                errorElement.style.display = 'block';
+                showMessage('signupMessage', 'Passwords do not match', true);
+                return;
+            }
+            if (users[username]) {
+                showMessage('signupMessage', 'Username already exists', true);
                 return;
             }
 
-            // Check if username already exists
-            if (userDatabase.some(u => u.username === username)) {
-                errorElement.textContent = "Username already exists. Please choose another.";
-                errorElement.style.display = 'block';
-                return;
-            }
-
-            // Check if email already exists
-            if (userDatabase.some(u => u.email === email)) {
-                errorElement.textContent = "Email already in use. Please use another email or log in.";
-                errorElement.style.display = 'block';
-                return;
-            }
-
-            // Show loading
-            loadingElement.style.display = 'block';
-            document.getElementById('signupBtn').disabled = true;
-
-            // Simulate server processing (timeout simulates network delay)
+            const { hash, salt } = hashPassword(password);
+            users[username] = {
+                firstName,
+                lastName,
+                age,
+                password: hash,
+                salt,
+                email,
+                createdAt: new Date().toISOString()
+            };
+            currentSession = username;
+            saveState(users, currentSession);
+            showMessage('signupMessage', 'Signup successful! Redirecting...', false);
             setTimeout(() => {
-                loadingElement.style.display = 'none';
-
-                // Add user to database directly without verification
-                userDatabase.push({
-                    firstName,
-                    lastName,
-                    username,
-                    email,
-                    password
-                });
-
-                // Save updated database to sessionStorage
-                sessionStorage.setItem('userDatabase', JSON.stringify(userDatabase));
-
-                // Set user as logged in
-                sessionStorage.setItem('loggedInUser', JSON.stringify({
-                    username: username,
-                    firstName: firstName,
-                    lastName: lastName
-                }));
-
-                // Show success
-                successElement.textContent = "Account created successfully! Redirecting...";
-                successElement.style.display = 'block';
-
-                // Redirect to home page
-                setTimeout(() => {
-                    window.location.href = "home.html";
-                }, 1500);
-            }, 1000);
+                window.location.href = "home.html";
+            }, 1500);
         }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const user = users[username];
+
+            if (!user) {
+                showMessage('loginMessage', 'Invalid credentials', true);
+                return;
+            }
+
+            const { hash } = hashPassword(password, user.salt);
+            if (user.password !== hash) {
+                showMessage('loginMessage', 'Invalid credentials', true);
+                return;
+            }
+
+            currentSession = username;
+            saveState(users, currentSession);
+            showMessage('loginMessage', 'Login successful! Redirecting...', false);
+            setTimeout(() => {
+                window.location.href = "home.html";
+            }, 1500);
+        }
+
+        // Session management
+        function checkSession() {
+            if (currentSession && sessionExpiry && Date.now() > sessionExpiry) {
+                currentSession = null;
+                sessionExpiry = null;
+                saveState(users, null);
+                showMessage('loginMessage', 'Session expired. Please login again.');
+            }
+            return !!currentSession;
+        }
+
+        // Initialize
+        if (checkSession()) {
+            console.log('User already logged in:', currentSession);
+        }
+
+        // Periodic session check
+        setInterval(checkSession, 60000); // Check every minute
 
         // Define colors for rotating words
         const wordColors = [
@@ -733,10 +722,9 @@
             setInterval(rotateTestimonials, 5000);
 
             // Check if user is already logged in
-            const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
-            if (loggedInUser.username) {
-                // In a real app, this would redirect to a dashboard or personalized homepage
-                console.log('User already logged in:', loggedInUser.username);
+            const loggedInUser = currentSession;
+            if (loggedInUser) {
+                console.log('User already logged in:', loggedInUser);
             }
         });
     </script>
