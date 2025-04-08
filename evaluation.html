@@ -67,8 +67,8 @@
 
         .nav-menu { list-style: none; display: flex; justify-content: center; align-items: center; padding: 0; margin: 0; }
         .nav-menu li { margin: 0 30px; position: relative; }
-        .nav-menu>li>a { color: #555; font-weight: 500; transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease; display: flex; align-items: center; text-decoration: none; padding-bottom: 4px; }
-        .nav-menu>li>a:hover { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); }
+        .nav-menu > li > a { color: #555; font-weight: 500; transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease; display: flex; align-items: center; text-decoration: none; padding-bottom: 4px; }
+        .nav-menu > li > a:hover { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); }
         .nav-menu .carrot { margin-left: 7px; font-size: 0.9em; transition: transform var(--transition-speed) ease; }
         .nav-menu li:hover .carrot { transform: rotate(180deg); }
 
@@ -207,25 +207,12 @@
         }
 
         .feedback-score { font-size: 1.5em; font-weight: bold; text-align: center; margin-bottom: 10px; }
-        
         .feedback-progress { width: 100%; height: 8px; background-color: #eee; border-radius: 4px; margin-bottom: 15px; overflow: hidden; }
-        
         .progress-bar { height: 100%; border-radius: 4px; transition: width 1s ease-in-out; }
-        
         .progress-bar.strength { background-color: #28a745; }
         .progress-bar.improvement { background-color: #dc3545; }
-
         .slider-container { width: 100%; margin: 10px 0; }
-
-        .feedback-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            margin-right: 5px;
-            font-weight: bold;
-        }
-        
+        .feedback-badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 0.8em; margin-right: 5px; font-weight: bold; }
         .badge-positive { background-color: rgba(40, 167, 69, 0.2); color: #155724; }
         .badge-negative { background-color: rgba(220, 53, 69, 0.2); color: #721c24; }
 
@@ -252,7 +239,6 @@
                 </svg>
                 <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
             </div>
-
             <ul class="nav-menu">
                 <li>
                     <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
@@ -267,6 +253,7 @@
                         <a href="learn.html">Puzzles</a>
                         <a href="learn.html">Drills</a>
                     </div>
+                </li>
                 <li>
                     <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
                     <div class="dropdown-content">
@@ -289,7 +276,6 @@
                     </div>
                 </li>
             </ul>
-
             <a href="user.html"><i class="fas fa-user-circle profile-icon"></i></a>
         </nav>
     </header>
@@ -313,6 +299,19 @@
         </div>
     </div>
     <script>
+        // Tracking state management
+        function loadEvaluationState() {
+            const state = localStorage.getItem('evaluationState');
+            return state ? JSON.parse(state) : {
+                speechesGiven: 0,
+                speechesWithFivePlusStrengths: 0
+            };
+        }
+
+        function saveEvaluationState(state) {
+            localStorage.setItem('evaluationState', JSON.stringify(state));
+        }
+
         let mediaRecorder;
         let recordedChunks = [];
         const videoElement = document.getElementById("video");
@@ -421,6 +420,9 @@
                 startBtn.style.display = "none";
                 stopBtn.style.display = "none";
                 restartBtn.style.display = "none";
+                const state = loadEvaluationState();
+                state.speechesGiven++;
+                saveEvaluationState(state);
             }
         }
 
@@ -503,7 +505,6 @@
 
             if (sentences.length >= 5 && wordCount > 150) {
                 overallScore += 20;
-                const keySentence = sentences.sort((a, b) => b.split(' ').length - a.split(' ').length)[0];
                 strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Content</span> Rich speech with ${sentences.length} sentences and ${wordCount} words.`);
             } else {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Content</span> Add depth (${sentences.length} sentences, ${wordCount} words)`);
@@ -597,11 +598,37 @@
             summaryFeedback.style.display = "block";
             strengthsFeedback.style.display = "block";
             improvementFeedback.style.display = "block";
+
+            // Update speechesWithFivePlusStrengths if applicable
+            if (strengths.length >= 5) {
+                const state = loadEvaluationState();
+                state.speechesWithFivePlusStrengths++;
+                saveEvaluationState(state);
+            }
         }
 
         document.addEventListener("DOMContentLoaded", function() {
             startBtn.addEventListener("click", startRecording);
             stopBtn.addEventListener("click", stopRecording);
+            restartBtn.addEventListener("click", function() {
+                if (!isRecording) {
+                    videoElement.src = "";
+                    videoElement.srcObject = stream;
+                    videoElement.play();
+                    transcriptionBox.textContent = "Transcription will appear here...";
+                    finalTranscript = "";
+                    startBtn.style.display = "block";
+                    stopBtn.style.display = "block";
+                    restartBtn.style.display = "block";
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    restartBtn.disabled = true;
+                    ratingFeedback.style.display = "none";
+                    summaryFeedback.style.display = "none";
+                    strengthsFeedback.style.display = "none";
+                    improvementFeedback.style.display = "none";
+                }
+            });
             startVideoStream();
             setupSpeechRecognition();
         });
