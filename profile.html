@@ -127,7 +127,7 @@
         .profile-tabs { display: flex; background: var(--card-bg); border-radius: 50px; padding: 5px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); position: relative; z-index: 1; }
         .profile-tab { flex: 1; text-align: center; padding: 15px 20px; font-weight: 600; cursor: pointer; border-radius: 50px; transition: all 0.3s ease; color: #666; position: relative; z-index: 2; }
         .profile-tab.active { color: white; }
-        .tab-slider { position: absolute; height: 85%; top: 7.5%; left: 0.5%; width: 25%; background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); border-radius: 50px; transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 1; }
+        .tab-slider { position: absolute; height: 85%; top: 7.5%; left: 0.5%; width: 33.33%; background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); border-radius: 50px; transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 1; }
 
         .tab-content { display: none; opacity: 0; transition: opacity 0.5s ease; }
         .tab-content.active { display: block; opacity: 1; }
@@ -139,8 +139,8 @@
         .personality-traits { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; position: relative; z-index: 1; }
         .trait { background: var(--light-bg); padding: 10px 20px; border-radius: 50px; font-weight: 500; color: var(--text-color); box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; }
         .trait:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); background: var(--primary-color); color: white; }
-        .take-quiz-btn { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; border: none; padding: 15px 30px; font-size: 1.1rem; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); position: relative; z-index: 1; font-weight: 600; }
-        .take-quiz-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); }
+        .take-quiz-btn, .copy-link-btn { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; border: none; padding: 15px 30px; font-size: 1.1rem; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); position: relative; z-index: 1; font-weight: 600; margin: 10px; }
+        .take-quiz-btn:hover, .copy-link-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); }
 
         .badges-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
         .badge-card { background: var(--card-bg); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; align-items: center; box-shadow: var(--box-shadow); transition: all 0.3s ease; position: relative; overflow: hidden; }
@@ -163,19 +163,6 @@
         .quest-status { display: flex; justify-content: space-between; align-items: center; }
         .quest-counter { font-size: 0.95rem; color: #777; }
         .quest-reward { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; padding: 5px 12px; background: rgba(255, 153, 51, 0.1); border-radius: 50px; color: var(--secondary-color); font-weight: 600; }
-
-        .stats-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .stats-card { background: var(--card-bg); border-radius: 20px; padding: 30px; box-shadow: var(--box-shadow); transition: all 0.3s ease; }
-        .stats-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .stats-title { font-size: 1.4rem; font-weight: 700; color: var(--text-color); display: flex; align-items: center; gap: 10px; }
-        .stats-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: white; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); font-size: 1.2rem; }
-        .stats-period { padding: 5px 15px; border-radius: 50px; font-size: 0.85rem; background: var(--light-bg); color: #777; }
-        .stats-summary { display: flex; justify-content: space-between; }
-        .stats-metric { display: flex; flex-direction: column; }
-        .stats-value { font-size: 1.6rem; font-weight: 700; color: var(--primary-color); }
-        .stats-label { font-size: 0.9rem; color: #777; }
-        .stats-trend { display: flex; align-items: center; gap: 5px; font-weight: 600; font-size: 0.9rem; }
-        .stats-trend.up { color: var(--success-color); }
 
         .quiz-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 2000; align-items: center; justify-content: center; overflow-y: auto; }
         .quiz-container { background: var(--card-bg); border-radius: 25px; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2); max-width: 1000px; width: 95%; padding: 50px; position: relative; transition: var(--transition-speed); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
@@ -300,7 +287,6 @@
             <div class="profile-tab active" data-tab="personality">Personality</div>
             <div class="profile-tab" data-tab="badges">Badges</div>
             <div class="profile-tab" data-tab="quests">Quests</div>
-            <div class="profile-tab" data-tab="stats">Stats</div>
             <div class="tab-slider"></div>
         </div>
 
@@ -345,17 +331,17 @@
                 <div class="quest-card animated">
                     <div class="quest-header">
                         <div class="quest-title">
-                            <div class="quest-icon"><i class="fas fa-bullhorn"></i></div>
-                            Everything Bagel
+                            <div class="quest-icon"><i class="fas fa-book"></i></div>
+                            Avid Learner
                         </div>
                         <div class="quest-badge active">Active</div>
                     </div>
-                    <p class="quest-description">Use all 10 parts of UpSpeak</p>
+                    <p class="quest-description">Complete 50 Learning Exercises (Drills + Puzzles)</p>
                     <div class="quest-progress">
-                        <div id="everythingBagelProgress" class="quest-progress-bar"></div>
+                        <div id="avidLearnerProgress" class="quest-progress-bar"></div>
                     </div>
                     <div class="quest-status">
-                        <span id="everythingBagelCounter" class="quest-counter">0/10 Portions Visited</span>
+                        <span id="avidLearnerCounter" class="quest-counter">0/50 Exercises Completed</span>
                         <span class="quest-reward"><i class="fas fa-trophy"></i> 500 XP</span>
                     </div>
                 </div>
@@ -374,53 +360,6 @@
                     <div class="quest-status">
                         <span id="qualitySpeechesCounter" class="quest-counter">0/25 Quality Speeches Given</span>
                         <span class="quest-reward"><i class="fas fa-trophy"></i> 750 XP</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="stats" class="tab-content">
-            <div class="stats-container">
-                <div class="stats-card animated">
-                    <div class="stats-header">
-                        <div class="stats-title">
-                            <div class="stats-icon"><i class="fas fa-chart-line"></i></div>
-                            Practice Time
-                        </div>
-                        <div class="stats-period">Last 30 Days</div>
-                    </div>
-                    <div class="stats-summary">
-                        <div class="stats-metric">
-                            <span id="practiceTimeValue" class="stats-value">0h</span>
-                            <span class="stats-label">Total Time</span>
-                        </div>
-                        <div class="stats-metric">
-                            <span class="stats-trend up">
-                                <i class="fas fa-arrow-up"></i> 0%
-                            </span>
-                            <span class="stats-label">vs Last Month</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="stats-card animated">
-                    <div class="stats-header">
-                        <div class="stats-title">
-                            <div class="stats-icon"><i class="fas fa-star"></i></div>
-                            Feedback Scores
-                        </div>
-                        <div class="stats-period">Last 30 Days</div>
-                    </div>
-                    <div class="stats-summary">
-                        <div class="stats-metric">
-                            <span id="feedbackScoreValue" class="stats-value">0/5</span>
-                            <span class="stats-label">Average Score</span>
-                        </div>
-                        <div class="stats-metric">
-                            <span class="stats-trend up">
-                                <i class="fas fa-arrow-up"></i> 0%
-                            </span>
-                            <span class="stats-label">vs Last Month</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -529,8 +468,7 @@
 
             updatePersonality(profileState.personality);
             updateBadges(learnState.puzzlesCompleted, evaluationState.speechesGiven, watchState.videosWatched);
-            updateQuests(evaluationState.speechesWithFivePlusStrengths);
-            updateStats(evaluationState.speechesGiven);
+            updateQuests(learnState.puzzlesCompleted + learnState.drillsCompleted, evaluationState.speechesWithFivePlusStrengths);
         }
 
         function updatePersonality(personalityKey) {
@@ -559,8 +497,18 @@
                     <button class="take-quiz-btn" onclick="startQuiz()">
                         <i class="fas fa-redo"></i> Retake Personality Quiz
                     </button>
+                    <button class="copy-link-btn" onclick="copyPersonalityLink('${resultData.title}')">
+                        <i class="fas fa-link"></i> Copy Link
+                    </button>
                 `;
             }
+        }
+
+        function copyPersonalityLink(personalityTitle) {
+            const text = `I'm ${personalityTitle}. What are you? Test at upspeak.onrender.com`;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Link copied to clipboard!');
+            });
         }
 
         function updateBadges(puzzlesCompleted, speechesGiven, videosWatched) {
@@ -580,26 +528,16 @@
             document.getElementById('bingewatcherStatus').textContent = `${videosWatched}/5 Videos Watched`;
         }
 
-        function updateQuests(speechesWithFivePlusStrengths) {
-            // Everything Bagel (simplified to track 4 main sections for demo)
-            const sectionsVisited = [loadWatchState().videosWatched > 0, loadLearnState().puzzlesCompleted > 0, loadLearnState().drillsCompleted > 0, loadEvaluationState().speechesGiven > 0].filter(Boolean).length;
-            const everythingProgress = Math.min((sectionsVisited / 10) * 100, 100);
-            document.getElementById('everythingBagelProgress').style.width = `${everythingProgress}%`;
-            document.getElementById('everythingBagelCounter').textContent = `${sectionsVisited}/10 Portions Visited`;
+        function updateQuests(learningExercisesCompleted, speechesWithFivePlusStrengths) {
+            // Avid Learner
+            const learnerProgress = Math.min((learningExercisesCompleted / 50) * 100, 100);
+            document.getElementById('avidLearnerProgress').style.width = `${learnerProgress}%`;
+            document.getElementById('avidLearnerCounter').textContent = `${learningExercisesCompleted}/50 Exercises Completed`;
 
             // Quality Speeches
             const qualityProgress = Math.min((speechesWithFivePlusStrengths / 25) * 100, 100);
             document.getElementById('qualitySpeechesProgress').style.width = `${qualityProgress}%`;
             document.getElementById('qualitySpeechesCounter').textContent = `${speechesWithFivePlusStrengths}/25 Quality Speeches Given`;
-        }
-
-        function updateStats(speechesGiven) {
-            // Practice Time (assuming 5 minutes per speech for demo)
-            const practiceTimeHours = Math.floor((speechesGiven * 5) / 60);
-            document.getElementById('practiceTimeValue').textContent = `${practiceTimeHours}h`;
-
-            // Feedback Scores (placeholder average of 0 since no scoring tracked yet)
-            document.getElementById('feedbackScoreValue').textContent = '0/5';
         }
 
         // Quiz Data
