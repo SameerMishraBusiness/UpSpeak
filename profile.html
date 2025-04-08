@@ -376,48 +376,24 @@
     </div>
 
     <script>
-        // State Management with Username
-        function getCurrentUsername() {
-            let username = localStorage.getItem('currentUsername');
-            if (!username) {
-                username = prompt("Please enter your username:");
-                if (!username) username = "Guest_" + Math.random().toString(36).substr(2, 5);
-                localStorage.setItem('currentUsername', username);
-            }
-            return username;
-        }
-
-        function loadProfileState(username) {
-            const key = `profileState_${username}`;
-            const state = localStorage.getItem(key);
+        // State Management
+        function loadProfileState() {
+            const state = localStorage.getItem('profileState');
             return state ? JSON.parse(state) : { name: null, personality: null };
         }
 
-        function saveProfileState(username, state) {
-            const key = `profileState_${username}`;
-            localStorage.setItem(key, JSON.stringify(state));
+        function saveProfileState(state) {
+            localStorage.setItem('profileState', JSON.stringify(state));
         }
 
-        function loadEvaluationState(username) {
-            const key = `evaluationState_${username}`;
-            const state = localStorage.getItem(key);
+        function loadEvaluationState() {
+            const state = localStorage.getItem('evaluationState');
             return state ? JSON.parse(state) : { speechesGiven: 0, speechesWithFivePlusStrengths: 0 };
         }
 
-        function saveEvaluationState(username, state) {
-            const key = `evaluationState_${username}`;
-            localStorage.setItem(key, JSON.stringify(state));
-        }
-
-        function loadLearnState(username) {
-            const key = `learnState_${username}`;
-            const state = localStorage.getItem(key);
+        function loadLearnState() {
+            const state = localStorage.getItem('learnState');
             return state ? JSON.parse(state) : { puzzlesCompleted: 0, drillsCompleted: 0 };
-        }
-
-        function saveLearnState(username, state) {
-            const key = `learnState_${username}`;
-            localStorage.setItem(key, JSON.stringify(state));
         }
 
         // Tab Navigation
@@ -463,28 +439,27 @@
         });
 
         function initializeProfile() {
-            const username = getCurrentUsername();
-            let profileState = loadProfileState(username);
+            const profileState = loadProfileState();
             if (!profileState.name) {
                 const name = prompt("Please enter your name:");
-                profileState.name = name || username;
-                saveProfileState(username, profileState);
+                profileState.name = name || "User";
+                saveProfileState(profileState);
             }
             document.getElementById('profileName').textContent = profileState.name;
 
-            const evaluationState = loadEvaluationState(username);
-            const learnState = loadLearnState(username);
+            const evaluationState = loadEvaluationState();
+            const learnState = loadLearnState();
 
             document.getElementById('puzzlesCompleted').textContent = learnState.puzzlesCompleted;
             document.getElementById('drillsCompleted').textContent = learnState.drillsCompleted;
             document.getElementById('speechesGiven').textContent = evaluationState.speechesGiven;
 
-            updatePersonality(username, profileState.personality);
-            updateBadges(username, learnState.puzzlesCompleted, evaluationState.speechesGiven, learnState.drillsCompleted);
-            updateQuests(username, learnState.puzzlesCompleted + learnState.drillsCompleted, evaluationState.speechesWithFivePlusStrengths);
+            updatePersonality(profileState.personality);
+            updateBadges(learnState.puzzlesCompleted, evaluationState.speechesGiven, learnState.drillsCompleted);
+            updateQuests(learnState.puzzlesCompleted + learnState.drillsCompleted, evaluationState.speechesWithFivePlusStrengths);
         }
 
-        function updatePersonality(username, personalityKey) {
+        function updatePersonality(personalityKey) {
             const personalityCard = document.getElementById('personalityCard');
             if (!personalityKey || !personalities[personalityKey]) {
                 personalityCard.innerHTML = `
@@ -494,7 +469,7 @@
                     <div class="personality-traits">
                         <div class="trait">Unknown</div>
                     </div>
-                    <button class="take-quiz-btn" onclick="startQuiz('${username}')">
+                    <button class="take-quiz-btn" onclick="startQuiz()">
                         <i class="fas fa-redo"></i> Take Personality Quiz
                     </button>
                 `;
@@ -507,7 +482,7 @@
                     <div class="personality-traits">
                         ${resultData.traits.map(trait => `<div class="trait">${trait}</div>`).join('')}
                     </div>
-                    <button class="take-quiz-btn" onclick="startQuiz('${username}')">
+                    <button class="take-quiz-btn" onclick="startQuiz()">
                         <i class="fas fa-redo"></i> Retake Personality Quiz
                     </button>
                     <button class="copy-link-btn" onclick="copyPersonalityLink('${resultData.title}')">
@@ -524,7 +499,7 @@
             });
         }
 
-        function updateBadges(username, puzzlesCompleted, speechesGiven, drillsCompleted) {
+        function updateBadges(puzzlesCompleted, speechesGiven, drillsCompleted) {
             // Puzzle Decipher
             const puzzleProgress = Math.min((puzzlesCompleted / 20) * 100, 100);
             document.getElementById('puzzleDecipherProgress').style.width = `${puzzleProgress}%`;
@@ -541,7 +516,7 @@
             document.getElementById('drillerStatus').textContent = `${drillsCompleted}/25 Drills Completed`;
         }
 
-        function updateQuests(username, learningExercisesCompleted, speechesWithFivePlusStrengths) {
+        function updateQuests(learningExercisesCompleted, speechesWithFivePlusStrengths) {
             // Avid Learner
             const learnerProgress = Math.min((learningExercisesCompleted / 50) * 100, 100);
             document.getElementById('avidLearnerProgress').style.width = `${learnerProgress}%`;
@@ -630,11 +605,9 @@
         };
 
         let currentQuestion = 0;
-        let currentUsernameForQuiz = '';
         const userAnswers = { peacock: 0, fox: 0, owl: 0, dolphin: 0 };
 
-        function startQuiz(username) {
-            currentUsernameForQuiz = username;
+        function startQuiz() {
             document.getElementById('quizModal').style.display = 'flex';
             currentQuestion = 0;
             for (let key in userAnswers) userAnswers[key] = 0;
@@ -731,10 +704,10 @@
                 personalityResult = tiedPersonalities[randomIndex];
             }
 
-            const profileState = loadProfileState(currentUsernameForQuiz);
+            const profileState = loadProfileState();
             profileState.personality = personalityResult;
-            saveProfileState(currentUsernameForQuiz, profileState);
-            updatePersonality(currentUsernameForQuiz, personalityResult);
+            saveProfileState(profileState);
+            updatePersonality(personalityResult);
 
             document.getElementById('quizModal').style.display = 'none';
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
