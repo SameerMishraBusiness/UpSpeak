@@ -69,7 +69,6 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Header Styles */
     header {
       background-color: rgba(255, 255, 255, 0.95);
       padding: 25px 0;
@@ -134,7 +133,7 @@
       position: relative;
     }
 
-    .nav-menu>li>a {
+    .nav-menu > li > a {
       color: #555;
       font-weight: 500;
       transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease;
@@ -144,7 +143,7 @@
       padding-bottom: 4px;
     }
 
-    .nav-menu>li>a:hover {
+    .nav-menu > li > a:hover {
       color: var(--primary-color);
       border-bottom: 2px solid var(--primary-color);
     }
@@ -858,7 +857,7 @@
       .logo .microphone-icon { width: 40px; height: 40px; margin-right: 10px; }
       .nav-menu { gap: 15px; }
       .nav-menu li { margin: 0 15px; }
-      .nav-menu>li>a { font-size: 0.9rem; }
+      .nav-menu > li > a { font-size: 0.9rem; }
       .dropdown-content { min-width: 200px; padding: 15px 20px; }
       .profile-icon { font-size: 2rem; }
       .sidebar {
@@ -892,61 +891,60 @@
 
 <body>
   <header id="mainHeader">
-        <nav class="navbar">
-            <div class="logo" onclick="goToHome()">
-                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <defs>
-                        <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                    <path fill="url(#microphone-gradient)"
-                        d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
-                </svg>
-                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
-            </div>
-
-            <ul class="nav-menu">
-                <li>
-                    <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="evaluation.html">Recording Studio</a>
-                    </div>
-                </li>
-                <li>
-                    <a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="learn.html">Videos</a>
-                        <a href="learn.html">Puzzles</a>
-                        <a href="learn.html">Drills</a>
-                    </div>
-                <li>
-                    <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="profile.html">Personality</a>
-                        <a href="profile.html">Badges</a>
-                        <a href="profile.html">Quests</a>
-                    </div>
-                </li>
-                <li>
-                    <a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="watch.html">Speech Archive</a>
-                        <a href="watch.html">Famous Speeches</a>
-                    </div>
-                </li>
-                <li>
-                    <a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="about.html">UpSpeak Credentials</a>
-                    </div>
-                </li>
-            </ul>
-
-            <a href="user.html"><i class="fas fa-user-circle profile-icon"></i></a>
-        </nav>
-    </header>
+    <nav class="navbar">
+      <div class="logo" onclick="goToHome()">
+        <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <defs>
+            <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <path fill="url(#microphone-gradient)"
+            d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+        </svg>
+        <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
+      </div>
+      <ul class="nav-menu">
+        <li>
+          <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
+          <div class="dropdown-content">
+            <a href="evaluation.html">Recording Studio</a>
+          </div>
+        </li>
+        <li>
+          <a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
+          <div class="dropdown-content">
+            <a href="learn.html">Videos</a>
+            <a href="learn.html">Puzzles</a>
+            <a href="learn.html">Drills</a>
+          </div>
+        </li>
+        <li>
+          <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
+          <div class="dropdown-content">
+            <a href="profile.html">Personality</a>
+            <a href="profile.html">Badges</a>
+            <a href="profile.html">Quests</a>
+          </div>
+        </li>
+        <li>
+          <a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
+          <div class="dropdown-content">
+            <a href="watch.html">Speech Archive</a>
+            <a href="watch.html">Famous Speeches</a>
+          </div>
+        </li>
+        <li>
+          <a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
+          <div class="dropdown-content">
+            <a href="about.html">UpSpeak Credentials</a>
+          </div>
+        </li>
+      </ul>
+      <a href="user.html"><i class="fas fa-user-circle profile-icon"></i></a>
+    </nav>
+  </header>
 
   <div class="app-container">
     <div class="sidebar">
@@ -1077,6 +1075,32 @@
       recognition.lang = 'en-US';
     }
 
+    // Tracking state management
+    function loadLearnState() {
+      const state = localStorage.getItem('learnState');
+      return state ? JSON.parse(state) : {
+        drillsCompleted: 0,
+        puzzlesCompleted: 0,
+        flashcardsViewed: 0,
+        drillScores: [], // Array to store individual drill star ratings
+        puzzleResults: [] // Array to store puzzle correct/incorrect (1 for correct, 0 for incorrect)
+      };
+    }
+
+    function saveLearnState(state) {
+      localStorage.setItem('learnState', JSON.stringify(state));
+    }
+
+    function updateAverageDrillScore(state) {
+      const totalScore = state.drillScores.reduce((sum, score) => sum + score, 0);
+      return state.drillScores.length ? totalScore / state.drillScores.length : 0;
+    }
+
+    function updatePuzzlePercentCorrect(state) {
+      const totalCorrect = state.puzzleResults.reduce((sum, result) => sum + result, 0);
+      return state.puzzleResults.length ? (totalCorrect / state.puzzleResults.length) * 100 : 0;
+    }
+
     const exercises = {
       'tongue-twister': {
         title: 'Tongue Twisters',
@@ -1114,27 +1138,27 @@
     };
 
     const flashcardsData = [
-  { front: 'Articulation', back: 'The clear and precise pronunciation of words' },
-  { front: 'Cadence', back: 'The rhythmic flow of sounds in language' },
-  { front: 'Diction', back: 'The choice and use of words in speech' },
-  { front: 'Enunciation', back: 'The act of pronouncing words clearly' },
-  { front: 'Filler', back: 'Words or sounds used to fill pauses in speech' },
-  { front: 'Gesture', back: 'Body movements that accompany and enhance speech' },
-  { front: 'Hesitation', back: 'A pause or delay in speech often from uncertainty' },
-  { front: 'Inflection', back: 'Changes in pitch and tone of voice' },
-  { front: 'Jargon', back: 'Specialized terms used by a profession or group' },
-  { front: 'Kinaesthetics', back: 'The role of body movement in communication' },
-  { front: 'Lilt', back: 'A rhythmic rising and falling pattern of speech' },
-  { front: 'Modulation', back: 'Controlling the tone or volume of your voice' },
-  { front: 'Nonverbal', back: 'Communication without words through gestures or expressions' },
-  { front: 'Oratory', back: 'The art of formal public speaking' },
-  { front: 'Pitch', back: 'The highness or lowness of your voice' },
-  { front: 'Rhetoric', back: 'The art of effective or persuasive speaking' },
-  { front: 'Speech', back: 'The expression of thoughts through spoken words' },
-  { front: 'Tempo', back: 'The speed at which someone talks' },
-  { front: 'Utterance', back: 'A spoken word, statement, or vocal sound' },
-  { front: 'Vernacular', back: 'The language or dialect spoken by ordinary people' }
-];
+      { front: 'Articulation', back: 'The clear and precise pronunciation of words' },
+      { front: 'Cadence', back: 'The rhythmic flow of sounds in language' },
+      { front: 'Diction', back: 'The choice and use of words in speech' },
+      { front: 'Enunciation', back: 'The act of pronouncing words clearly' },
+      { front: 'Filler', back: 'Words or sounds used to fill pauses in speech' },
+      { front: 'Gesture', back: 'Body movements that accompany and enhance speech' },
+      { front: 'Hesitation', back: 'A pause or delay in speech often from uncertainty' },
+      { front: 'Inflection', back: 'Changes in pitch and tone of voice' },
+      { front: 'Jargon', back: 'Specialized terms used by a profession or group' },
+      { front: 'Kinaesthetics', back: 'The role of body movement in communication' },
+      { front: 'Lilt', back: 'A rhythmic rising and falling pattern of speech' },
+      { front: 'Modulation', back: 'Controlling the tone or volume of your voice' },
+      { front: 'Nonverbal', back: 'Communication without words through gestures or expressions' },
+      { front: 'Oratory', back: 'The art of formal public speaking' },
+      { front: 'Pitch', back: 'The highness or lowness of your voice' },
+      { front: 'Rhetoric', back: 'The art of effective or persuasive speaking' },
+      { front: 'Speech', back: 'The expression of thoughts through spoken words' },
+      { front: 'Tempo', back: 'The speed at which someone talks' },
+      { front: 'Utterance', back: 'A spoken word, statement, or vocal sound' },
+      { front: 'Vernacular', back: 'The language or dialect spoken by ordinary people' }
+    ];
 
     const puzzleData = [
       { id: 1, title: "Synonym Match", question: "What's a synonym for 'quick'?", options: ["Slow", "Fast", "Steady", "Calm"], correct: "Fast", difficulty: 1 },
@@ -1205,6 +1229,9 @@
         cardFront.innerHTML = flashcardsData[currentCardIndex].front + '<small>Tap to flip</small>';
         cardBack.textContent = flashcardsData[currentCardIndex].back;
       }, 300);
+      const state = loadLearnState();
+      state.flashcardsViewed++;
+      saveLearnState(state);
     }
 
     card.addEventListener('click', () => card.classList.toggle('flipped'));
@@ -1263,6 +1290,11 @@
           const isCorrect = option.getAttribute('data-answer') === 'correct';
           option.classList.add(isCorrect ? 'correct' : 'incorrect');
           
+          const state = loadLearnState();
+          state.puzzlesCompleted++;
+          state.puzzleResults.push(isCorrect ? 1 : 0);
+          saveLearnState(state);
+
           if (isCorrect) {
             streak++;
             if (streak >= 3 && currentDifficulty < 5) {
@@ -1434,6 +1466,11 @@
         if (analysis.starRating === 5) {
           setTimeout(createConfetti, 500);
         }
+
+        const state = loadLearnState();
+        state.drillsCompleted++;
+        state.drillScores.push(analysis.starRating);
+        saveLearnState(state);
       };
 
       recognition.onerror = (event) => {
@@ -1449,6 +1486,10 @@
           recordBtn.classList.remove('recording');
         }
       };
+    }
+
+    function goToHome() {
+      window.location.href = 'index.html';
     }
 
     window.addEventListener('load', () => {
@@ -1560,6 +1601,13 @@
       preloadLink.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap';
       preloadLink.as = 'style';
       document.head.appendChild(preloadLink);
+
+      // Initialize flashcardsViewed on first load
+      const state = loadLearnState();
+      if (state.flashcardsViewed === 0) {
+        state.flashcardsViewed = 1; // Count the initial card
+        saveLearnState(state);
+      }
     });
   </script>
 </body>
