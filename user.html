@@ -1,31 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UpSpeak - User Profile</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Include SweetAlert CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <style>
-        /* General Styles */
         :root {
             --primary-color: #007bff;
             --secondary-color: #ff9933;
-            /* Vibrant orange */
             --text-color: #2c3e50;
             --background-gradient: linear-gradient(135deg, #e6f0f1, #d5dbdb);
-            /* Softer gradient */
             --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            /* Stronger shadow */
             --transition-speed: 0.3s;
-            /* Standard transition speed */
         }
 
         body {
@@ -38,31 +28,20 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
             transition: background-color 0.3s, color 0.3s, filter 0.3s;
-            /* Smooth transition */
             filter: brightness(100%);
-            /* Default brightness */
         }
 
-        a {
-            text-decoration: none;
-            color: #007bff;
-        }
+        a { text-decoration: none; color: #007bff; }
+        a:hover { text-decoration: underline; }
 
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Header Styles */
         header {
             background-color: rgba(255, 255, 255, 0.95);
-            /* Slightly transparent white */
             padding: 25px 0;
             box-shadow: var(--box-shadow);
             position: sticky;
             top: 0;
             z-index: 1000;
             backdrop-filter: blur(10px);
-            /* Glassmorphism effect */
         }
 
         .navbar {
@@ -82,29 +61,12 @@
             align-items: center;
             cursor: pointer;
             transition: transform var(--transition-speed) ease;
-            /* Smooth transform */
         }
 
-        .logo:hover {
-            transform: scale(1.08);
-        }
-
-        .logo .microphone-icon {
-            width: 55px;
-            height: 55px;
-            margin-right: 15px;
-            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
-            /* Subtle shadow */
-        }
-
-        .logo .upspeak-up {
-            color: var(--secondary-color);
-            /* Orange */
-        }
-
-        .logo .upspeak-speak {
-            color: var(--primary-color);
-        }
+        .logo:hover { transform: scale(1.08); }
+        .logo .microphone-icon { width: 55px; height: 55px; margin-right: 15px; filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1)); }
+        .logo .upspeak-up { color: var(--secondary-color); }
+        .logo .upspeak-speak { color: var(--primary-color); }
 
         .nav-menu {
             list-style: none;
@@ -115,42 +77,16 @@
             margin: 0;
         }
 
-        .nav-menu li {
-            margin: 0 30px;
-            position: relative;
-        }
-
-        .nav-menu>li>a {
-            color: #555;
-            font-weight: 500;
-            transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            padding-bottom: 4px;
-            /* Space for underline */
-        }
-
-        .nav-menu>li>a:hover {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .nav-menu .carrot {
-            margin-left: 7px;
-            font-size: 0.9em;
-            transition: transform var(--transition-speed) ease;
-        }
-
-        .nav-menu li:hover .carrot {
-            transform: rotate(180deg);
-        }
+        .nav-menu li { margin: 0 30px; position: relative; }
+        .nav-menu > li > a { color: #555; font-weight: 500; transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease; display: flex; align-items: center; text-decoration: none; padding-bottom: 4px; }
+        .nav-menu > li > a:hover { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); }
+        .nav-menu .carrot { margin-left: 7px; font-size: 0.9em; transition: transform var(--transition-speed) ease; }
+        .nav-menu li:hover .carrot { transform: rotate(180deg); }
 
         .dropdown-content {
             display: none;
             position: absolute;
             background-color: rgba(255, 255, 255, 0.98);
-            /* Slightly transparent */
             min-width: 240px;
             box-shadow: var(--box-shadow);
             padding: 20px 30px;
@@ -164,679 +100,65 @@
             transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
             transform-origin: top center;
             backdrop-filter: blur(10px);
-            /* Glassmorphism */
         }
 
-        .nav-menu li:hover .dropdown-content {
-            display: block;
-            opacity: 1;
-            transform: translateX(-50%) translateY(10px);
-        }
+        .nav-menu li:hover .dropdown-content { display: block; opacity: 1; transform: translateX(-50%) translateY(10px); }
+        .dropdown-content a { color: var(--text-color); padding: 12px 0; text-decoration: none; display: block; transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease; border-radius: 8px; }
+        .dropdown-content a:hover { background-color: rgba(0, 123, 255, 0.1); color: var(--primary-color); }
 
-        .dropdown-content a {
-            color: var(--text-color);
-            padding: 12px 0;
-            text-decoration: none;
-            display: block;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-            border-radius: 8px;
-        }
+        .profile-icon { font-size: 3rem; color: #777; transition: color var(--transition-speed) ease, transform var(--transition-speed) ease; }
+        .profile-icon:hover { color: var(--primary-color); transform: scale(1.15); }
 
-        .dropdown-content a:hover {
-            background-color: rgba(0, 123, 255, 0.1);
-            color: var(--primary-color);
-        }
+        .user-profile { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70vh; padding: 50px 20px; text-align: center; }
+        .profile-info { background-color: #fff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 30px; width: 80%; max-width: 600px; transition: background-color 0.3s, color 0.3s; }
+        .profile-info h2 { font-size: 2rem; margin-bottom: 20px; color: #333; }
+        .profile-info p { font-size: 1.2rem; color: #555; margin-bottom: 15px; }
 
-        .profile-icon {
-            font-size: 3rem;
-            color: #777;
-            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
-        }
+        .profile-actions { margin-top: 30px; display: flex; justify-content: center; gap: 10px; }
+        .profile-actions button { padding: 12px 30px; font-size: 1rem; border: none; border-radius: 5px; color: white; font-weight: 500; cursor: pointer; transition: background-color 0.3s ease; display: inline-block; }
+        .btn-signout { background-color: #dc3545; }
+        .btn-settings { background-color: #007bff; }
+        .btn-account { background-color: #28a745; }
+        .btn-signout:hover { background-color: #c82333; }
+        .btn-settings:hover { background-color: #0056b3; }
+        .btn-account:hover { background-color: #218838; }
 
-        .profile-icon:hover {
-            color: var(--primary-color);
-            transform: scale(1.15);
-        }
+        footer { background-color: #343a40; color: white; text-align: center; padding: 20px 0; transition: background-color 0.3s, color 0.3s; }
 
-        /* Hero Section Styles */
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            padding: 50px 20px;
-            text-align: center;
-        }
+        .swal2-container { z-index: 2000; }
+        .swal2-popup { border-radius: 15px; padding: 20px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); background: #f8f9fa; }
+        .swal2-title { font-size: 2rem; color: #495057; }
+        .swal2-content { color: #6c757d; }
+        .swal2-input { border-radius: 8px; border: 2px solid #ced4da; padding: 12px; margin-bottom: 15px; font-size: 1.1rem; transition: border-color 0.3s ease; }
+        .swal2-input:focus { border-color: #007bff; outline: none; box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); }
+        .slider-label { display: block; margin-bottom: 5px; font-weight: 500; color: #495057; text-align: left; }
+        .slider-container { margin-bottom: 20px; }
+        .slider { -webkit-appearance: none; width: 100%; height: 12px; border-radius: 6px; background: #d3d3d3; outline: none; opacity: 0.7; -webkit-transition: .2s; transition: opacity .2s; }
+        .slider:hover { opacity: 1; }
+        .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 25px; height: 25px; border-radius: 50%; background: #007bff; cursor: pointer; box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); }
+        .slider::-moz-range-thumb { width: 25px; height: 25px; border-radius: 50%; background: #007bff; cursor: pointer; box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); }
+        .swal2-styled.swal2-confirm { background-color: #28a745; border-radius: 8px; padding: 12px 20px; font-size: 1.1rem; font-weight: 500; box-shadow: none; transition: background-color 0.3s ease; }
+        .swal2-styled.swal2-cancel { background-color: #dc3545; border-radius: 8px; padding: 12px 20px; font-size: 1.1rem; font-weight: 500; box-shadow: none; transition: background-color 0.3s ease; }
+        .swal2-styled.swal2-confirm:focus, .swal2-styled.swal2-cancel:focus { outline: none; box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); }
+        .swal2-styled.swal2-confirm:hover { background-color: #218838; }
+        .swal2-styled.swal2-cancel:hover { background-color: #c82333; }
 
-        .hero-content {
-            max-width: 800px;
-        }
+        body.dark-mode { background: #333; color: #fff; }
+        header.dark-mode { background-color: #444; color: #fff; }
+        .profile-info.dark-mode { background-color: #444; color: #fff; }
+        footer.dark-mode { background-color: #222; color: #fff; }
 
-        .hero-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: #555;
-            margin-bottom: 30px;
-        }
-
-        /* Button Styles */
-        .btn {
-            padding: 12px 30px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            display: inline-block;
-            margin: 0 10px;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-secondary:hover {
-            background-color: #545b62;
-        }
-
-        /* Mission Section Styles */
-        .mission {
-            background-color: #f8f9fa;
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .mission-title {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .mission-content {
-            max-width: 800px;
-            margin: 0 auto;
-            color: #555;
-        }
-
-        /* Testimonials Section Styles */
-        .testimonials {
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .testimonial-title {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-        }
-
-        .testimonial-container {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-            height: 100px;
-        }
-
-        .testimonial {
-            position: absolute;
-            width: 100%;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            font-size: 1.2rem;
-            color: #555;
-        }
-
-        .testimonial.active {
-            opacity: 1;
-        }
-
-        /* Features Section Styles */
-        .features {
-            background-color: #fff;
-            padding: 50px 20px;
-        }
-
-        .features-title {
-            font-size: 2rem;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-item {
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .feature-item i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #007bff;
-        }
-
-        .feature-item h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .feature-item p {
-            color: #555;
-        }
-
-        /* Contact Section Styles */
-        .contact {
-            background-color: #fff;
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .contact-title {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 40px;
-        }
-
-        .contact-details {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* Footer Styles */
-        footer {
-            background-color: #343a40;
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            transition: background-color 0.3s, color 0.3s;
-            /* Smooth transition */
-        }
-
-        /* Updated Navbar Styles */
-        .nav-menu {
-            list-style: none;
-            display: flex;
-            align-items: center;
-            margin: 0;
-            /* Remove default margin */
-            padding: 0;
-            /* Remove default padding */
-        }
-
-        .nav-menu li {
-            position: relative;
-            margin-left: 20px;
-            /* Consistent spacing between items */
-        }
-
-        .nav-menu li:first-child {
-            margin-left: 0;
-            /* No left margin for the first item */
-        }
-
-        .nav-menu li a {
-            color: #555;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            display: block;
-            padding: 10px 0;
-            /* Maintain vertical padding */
-        }
-
-        .nav-menu li a:hover {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        /* Centralized Dropdown Styles */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            border-radius: 5px;
-            padding: 5px 0;
-            top: 100%;
-            left: 50%;
-            /* Center the dropdown horizontally */
-            transform: translateX(-50%);
-            /* Adjust for the dropdown width */
-            text-align: center;
-            /* Center text within the dropdown */
-        }
-
-        .dropdown-content a {
-            color: #333;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            transition: background-color 0.3s ease;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #ddd;
-        }
-
-        .nav-menu li:hover .dropdown-content {
-            display: block;
-        }
-
-        /* Profile Icon */
-        .profile-icon {
-            font-size: 2em;
-            color: #555;
-            transition: color 0.3s ease;
-        }
-
-        .profile-icon:hover {
-            color: #007bff;
-        }
-
-        /* Responsive adjustments for Navbar */
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nav-menu {
-                margin-top: 10px;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nav-menu li {
-                margin-left: 0;
-                margin-bottom: 10px;
-            }
-
-            .nav-menu li a {
-                padding: 8px 0;
-            }
-
-            .dropdown-content {
-                position: static;
-                box-shadow: none;
-                border-radius: 0;
-                transform: none;
-                left: 0;
-                text-align: left;
-            }
-
-            .dropdown-content a {
-                padding: 10px 16px;
-            }
-        }
-
-        /* Custom Styles for User Profile Page */
-        .user-profile {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 70vh;
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .profile-info {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            width: 80%;
-            max-width: 600px;
-            transition: background-color 0.3s, color 0.3s;
-            /* Smooth transition */
-        }
-
-        .profile-info h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .profile-info p {
-            font-size: 1.2rem;
-            color: #555;
-            margin-bottom: 15px;
-        }
-
-        .profile-actions {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .profile-actions button {
-            padding: 12px 30px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            display: inline-block;
-        }
-
-        .btn-signout {
-            background-color: #dc3545;
-        }
-
-        .btn-settings {
-            background-color: #007bff;
-        }
-
-        .btn-account {
-            background-color: #28a745;
-        }
-
-        .btn-signout:hover {
-            background-color: #c82333;
-        }
-
-        .btn-settings:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-account:hover {
-            background-color: #218838;
-        }
-
-        /* Enhanced Settings Popup Styles */
-        .swal2-container {
-            z-index: 2000;
-            /* Ensure it's above everything */
-        }
-
-        .swal2-popup {
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            background: #f8f9fa;
-            /* A softer background */
-        }
-
-        .swal2-title {
-            font-size: 2rem;
-            color: #495057;
-            /* Darker, more readable title */
-        }
-
-        .swal2-content {
-            color: #6c757d;
-            /* A slightly lighter text for the content */
-        }
-
-        .swal2-input {
-            border-radius: 8px;
-            border: 2px solid #ced4da;
-            /* More defined input border */
-            padding: 12px;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .swal2-input:focus {
-            border-color: #007bff;
-            /* Highlight on focus */
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-            /* Subtle shadow for focus */
-        }
-
-        /* Style for slider labels */
-        .slider-label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #495057;
-            text-align: left;
-            /* Align labels to the left */
-        }
-
-        /* Custom slider styles */
-        .slider-container {
-            margin-bottom: 20px;
-        }
-
-        .slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 12px;
-            border-radius: 6px;
-            background: #d3d3d3;
-            outline: none;
-            opacity: 0.7;
-            -webkit-transition: .2s;
-            transition: opacity .2s;
-        }
-
-        .slider:hover {
-            opacity: 1;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background: #007bff;
-            cursor: pointer;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-
-        .slider::-moz-range-thumb {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background: #007bff;
-            cursor: pointer;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-
-        /* Button Styles in SweetAlert */
-        .swal2-styled.swal2-confirm {
-            background-color: #28a745;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            box-shadow: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .swal2-styled.swal2-cancel {
-            background-color: #dc3545;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            box-shadow: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .swal2-styled.swal2-confirm:focus,
-        .swal2-styled.swal2-cancel:focus {
-            outline: none;
-            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
-            /* Highlight on focus */
-        }
-
-        .swal2-styled.swal2-confirm:hover {
-            background-color: #218838;
-        }
-
-        .swal2-styled.swal2-cancel:hover {
-            background-color: #c82333;
-        }
-
-        /* Dark Mode Styles */
-        body.dark-mode {
-            background: #333;
-            color: #fff;
-        }
-
-        header.dark-mode {
-            background-color: #444;
-            color: #fff;
-        }
-
-        .profile-info.dark-mode {
-            background-color: #444;
-            color: #fff;
-        }
-
-        footer.dark-mode {
-            background-color: #222;
-            color: #fff;
-        }
-
-        /* Media Queries for Responsiveness */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nav-links {
-                margin-top: 10px;
-                flex-direction: column;
-            }
-
-            .nav-links li {
-                margin-left: 0;
-                margin-bottom: 10px;
-            }
-
-            .hero {
-                min-height: auto;
-                padding: 30px 20px;
-            }
-
-            .hero-title {
-                font-size: 2rem;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Custom Styles for User Profile Page */
-        .user-profile {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 70vh;
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .profile-info {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            width: 80%;
-            max-width: 600px;
-            transition: background-color 0.3s, color 0.3s;
-            /* Smooth transition */
-        }
-
-        .profile-info h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .profile-info p {
-            font-size: 1.2rem;
-            color: #555;
-            margin-bottom: 15px;
-        }
-
-        .profile-actions {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .profile-actions button {
-            padding: 12px 30px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            display: inline-block;
-        }
-
-        .upspeak-up {
-            color: var(--secondary-color);
-            /* Orange */
-        }
-
-        .btn-signout {
-            background-color: #dc3545;
-        }
-
-        .btn-settings {
-            background-color: #007bff;
-        }
-
-        .btn-account {
-            background-color: #28a745;
-        }
-
-        .btn-signout:hover {
-            background-color: #c82333;
-        }
-
-        .btn-settings:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-account:hover {
-            background-color: #218838;
+            .navbar { flex-direction: column; align-items: flex-start; }
+            .nav-menu { margin-top: 10px; flex-direction: column; align-items: flex-start; }
+            .nav-menu li { margin-left: 0; margin-bottom: 10px; }
+            .dropdown-content { position: static; box-shadow: none; border-radius: 0; transform: none; left: 0; text-align: left; }
+            .dropdown-content a { padding: 10px 16px; }
+            .user-profile { padding: 30px 20px; }
+            .profile-info { width: 90%; }
         }
     </style>
 </head>
-
 <body>
     <header>
         <nav class="navbar">
@@ -848,8 +170,7 @@
                             <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
                         </linearGradient>
                     </defs>
-                    <path fill="url(#microphone-gradient)"
-                        d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                    <path fill="url(#microphone-gradient)" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
                 </svg>
                 <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
             </div>
@@ -867,6 +188,7 @@
                         <a href="learn.html">Puzzles</a>
                         <a href="learn.html">Drills</a>
                     </div>
+                </li>
                 <li>
                     <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
                     <div class="dropdown-content">
@@ -895,45 +217,100 @@
     <section class="user-profile">
         <div class="profile-info">
             <h2 id="welcome-message">Welcome, User!</h2>
-            <p id="username-display">Username: User</p>
-            <p id="email-display">Email: user@example.com</p>
+            <p id="first-name-display">First Name: </p>
+            <p id="last-name-display">Last Name: </p>
+            <p id="age-display">Age: </p>
+            <p id="username-display">Username: </p>
+            <p id="email-display">Email: </p>
             <div class="profile-actions">
                 <button class="btn btn-settings" onclick="showSettings()">Settings</button>
                 <button class="btn btn-account" onclick="showAccountSettings()">Account</button>
                 <button class="btn btn-signout" onclick="signOut()">Sign Out</button>
             </div>
-        </divxq>
+        </div>
     </section>
     <footer>
         <p>© 2025 UpSpeak. All rights reserved.</p>
     </footer>
-    <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
     <script>
-        // Function to load user data from sessionStorage on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            loadUserData();
-        });
-
-        // Function to load user data from sessionStorage
-        function loadUserData() {
-            // Get user information from sessionStorage
-            const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-
-            // Update the user information display
-            document.getElementById('welcome-message').textContent = `Welcome, ${loggedInUser.firstName}!`;
-            document.getElementById('username-display').textContent = `Username: ${loggedInUser.username}`;
-
-            // Get the user's email from the database
-            const userDatabase = JSON.parse(sessionStorage.getItem('userDatabase')) || [];
-            const currentUser = userDatabase.find(user => user.username === loggedInUser.username);
-
-            if (currentUser && currentUser.email) {
-                document.getElementById('email-display').textContent = `Email: ${currentUser.email}`;
-            }
+        // Load and save state using localStorage
+        function loadState() {
+            const state = localStorage.getItem('authState');
+            return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
         }
 
-        // Function to handle dark mode
+        function saveState(users, session, sessionExpiry = null) {
+            const state = { 
+                users, 
+                session, 
+                sessionExpiry: sessionExpiry || (session ? Date.now() + 24 * 60 * 60 * 1000 : null)
+            };
+            localStorage.setItem('authState', JSON.stringify(state));
+        }
+
+        // Password hashing function
+        function hashPassword(password, salt = Date.now().toString()) {
+            let hash = 0;
+            const combined = password + salt;
+            for (let i = 0; i < combined.length; i++) {
+                hash = ((hash << 5) - hash) + combined.charCodeAt(i);
+                hash = hash >>> 0;
+            }
+            return { hash: hash.toString(), salt };
+        }
+
+        // Validation functions
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function validateName(name) {
+            return /^[a-zA-Z\s]{1,50}$/.test(name);
+        }
+
+        function validateAge(age) {
+            const numAge = parseInt(age);
+            return numAge >= 1 && numAge <= 150;
+        }
+
+        function validatePassword(password) {
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+            return passwordRegex.test(password);
+        }
+
+        // Load user data on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            checkSessionAndLoadData();
+            applySavedSettings();
+        });
+
+        function checkSessionAndLoadData() {
+            const state = loadState();
+            const currentSession = state.session;
+
+            if (!currentSession || (state.sessionExpiry && Date.now() > state.sessionExpiry)) {
+                Swal.fire('Not Logged In', 'Please log in to access your profile.', 'warning').then(() => {
+                    window.location.href = 'index.html';
+                });
+                return;
+            }
+
+            loadUserData(state);
+        }
+
+        function loadUserData(state) {
+            const currentSession = state.session;
+            const user = state.users[currentSession];
+            document.getElementById('welcome-message').textContent = `Welcome, ${user.firstName}!`;
+            document.getElementById('first-name-display').textContent = `First Name: ${user.firstName}`;
+            document.getElementById('last-name-display').textContent = `Last Name: ${user.lastName}`;
+            document.getElementById('age-display').textContent = `Age: ${user.age}`;
+            document.getElementById('username-display').textContent = `Username: ${currentSession}`;
+            document.getElementById('email-display').textContent = `Email: ${user.email}`;
+        }
+
+        // Apply dark mode and brightness
         function applyDarkMode(mode) {
             const body = document.body;
             const header = document.querySelector('header');
@@ -952,9 +329,15 @@
             }
         }
 
-        // Function to show settings popup
+        function applySavedSettings() {
+            const savedDarkMode = localStorage.getItem('darkMode') || 'off';
+            const savedBrightness = localStorage.getItem('brightness') || 100;
+            applyDarkMode(savedDarkMode);
+            document.body.style.filter = `brightness(${savedBrightness}%)`;
+        }
+
+        // Show settings popup
         function showSettings() {
-            // Get current settings from localStorage
             const currentDarkMode = localStorage.getItem('darkMode') || 'off';
             const currentBrightness = localStorage.getItem('brightness') || 100;
 
@@ -964,9 +347,9 @@
                     '<div class="slider-container">' +
                     '<label class="slider-label">Dark Mode</label>' +
                     `<select id="darkmode-select" class="swal2-input">
-                                              <option value="off" ${currentDarkMode === 'off' ? 'selected' : ''}>Off</option>
-                                                                      <option value="on" ${currentDarkMode === 'on' ? 'selected' : ''}>On</option>
-                                                                  </select>` +
+                        <option value="off" ${currentDarkMode === 'off' ? 'selected' : ''}>Off</option>
+                        <option value="on" ${currentDarkMode === 'on' ? 'selected' : ''}>On</option>
+                    </select>` +
                     '</div>' +
                     '<div class="slider-container">' +
                     '<label class="slider-label">Screen Brightness</label>' +
@@ -980,44 +363,36 @@
                     return {
                         darkMode: document.getElementById('darkmode-select').value,
                         brightness: document.getElementById('brightness-slider').value
-                    }
+                    };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Save settings to localStorage
                     localStorage.setItem('darkMode', result.value.darkMode);
                     localStorage.setItem('brightness', result.value.brightness);
-
-                    // Apply dark mode setting
                     applyDarkMode(result.value.darkMode);
-
-                    // Apply brightness setting
                     document.body.style.filter = `brightness(${result.value.brightness}%)`;
-
-                    Swal.fire(
-                        'Settings Saved!',
-                        'Your display preferences have been updated.',
-                        'success'
-                    )
+                    Swal.fire('Settings Saved!', 'Your display preferences have been updated.', 'success');
                 }
-            })
+            });
         }
 
-        // Function to show account settings popup
+        // Show account settings popup
         function showAccountSettings() {
-            // Get user information from sessionStorage
-            const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-            const userDatabase = JSON.parse(sessionStorage.getItem('userDatabase')) || [];
-            const currentUser = userDatabase.find(user => user.username === loggedInUser.username);
+            const state = loadState();
+            const currentSession = state.session;
+            const user = state.users[currentSession];
 
             Swal.fire({
                 title: 'Account Settings',
                 html:
-                    `<input id="first-name" class="swal2-input" placeholder="First Name" value="${loggedInUser.firstName || ''}">` +
-                    `<input id="last-name" class="swal2-input" placeholder="Last Name" value="${loggedInUser.lastName || ''}">` +
-                    `<input id="email" class="swal2-input" placeholder="Email" value="${currentUser?.email || ''}">` +
+                    `<input id="first-name" class="swal2-input" placeholder="First Name" value="${user.firstName || ''}">` +
+                    `<input id="last-name" class="swal2-input" placeholder="Last Name" value="${user.lastName || ''}">` +
+                    `<input id="age" class="swal2-input" type="number" placeholder="Age" value="${user.age || ''}" min="1" max="150">` +
+                    `<input id="username" class="swal2-input" placeholder="Username" value="${currentSession}" disabled>` +
+                    `<input id="email" class="swal2-input" placeholder="Email" value="${user.email || ''}">` +
                     `<input id="old-password" type="password" class="swal2-input" placeholder="Current Password">` +
-                    `<input id="new-password" type="password" class="swal2-input" placeholder="New Password (optional)">`,
+                    `<input id="new-password" type="password" class="swal2-input" placeholder="New Password (optional)">` +
+                    `<input id="confirm-new-password" type="password" class="swal2-input" placeholder="Confirm New Password">`,
                 focusConfirm: false,
                 showCancelButton: true,
                 confirmButtonText: 'Update',
@@ -1026,62 +401,66 @@
                     return {
                         firstName: document.getElementById('first-name').value,
                         lastName: document.getElementById('last-name').value,
+                        age: document.getElementById('age').value,
                         email: document.getElementById('email').value,
                         oldPassword: document.getElementById('old-password').value,
-                        newPassword: document.getElementById('new-password').value
-                    }
+                        newPassword: document.getElementById('new-password').value,
+                        confirmNewPassword: document.getElementById('confirm-new-password').value
+                    };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Verify current password
-                    if (currentUser?.password !== result.value.oldPassword) {
-                        Swal.fire(
-                            'Error!',
-                            'Current password is incorrect.',
-                            'error'
-                        );
+                    const { firstName, lastName, age, email, oldPassword, newPassword, confirmNewPassword } = result.value;
+
+                    // Validation
+                    if (!validateName(firstName) || !validateName(lastName)) {
+                        Swal.fire('Error', 'Names must be 1-50 letters only.', 'error');
+                        return;
+                    }
+                    if (!validateAge(age)) {
+                        Swal.fire('Error', 'Age must be between 1 and 150.', 'error');
+                        return;
+                    }
+                    if (!validateEmail(email)) {
+                        Swal.fire('Error', 'Invalid email format.', 'error');
                         return;
                     }
 
-                    // Update user information in the database
-                    const updatedUser = {
-                        ...currentUser,
-                        firstName: result.value.firstName,
-                        lastName: result.value.lastName,
-                        email: result.value.email,
-                    };
-
-                    // Update password if a new one was provided
-                    if (result.value.newPassword) {
-                        updatedUser.password = result.value.newPassword;
+                    // Verify current password
+                    const { hash: oldHash } = hashPassword(oldPassword, user.salt);
+                    if (user.password !== oldHash) {
+                        Swal.fire('Error', 'Current password is incorrect.', 'error');
+                        return;
                     }
 
-                    // Update userDatabase
-                    const userIndex = userDatabase.findIndex(user => user.username === loggedInUser.username);
-                    userDatabase[userIndex] = updatedUser;
-                    sessionStorage.setItem('userDatabase', JSON.stringify(userDatabase));
+                    // Validate new password if provided
+                    if (newPassword && newPassword !== confirmNewPassword) {
+                        Swal.fire('Error', 'New passwords do not match.', 'error');
+                        return;
+                    }
+                    if (newPassword && !validatePassword(newPassword)) {
+                        Swal.fire('Error', 'New password must be at least 8 characters with one uppercase, one number, and one special character.', 'error');
+                        return;
+                    }
 
-                    // Update loggedInUser session
-                    const updatedLoggedInUser = {
-                        ...loggedInUser,
-                        firstName: result.value.firstName,
-                        lastName: result.value.lastName
-                    };
-                    sessionStorage.setItem('loggedInUser', JSON.stringify(updatedLoggedInUser));
+                    // Update user data
+                    const updatedUser = { ...user, firstName, lastName, age, email };
+                    if (newPassword) {
+                        const { hash, salt } = hashPassword(newPassword);
+                        updatedUser.password = hash;
+                        updatedUser.salt = salt;
+                    }
 
-                    // Refresh the displayed information
-                    loadUserData();
+                    state.users[currentSession] = updatedUser;
+                    saveState(state.users, currentSession);
+                    loadUserData(state);
 
-                    Swal.fire(
-                        'Updated!',
-                        'Your account information has been updated.',
-                        'success'
-                    )
+                    Swal.fire('Updated!', 'Your account information has been updated.', 'success');
                 }
-            })
+            });
         }
 
-        // Function to sign out
+        // Sign out function (only triggered by button click)
         function signOut() {
             Swal.fire({
                 title: 'Sign Out',
@@ -1092,32 +471,19 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Clear the logged in user from session storage
-                    sessionStorage.removeItem('loggedInUser');
-
-                    // Redirect to login page
-                    window.location.href = 'index.html';
+                    const state = loadState();
+                    saveState(state.users, null); // Clear session only on confirmation
+                    Swal.fire('Signed Out', 'You have been signed out.', 'success').then(() => {
+                        window.location.href = 'index.html';
+                    });
                 }
-            })
+            });
         }
 
-        // Function to navigate to home page
+        // Navigate to home page
         function goToHome() {
             window.location.href = 'index.html';
         }
-
-        // Apply saved display settings on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            const savedDarkMode = localStorage.getItem('darkMode') || 'off';
-            const savedBrightness = localStorage.getItem('brightness') || 100;
-
-            // Apply dark mode setting
-            applyDarkMode(savedDarkMode);
-
-            // Apply brightness setting
-            document.body.style.filter = `brightness(${savedBrightness}%)`;
-        });
     </script>
 </body>
-
 </html>
