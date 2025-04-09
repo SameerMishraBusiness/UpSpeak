@@ -299,17 +299,62 @@
         </div>
     </div>
     <script>
-        // Tracking state management
-        function loadEvaluationState() {
-            const state = localStorage.getItem('evaluationState');
-            return state ? JSON.parse(state) : {
-                speechesGiven: 0,
-                speechesWithFivePlusStrengths: 0
-            };
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = SpeechRecognition ? new SpeechRecognition() : null;
+        if (recognition) {
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
         }
 
-        function saveEvaluationState(state) {
-            localStorage.setItem('evaluationState', JSON.stringify(state));
+        // State Management aligned with profile.html
+        function loadState() {
+            const state = localStorage.getItem('authState');
+            return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
+        }
+
+        function saveState(state) {
+            localStorage.setItem('authState', JSON.stringify(state));
+        }
+
+        function getUserProfile(username) {
+            const state = loadState();
+            if (!state.users[username]) {
+                state.users[username] = {
+                    firstName: username,
+                    lastName: "",
+                    age: "",
+                    email: "",
+                    password: "",
+                    salt: "",
+                    profile: {
+                        name: username,
+                        personality: null,
+                        puzzlesCompleted: 0,
+                        drillsCompleted: 0,
+                        speechesGiven: 0,
+                        speechesWithFivePlusStrengths: 0
+                    }
+                };
+                saveState(state);
+            } else if (!state.users[username].profile) {
+                state.users[username].profile = {
+                    name: username,
+                    personality: null,
+                    puzzlesCompleted: 0,
+                    drillsCompleted: 0,
+                    speechesGiven: 0,
+                    speechesWithFivePlusStrengths: 0
+                };
+                saveState(state);
+            }
+            return state.users[username].profile;
+        }
+
+        function saveUserProfile(username, profile) {
+            const state = loadState();
+            state.users[username].profile = profile;
+            saveState(state);
         }
 
         let mediaRecorder;
@@ -326,11 +371,11 @@
         const buttonsContainer = document.getElementById("buttonsContainer");
 
         let stream;
-        let recognition;
         let isRecording = false;
         let finalTranscript = "";
         let silenceTimeout;
         let previousFrame = null;
+        let startTime;
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
@@ -338,23 +383,21 @@
 
         async function startVideoStream() {
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 videoElement.srcObject = stream;
                 videoElement.play();
             } catch (error) {
                 console.error("Error accessing webcam:", error);
+                transcriptionBox.textContent = "Error: Could not access webcam/microphone.";
             }
         }
 
         function setupSpeechRecognition() {
-            if (!('webkitSpeechRecognition' in window)) {
-                alert("Your browser does not support speech recognition.");
+            if (!recognition) {
+                transcriptionBox.textContent = "Speech recognition not supported in this browser.";
+                startBtn.disabled = true;
                 return;
             }
-
-            recognition = new webkitSpeechRecognition();
-            recognition.continuous = true;
-            recognition.interimResults = true;
 
             recognition.onresult = function(event) {
                 let interimTranscript = "";
@@ -377,7 +420,11 @@
                 }, 1000);
             };
 
-            recognition.onerror = function(event) { console.error("Speech Recognition Error:", event.error); };
+            recognition.onerror = function(event) {
+                console.error("Speech Recognition Error:", event.error);
+                transcriptionBox.textContent = `Error: ${event.error}`;
+            };
+
             recognition.onend = function() {
                 if (isRecording) recognition.start();
                 else evaluateSpeech();
@@ -396,11 +443,13 @@
                 videoElement.srcObject = null;
                 videoElement.src = videoUrl;
                 videoElement.controls = true;
+                videoElement.muted = false;
                 videoElement.play();
             };
             mediaRecorder.start();
             recognition.start();
             isRecording = true;
+            startTime = Date.now();
             startBtn.disabled = true;
             stopBtn.disabled = false;
             restartBtn.disabled = false;
@@ -420,13 +469,17 @@
                 startBtn.style.display = "none";
                 stopBtn.style.display = "none";
                 restartBtn.style.display = "none";
-                const state = loadEvaluationState();
-                state.speechesGiven++;
-                saveEvaluationState(state);
+
+                const state = loadState();
+                const username = state.session;
+                let profile = getUserProfile(username);
+                profile.speechesGiven += 1;
+                saveUserProfile(username, profile);
             }
         }
 
         function detectHandMotions() {
+            if (!isRecording) return;
             if (!videoElement.videoWidth || !videoElement.videoHeight) {
                 requestAnimationFrame(detectHandMotions);
                 return;
@@ -443,7 +496,6 @@
                         Math.abs(currentFrame.data[i + 2] - previousFrame.data[i + 2]);
                     if (diff > 50) motionCount++;
                 }
-                return motionCount;
             }
             previousFrame = currentFrame;
             requestAnimationFrame(detectHandMotions);
@@ -502,6 +554,7 @@
             const wordCount = finalTranscript.split(/\s+/).filter(Boolean).length;
             const oneSentenceSummary = generateSummary(finalTranscript);
             let overallScore = 0;
+            const durationSeconds = Math.max(10, (Date.now() - startTime) / 1000);
 
             if (sentences.length >= 5 && wordCount > 150) {
                 overallScore += 20;
@@ -547,7 +600,6 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Clarity</span> Reduce ${fillerTotal} fillers`);
             }
 
-            const durationSeconds = Math.max(10, recordedChunks.length * 0.03);
             const wordsPerMinute = Math.floor((wordCount / durationSeconds) * 60);
             if (wordsPerMinute > 200) {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Pace</span> Slow down (${wordsPerMinute} wpm)`);
@@ -599,21 +651,32 @@
             strengthsFeedback.style.display = "block";
             improvementFeedback.style.display = "block";
 
-            // Update speechesWithFivePlusStrengths if applicable
+            const state = loadState();
+            const username = state.session;
+            let profile = getUserProfile(username);
             if (strengths.length >= 5) {
-                const state = loadEvaluationState();
-                state.speechesWithFivePlusStrengths++;
-                saveEvaluationState(state);
+                profile.speechesWithFivePlusStrengths += 1;
             }
+            saveUserProfile(username, profile);
         }
 
         document.addEventListener("DOMContentLoaded", function() {
+            const state = loadState();
+            const currentSession = state.session;
+
+            if (!currentSession || (state.sessionExpiry && Date.now() > state.sessionExpiry)) {
+                alert('Please log in to access the recording studio.');
+                window.location.href = 'index.html';
+                return;
+            }
+
             startBtn.addEventListener("click", startRecording);
             stopBtn.addEventListener("click", stopRecording);
             restartBtn.addEventListener("click", function() {
                 if (!isRecording) {
                     videoElement.src = "";
                     videoElement.srcObject = stream;
+                    videoElement.muted = true;
                     videoElement.play();
                     transcriptionBox.textContent = "Transcription will appear here...";
                     finalTranscript = "";
@@ -629,6 +692,7 @@
                     improvementFeedback.style.display = "none";
                 }
             });
+
             startVideoStream();
             setupSpeechRecognition();
         });
