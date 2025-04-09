@@ -830,7 +830,7 @@
       background: rgba(0, 0, 0, 0.5);
       display: flex;
       align-items: center;
-      justify-content: center;
+ivano      justify-content: center;
       z-index: 3000;
       display: none;
     }
@@ -1067,548 +1067,573 @@
   </div>
 
   <script>
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let recognition = SpeechRecognition ? new SpeechRecognition() : null;
-  if (recognition) {
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
-  }
-
-  // State management compatible with profile.html
-  function loadLearnState() {
-    const state = localStorage.getItem('learnState');
-    return state ? JSON.parse(state) : {
-      drillsCompleted: 0,
-      puzzlesCompleted: 0,
-      flashcardsViewed: 0,
-      drillScores: [], // Array to store individual drill star ratings
-      puzzleResults: [] // Array to store puzzle correct/incorrect (1 for correct, 0 for incorrect)
-    };
-  }
-
-  function saveLearnState(state) {
-    localStorage.setItem('learnState', JSON.stringify(state));
-  }
-
-  function updateAverageDrillScore(state) {
-    const totalScore = state.drillScores.reduce((sum, score) => sum + score, 0);
-    return state.drillScores.length ? totalScore / state.drillScores.length : 0;
-  }
-
-  function updatePuzzlePercentCorrect(state) {
-    const totalCorrect = state.puzzleResults.reduce((sum, result) => sum + result, 0);
-    return state.puzzleResults.length ? (totalCorrect / state.puzzleResults.length) * 100 : 0;
-  }
-
-  const exercises = {
-    'tongue-twister': {
-      title: 'Tongue Twisters',
-      samples: [
-        'She sells seashells by the seashore, the shells she sells are surely seashells',
-        'Peter Piper picked a peck of pickled peppers, a peck of pickled peppers Peter Piper picked',
-        'How much wood would a woodchuck chuck if a woodchuck could chuck wood?',
-        'Fuzzy Wuzzy was a bear, Fuzzy Wuzzy had no hair',
-        'Six slippery snails slid slowly seaward'
-      ],
-      instructions: 'Speak quickly and clearly. Focus on distinct sounds. Perfect articulation is key.'
-    },
-    'sentence-repetition': {
-      title: 'Sentence Repetition',
-      samples: [
-        'The quick brown fox jumps over the lazy dog',
-        'A journey of a thousand miles begins with a single step',
-        'Practice makes perfect in every challenging endeavor',
-        'Bright sunlight dances across the shimmering lake',
-        'Curiosity drives innovation and personal growth'
-      ],
-      instructions: 'Repeat with clear enunciation and steady pace. Match the rhythm precisely.'
-    },
-    'paragraph-reading': {
-      title: 'Paragraph Reading',
-      samples: [
-        'The greatest glory in living lies not in never falling, but in rising every time we fall. Confidence comes from preparation and persistent effort.',
-        'To speak effectively, one must master breath control, articulation, and emotional resonance. Each word carries weight when delivered with intention.',
-        'Learning a new skill requires patience and dedication. Voice training enhances not just speech, but also self-assurance and presence.',
-        'Nature’s symphony unfolds daily, from chirping birds to rustling leaves. Listening closely sharpens our auditory perception.',
-        'Success in communication hinges on clarity and connection. Practice transforms potential into performance.'
-      ],
-      instructions: 'Read naturally with proper intonation and pauses. Focus on flow and expression.'
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition = SpeechRecognition ? new SpeechRecognition() : null;
+    if (recognition) {
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
     }
-  };
 
-  const flashcardsData = [
-    { front: 'Articulation', back: 'The clear and precise pronunciation of words' },
-    { front: 'Cadence', back: 'The rhythmic flow of sounds in language' },
-    { front: 'Diction', back: 'The choice and use of words in speech' },
-    { front: 'Enunciation', back: 'The act of pronouncing words clearly' },
-    { front: 'Filler', back: 'Words or sounds used to fill pauses in speech' },
-    { front: 'Gesture', back: 'Body movements that accompany and enhance speech' },
-    { front: 'Hesitation', back: 'A pause or delay in speech often from uncertainty' },
-    { front: 'Inflection', back: 'Changes in pitch and tone of voice' },
-    { front: 'Jargon', back: 'Specialized terms used by a profession or group' },
-    { front: 'Kinaesthetics', back: 'The role of body movement in communication' },
-    { front: 'Lilt', back: 'A rhythmic rising and falling pattern of speech' },
-    { front: 'Modulation', back: 'Controlling the tone or volume of your voice' },
-    { front: 'Nonverbal', back: 'Communication without words through gestures or expressions' },
-    { front: 'Oratory', back: 'The art of formal public speaking' },
-    { front: 'Pitch', back: 'The highness or lowness of your voice' },
-    { front: 'Rhetoric', back: 'The art of effective or persuasive speaking' },
-    { front: 'Speech', back: 'The expression of thoughts through spoken words' },
-    { front: 'Tempo', back: 'The speed at which someone talks' },
-    { front: 'Utterance', back: 'A spoken word, statement, or vocal sound' },
-    { front: 'Vernacular', back: 'The language or dialect spoken by ordinary people' }
-  ];
+    // State Management aligned with profile.html
+    function loadState() {
+      const state = localStorage.getItem('authState');
+      return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
+    }
 
-  const puzzleData = [
-    { id: 1, title: "Synonym Match", question: "What's a synonym for 'quick'?", options: ["Slow", "Fast", "Steady", "Calm"], correct: "Fast", difficulty: 1 },
-    { id: 2, title: "Sentence Completion", question: "The day was so ___ that everyone smiled.", options: ["dull", "bright", "cold", "long"], correct: "bright", difficulty: 2 },
-    { id: 3, title: "Pronunciation Challenge", question: "Same vowel sound as 'bike'?", options: ["bit", "bite", "bet", "but"], correct: "bite", difficulty: 3 },
-    { id: 4, title: "Antonym Finder", question: "Opposite of 'increase'?", options: ["grow", "decrease", "rise", "expand"], correct: "decrease", difficulty: 2 },
-    { id: 5, title: "Word Stress", question: "Stresses first syllable?", options: ["present (n)", "present (v)", "record (v)", "project (v)"], correct: "present (n)", difficulty: 4 },
-    { id: 6, title: "Synonym Match", question: "What's a synonym for 'happy'?", options: ["Sad", "Joyful", "Angry", "Tired"], correct: "Joyful", difficulty: 1 },
-    { id: 7, title: "Sentence Completion", question: "The puzzle was ___ to solve.", options: ["impossible", "easy", "boring", "loud"], correct: "easy", difficulty: 1 },
-    { id: 8, title: "Pronunciation Challenge", question: "Same vowel sound as 'cat'?", options: ["cake", "cot", "cute", "cite"], correct: "cot", difficulty: 2 },
-    { id: 9, title: "Antonym Finder", question: "Opposite of 'dark'?", options: ["dim", "bright", "dull", "shadow"], correct: "bright", difficulty: 2 },
-    { id: 10, title: "Word Stress", question: "Stresses second syllable?", options: ["conduct (n)", "conduct (v)", "object (n)", "subject (n)"], correct: "conduct (v)", difficulty: 3 }
-  ];
+    function saveState(state) {
+      localStorage.setItem('authState', JSON.stringify(state));
+    }
 
-  function levenshteinDistance(a, b) {
-    const matrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));
-    for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
-    for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
-    for (let j = 1; j <= b.length; j++) {
-      for (let i = 1; i <= a.length; i++) {
-        const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
-        matrix[j][i] = Math.min(
-          matrix[j][j - 1] + 1,
-          matrix[j - 1][i] + 1,
-          matrix[j - 1][i - 1] + indicator
-        );
+    function getUserProfile(username) {
+      const state = loadState();
+      if (!state.users[username]) {
+        state.users[username] = {
+          firstName: username,
+          lastName: "",
+          age: "",
+          email: "",
+          password: "",
+          salt: "",
+          profile: {
+            name: username,
+            personality: null,
+            puzzlesCompleted: 0,
+            drillsCompleted: 0,
+            speechesGiven: 0,
+            speechesWithFivePlusStrengths: 0
+          }
+        };
+        saveState(state);
+      } else if (!state.users[username].profile) {
+        state.users[username].profile = {
+          name: username,
+          personality: null,
+          puzzlesCompleted: 0,
+          drillsCompleted: 0,
+          speechesGiven: 0,
+          speechesWithFivePlusStrengths: 0
+        };
+        saveState(state);
       }
+      return state.users[username].profile;
     }
-    return matrix[b.length][a.length];
-  }
 
-  function showLoading() {
-    document.getElementById('loading').classList.add('active');
-  }
+    function saveUserProfile(username, profile) {
+      const state = loadState();
+      state.users[username].profile = profile;
+      saveState(state);
+    }
 
-  function hideLoading() {
-    document.getElementById('loading').classList.remove('active');
-  }
+    const exercises = {
+      'tongue-twister': {
+        title: 'Tongue Twisters',
+        samples: [
+          'She sells seashells by the seashore, the shells she sells are surely seashells',
+          'Peter Piper picked a peck of pickled peppers, a peck of pickled peppers Peter Piper picked',
+          'How much wood would a woodchuck chuck if a woodchuck could chuck wood?',
+          'Fuzzy Wuzzy was a bear, Fuzzy Wuzzy had no hair',
+          'Six slippery snails slid slowly seaward'
+        ],
+        instructions: 'Speak quickly and clearly. Focus on distinct sounds. Perfect articulation is key.'
+      },
+      'sentence-repetition': {
+        title: 'Sentence Repetition',
+        samples: [
+          'The quick brown fox jumps over the lazy dog',
+          'A journey of a thousand miles begins with a single step',
+          'Practice makes perfect in every challenging endeavor',
+          'Bright sunlight dances across the shimmering lake',
+          'Curiosity drives innovation and personal growth'
+        ],
+        instructions: 'Repeat with clear enunciation and steady pace. Match the rhythm precisely.'
+      },
+      'paragraph-reading': {
+        title: 'Paragraph Reading',
+        samples: [
+          'The greatest glory in living lies not in never falling, but in rising every time we fall. Confidence comes from preparation and persistent effort.',
+          'To speak effectively, one must master breath control, articulation, and emotional resonance. Each word carries weight when delivered with intention.',
+          'Learning a new skill requires patience and dedication. Voice training enhances not just speech, but also self-assurance and presence.',
+          'Nature’s symphony unfolds daily, from chirping birds to rustling leaves. Listening closely sharpens our auditory perception.',
+          'Success in communication hinges on clarity and connection. Practice transforms potential into performance.'
+        ],
+        instructions: 'Read naturally with proper intonation and pauses. Focus on flow and expression.'
+      }
+    };
 
-  const navItems = document.querySelectorAll('.sidebar .nav-item');
-  const sections = document.querySelectorAll('.section');
+    const flashcardsData = [
+      { front: 'Articulation', back: 'The clear and precise pronunciation of words' },
+      { front: 'Cadence', back: 'The rhythmic flow of sounds in language' },
+      { front: 'Diction', back: 'The choice and use of words in speech' },
+      { front: 'Enunciation', back: 'The act of pronouncing words clearly' },
+      { front: 'Filler', back: 'Words or sounds used to fill pauses in speech' },
+      { front: 'Gesture', back: 'Body movements that accompany and enhance speech' },
+      { front: 'Hesitation', back: 'A pause or delay in speech often from uncertainty' },
+      { front: 'Inflection', back: 'Changes in pitch and tone of voice' },
+      { front: 'Jargon', back: 'Specialized terms used by a profession or group' },
+      { front: 'Kinaesthetics', back: 'The role of body movement in communication' },
+      { front: 'Lilt', back: 'A rhythmic rising and falling pattern of speech' },
+      { front: 'Modulation', back: 'Controlling the tone or volume of your voice' },
+      { front: 'Nonverbal', back: 'Communication without words through gestures or expressions' },
+      { front: 'Oratory', back: 'The art of formal public speaking' },
+      { front: 'Pitch', back: 'The highness or lowness of your voice' },
+      { front: 'Rhetoric', back: 'The art of effective or persuasive speaking' },
+      { front: 'Speech', back: 'The expression of thoughts through spoken words' },
+      { front: 'Tempo', back: 'The speed at which someone talks' },
+      { front: 'Utterance', back: 'A spoken word, statement, or vocal sound' },
+      { front: 'Vernacular', back: 'The language or dialect spoken by ordinary people' }
+    ];
 
-  function switchSection(sectionId) {
-    sections.forEach(section => section.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
-    navItems.forEach(item => item.classList.remove('active'));
-    const activeSidebarNav = Array.from(navItems).find(item => item.getAttribute('data-section') === sectionId);
-    if (activeSidebarNav) activeSidebarNav.classList.add('active');
-  }
+    const puzzleData = [
+      { id: 1, title: "Synonym Match", question: "What's a synonym for 'quick'?", options: ["Slow", "Fast", "Steady", "Calm"], correct: "Fast", difficulty: 1 },
+      { id: 2, title: "Sentence Completion", question: "The day was so ___ that everyone smiled.", options: ["dull", "bright", "cold", "long"], correct: "bright", difficulty: 2 },
+      { id: 3, title: "Pronunciation Challenge", question: "Same vowel sound as 'bike'?", options: ["bit", "bite", "bet", "but"], correct: "bite", difficulty: 3 },
+      { id: 4, title: "Antonym Finder", question: "Opposite of 'increase'?", options: ["grow", "decrease", "rise", "expand"], correct: "decrease", difficulty: 2 },
+      { id: 5, title: "Word Stress", question: "Stresses first syllable?", options: ["present (n)", "present (v)", "record (v)", "project (v)"], correct: "present (n)", difficulty: 4 },
+      { id: 6, title: "Synonym Match", question: "What's a synonym for 'happy'?", options: ["Sad", "Joyful", "Angry", "Tired"], correct: "Joyful", difficulty: 1 },
+      { id: 7, title: "Sentence Completion", question: "The puzzle was ___ to solve.", options: ["impossible", "easy", "boring", "loud"], correct: "easy", difficulty: 1 },
+      { id: 8, title: "Pronunciation Challenge", question: "Same vowel sound as 'cat'?", options: ["cake", "cot", "cute", "cite"], correct: "cot", difficulty: 2 },
+      { id: 9, title: "Antonym Finder", question: "Opposite of 'dark'?", options: ["dim", "bright", "dull", "shadow"], correct: "bright", difficulty: 2 },
+      { id: 10, title: "Word Stress", question: "Stresses second syllable?", options: ["conduct (n)", "conduct (v)", "object (n)", "subject (n)"], correct: "conduct (v)", difficulty: 3 }
+    ];
 
-  navItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const section = item.getAttribute('data-section');
-      switchSection(section);
-    });
-  });
-
-  const card = document.querySelector('.card');
-  const nextCardBtn = document.getElementById('next-card');
-  const prevCardBtn = document.getElementById('prev-card');
-  let currentCardIndex = 0;
-
-  function updateFlashcard() {
-    const cardFront = document.querySelector('.card-front');
-    const cardBack = document.querySelector('.card-back');
-    card.classList.remove('flipped');
-    setTimeout(() => {
-      cardFront.innerHTML = flashcardsData[currentCardIndex].front + '<small>Tap to flip</small>';
-      cardBack.textContent = flashcardsData[currentCardIndex].back;
-    }, 300);
-    const state = loadLearnState();
-    state.flashcardsViewed = (state.flashcardsViewed || 0) + 1; // Increment flashcards viewed
-    saveLearnState(state);
-  }
-
-  card.addEventListener('click', () => card.classList.toggle('flipped'));
-  nextCardBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    currentCardIndex = (currentCardIndex + 1) % flashcardsData.length;
-    updateFlashcard();
-  });
-  prevCardBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    currentCardIndex = (currentCardIndex - 1 + flashcardsData.length) % flashcardsData.length;
-    updateFlashcard();
-  });
-
-  const puzzlesContainer = document.getElementById('puzzles-container');
-  let currentDifficulty = 2;
-  let streak = 0;
-  let lastPuzzleId = null;
-
-  function getRandomPuzzleByDifficulty(difficulty) {
-    const filteredPuzzles = puzzleData.filter(p => p.difficulty === difficulty && p.id !== lastPuzzleId);
-    const puzzle = filteredPuzzles[Math.floor(Math.random() * filteredPuzzles.length)];
-    lastPuzzleId = puzzle.id;
-    return puzzle;
-  }
-
-  function loadNextPuzzle() {
-    puzzlesContainer.innerHTML = '';
-    const puzzle = getRandomPuzzleByDifficulty(currentDifficulty);
-    const puzzleElement = document.createElement('div');
-    puzzleElement.className = 'puzzle active';
-    puzzleElement.innerHTML = `
-      <div class="puzzle-header">
-        <h3 class="puzzle-title">${puzzle.title}</h3>
-        <span class="difficulty level-${puzzle.difficulty}">Level ${puzzle.difficulty}</span>
-      </div>
-      <div class="puzzle-content">
-        <p class="puzzle-question">${puzzle.question}</p>
-        <div class="options">
-          ${puzzle.options.map(opt => `<div class="option" data-answer="${opt === puzzle.correct ? 'correct' : 'incorrect'}">${opt}</div>`).join('')}
-        </div>
-      </div>
-      <div class="puzzle-footer">
-        <button class="btn btn-primary next-puzzle">Next <i class="fas fa-arrow-right"></i></button>
-      </div>
-    `;
-    puzzlesContainer.appendChild(puzzleElement);
-
-    const options = puzzleElement.querySelectorAll('.option');
-    let answered = false;
-
-    options.forEach(option => {
-      option.addEventListener('click', () => {
-        if (answered) return;
-        answered = true;
-        const isCorrect = option.getAttribute('data-answer') === 'correct';
-        option.classList.add(isCorrect ? 'correct' : 'incorrect');
-        
-        const state = loadLearnState();
-        state.puzzlesCompleted = (state.puzzlesCompleted || 0) + 1; // Increment puzzles completed
-        state.puzzleResults.push(isCorrect ? 1 : 0);
-        saveLearnState(state);
-
-        if (isCorrect) {
-          streak++;
-          if (streak >= 3 && currentDifficulty < 5) {
-            currentDifficulty++;
-            streak = 0;
-          }
-        } else {
-          streak--;
-          if (streak <= -2 && currentDifficulty > 1) {
-            currentDifficulty--;
-            streak = 0;
-          }
+    function levenshteinDistance(a, b) {
+      const matrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));
+      for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
+      for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
+      for (let j = 1; j <= b.length; j++) {
+        for (let i = 1; i <= a.length; i++) {
+          const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
+          matrix[j][i] = Math.min(
+            matrix[j][j - 1] + 1,
+            matrix[j - 1][i] + 1,
+            matrix[j - 1][i - 1] + indicator
+          );
         }
+      }
+      return matrix[b.length][a.length];
+    }
 
-        setTimeout(loadNextPuzzle, 1000);
+    function showLoading() {
+      document.getElementById('loading').classList.add('active');
+    }
+
+    function hideLoading() {
+      document.getElementById('loading').classList.remove('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const state = loadState();
+      const currentSession = state.session;
+
+      if (!currentSession || (state.sessionExpiry && Date.now() > state.sessionExpiry)) {
+        alert('Please log in to access the learn section.');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      const navItems = document.querySelectorAll('.sidebar .nav-item');
+      const sections = document.querySelectorAll('.section');
+
+      function switchSection(sectionId) {
+        sections.forEach(section => section.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        navItems.forEach(item => item.classList.remove('active'));
+        const activeSidebarNav = Array.from(navItems).find(item => item.getAttribute('data-section') === sectionId);
+        if (activeSidebarNav) activeSidebarNav.classList.add('active');
+      }
+
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const section = item.getAttribute('data-section');
+          switchSection(section);
+        });
       });
-    });
-  }
 
-  loadNextPuzzle();
+      const card = document.querySelector('.card');
+      const nextCardBtn = document.getElementById('next-card');
+      const prevCardBtn = document.getElementById('prev-card');
+      let currentCardIndex = 0;
 
-  const drills = document.querySelectorAll('.drill');
-  const modal = document.getElementById('exerciseModal');
-  const closeBtn = document.querySelector('.close');
-  const exerciseText = document.getElementById('exercise-text');
-  const exerciseInstructions = document.getElementById('exercise-instructions');
-  const modalTitle = document.getElementById('modal-title');
-  const recordBtn = document.getElementById('record-btn');
-  const recordStatus = document.getElementById('record-status');
-  const feedbackPanel = document.getElementById('feedback-panel');
-  const feedbackMeterFill = document.getElementById('feedback-meter-fill');
-  const feedbackStats = document.getElementById('feedback-stats');
-  const ratingStars = document.getElementById('rating-stars');
-  const recordingControls = document.getElementById('recording-controls');
-
-  let isRecording = false;
-  let startTime;
-  let expectedText;
-
-  function resetModal() {
-    recordBtn.classList.remove('recording');
-    recordStatus.textContent = 'Tap to start recording';
-    recordStatus.classList.remove('recording');
-    feedbackPanel.classList.remove('active');
-    exerciseText.style.display = 'block';
-    exerciseInstructions.style.display = 'block';
-    recordingControls.style.display = 'flex';
-    isRecording = false;
-  }
-
-  drills.forEach(drill => {
-    drill.addEventListener('click', async () => {
-      showLoading();
-      const exerciseType = drill.getAttribute('data-exercise');
-      const exercise = exercises[exerciseType];
-      modalTitle.textContent = exercise.title;
-      const randomSample = exercise.samples[Math.floor(Math.random() * exercise.samples.length)];
-      exerciseText.textContent = randomSample;
-      expectedText = randomSample.toLowerCase().replace(/[.,!?]/g, '');
-      exerciseInstructions.textContent = exercise.instructions;
-      exerciseText.classList.toggle('tongue-twister', exerciseType === 'tongue-twister');
-      resetModal();
-      modal.style.display = 'block';
-      hideLoading();
-    });
-  });
-
-  closeBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-    if (recognition) recognition.stop();
-    resetModal();
-  });
-
-  function createConfetti() {
-    for (let i = 0; i < 50; i++) {
-      const confetti = document.createElement('div');
-      confetti.className = 'confetti';
-      confetti.style.left = `${Math.random() * 100}%`;
-      confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
-      confetti.style.animationDelay = `${Math.random() * 2}s`;
-      feedbackPanel.appendChild(confetti);
-      setTimeout(() => confetti.remove(), 3000);
-    }
-  }
-
-  function analyzeSpeechResult(result, expected) {
-    const spokenText = result.toLowerCase().replace(/[.,!?]/g, '').trim();
-    const expectedTextClean = expected.toLowerCase().replace(/[.,!?]/g, '').trim();
-    const endTime = Date.now();
-    const duration = Math.max(0, (endTime - startTime) / 1000);
-    const expectedWords = expectedTextClean.split(/\s+/);
-    const spokenWords = spokenText.split(/\s+/);
-    const wordAccuracy = spokenWords.filter((word, i) => i < expectedWords.length && word === expectedWords[i]).length / expectedWords.length * 100;
-    const roundedAccuracy = Math.round(wordAccuracy / 20) * 20;
-    const starRating = roundedAccuracy / 20;
-    const wps = duration > 0 ? spokenWords.length / duration : 0;
-
-    return { 
-      starRating,
-      spokenText, 
-      wordAccuracy: wordAccuracy.toFixed(1), 
-      wps: wps.toFixed(2) 
-    };
-  }
-
-  function displayStarRating(rating) {
-    ratingStars.innerHTML = '';
-    for (let i = 0; i < 5; i++) {
-      const star = document.createElement('i');
-      star.className = `fas fa-star star ${i < rating ? 'filled' : 'empty'}`;
-      ratingStars.appendChild(star);
-    }
-  }
-
-  recordBtn.addEventListener('click', async () => {
-    if (!recognition) {
-      recordStatus.textContent = 'Speech recognition not supported';
-      return;
-    }
-    if (!isRecording) {
-      showLoading();
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        stream.getTracks().forEach(track => track.stop());
-        isRecording = true;
-        startTime = Date.now();
-        recordBtn.classList.add('recording');
-        recordStatus.textContent = 'Recording... Speak now!';
-        recordStatus.classList.add('recording');
-        recognition.start();
-      } catch (err) {
-        recordStatus.textContent = 'Microphone access denied';
-        console.error(err);
-      } finally {
-        hideLoading();
-      }
-    }
-  });
-
-  if (recognition) {
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      recognition.stop();
-      isRecording = false;
-      recordBtn.classList.remove('recording');
-      recordStatus.classList.remove('recording');
-      recordStatus.textContent = 'Processing...';
-
-      const analysis = analyzeSpeechResult(transcript, expectedText);
-      
-      exerciseText.style.display = 'none';
-      exerciseInstructions.style.display = 'none';
-      recordingControls.style.display = 'none';
-      
-      displayStarRating(analysis.starRating);
-      feedbackMeterFill.style.width = `${(analysis.starRating / 5) * 100}%`;
-      feedbackStats.innerHTML = `
-        <div class="stat-item">
-          <div class="stat-value">${analysis.wordAccuracy}%</div>
-          <div class="stat-label">Word Accuracy</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value">${analysis.wps}</div>
-          <div class="stat-label">Words/Sec</div>
-        </div>
-      `;
-      feedbackPanel.classList.add('active');
-      
-      if (analysis.starRating === 5) {
-        setTimeout(createConfetti, 500);
+      function updateFlashcard() {
+        const cardFront = document.querySelector('.card-front');
+        const cardBack = document.querySelector('.card-back');
+        card.classList.remove('flipped');
+        setTimeout(() => {
+          cardFront.innerHTML = flashcardsData[currentCardIndex].front + '<small>Tap to flip</small>';
+          cardBack.textContent = flashcardsData[currentCardIndex].back;
+        }, 300);
       }
 
-      const state = loadLearnState();
-      state.drillsCompleted = (state.drillsCompleted || 0) + 1; // Increment drills completed
-      state.drillScores.push(analysis.starRating);
-      saveLearnState(state);
-    };
+      card.addEventListener('click', () => card.classList.toggle('flipped'));
+      nextCardBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentCardIndex = (currentCardIndex + 1) % flashcardsData.length;
+        updateFlashcard();
+      });
+      prevCardBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentCardIndex = (currentCardIndex - 1 + flashcardsData.length) % flashcardsData.length;
+        updateFlashcard();
+      });
 
-    recognition.onerror = (event) => {
-      isRecording = false;
-      recordBtn.classList.remove('recording');
-      recordStatus.textContent = `Error: ${event.error}`;
-    };
+      const puzzlesContainer = document.getElementById('puzzles-container');
+      let currentDifficulty = 2;
+      let streak = 0;
+      let lastPuzzleId = null;
 
-    recognition.onend = () => {
-      if (isRecording) {
-        recordStatus.textContent = 'Recording stopped unexpectedly';
-        isRecording = false;
+      function getRandomPuzzleByDifficulty(difficulty) {
+        const filteredPuzzles = puzzleData.filter(p => p.difficulty === difficulty && p.id !== lastPuzzleId);
+        const puzzle = filteredPuzzles[Math.floor(Math.random() * filteredPuzzles.length)];
+        lastPuzzleId = puzzle.id;
+        return puzzle;
+      }
+
+      function loadNextPuzzle() {
+        puzzlesContainer.innerHTML = '';
+        const puzzle = getRandomPuzzleByDifficulty(currentDifficulty);
+        const puzzleElement = document.createElement('div');
+        puzzleElement.className = 'puzzle active';
+        puzzleElement.innerHTML = `
+          <div class="puzzle-header">
+            <h3 class="puzzle-title">${puzzle.title}</h3>
+            <span class="difficulty level-${puzzle.difficulty}">Level ${puzzle.difficulty}</span>
+          </div>
+          <div class="puzzle-content">
+            <p class="puzzle-question">${puzzle.question}</p>
+            <div class="options">
+              ${puzzle.options.map(opt => `<div class="option" data-answer="${opt === puzzle.correct ? 'correct' : 'incorrect'}">${opt}</div>`).join('')}
+            </div>
+          </div>
+          <div class="puzzle-footer">
+            <button class="btn btn-primary next-puzzle">Next <i class="fas fa-arrow-right"></i></button>
+          </div>
+        `;
+        puzzlesContainer.appendChild(puzzleElement);
+
+        const options = puzzleElement.querySelectorAll('.option');
+        let answered = false;
+
+        options.forEach(option => {
+          option.addEventListener('click', () => {
+            if (answered) return;
+            answered = true;
+            const isCorrect = option.getAttribute('data-answer') === 'correct';
+            option.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            const username = state.session;
+            let profile = getUserProfile(username);
+            profile.puzzlesCompleted += 1;
+            saveUserProfile(username, profile);
+
+            if (isCorrect) {
+              streak++;
+              if (streak >= 3 && currentDifficulty < 5) {
+                currentDifficulty++;
+                streak = 0;
+              }
+            } else {
+              streak--;
+              if (streak <= -2 && currentDifficulty > 1) {
+                currentDifficulty--;
+                streak = 0;
+              }
+            }
+
+            setTimeout(loadNextPuzzle, 1000);
+          });
+        });
+      }
+
+      loadNextPuzzle();
+
+      const drills = document.querySelectorAll('.drill');
+      const modal = document.getElementById('exerciseModal');
+      const closeBtn = document.querySelector('.close');
+      const exerciseText = document.getElementById('exercise-text');
+      const exerciseInstructions = document.getElementById('exercise-instructions');
+      const modalTitle = document.getElementById('modal-title');
+      const recordBtn = document.getElementById('record-btn');
+      const recordStatus = document.getElementById('record-status');
+      const feedbackPanel = document.getElementById('feedback-panel');
+      const feedbackMeterFill = document.getElementById('feedback-meter-fill');
+      const feedbackStats = document.getElementById('feedback-stats');
+      const ratingStars = document.getElementById('rating-stars');
+      const recordingControls = document.getElementById('recording-controls');
+
+      let isRecording = false;
+      let startTime;
+      let expectedText;
+
+      function resetModal() {
         recordBtn.classList.remove('recording');
+        recordStatus.textContent = 'Tap to start recording';
+        recordStatus.classList.remove('recording');
+        feedbackPanel.classList.remove('active');
+        exerciseText.style.display = 'block';
+        exerciseInstructions.style.display = 'block';
+        recordingControls.style.display = 'flex';
+        isRecording = false;
       }
-    };
-  }
 
-  function goToHome() {
-    window.location.href = 'index.html';
-  }
-
-  window.addEventListener('load', () => {
-    if (!SpeechRecognition) {
-      recordBtn.disabled = true;
-      recordStatus.textContent = 'Speech recognition not available';
-    }
-
-    document.body.style.touchAction = 'manipulation';
-    window.addEventListener('contextmenu', (e) => e.preventDefault());
-    
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const installBtn = document.createElement('button');
-      installBtn.className = 'btn btn-primary';
-      installBtn.textContent = 'Install App';
-      installBtn.style.position = 'fixed';
-      installBtn.style.bottom = '20px';
-      installBtn.style.right = '20px';
-      installBtn.style.zIndex = '2000';
-      document.body.appendChild(installBtn);
-      
-      installBtn.addEventListener('click', async () => {
-        installBtn.style.display = 'none';
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          console.log('User installed the app');
-        }
-        deferredPrompt = null;
+      drills.forEach(drill => {
+        drill.addEventListener('click', async () => {
+          showLoading();
+          const exerciseType = drill.getAttribute('data-exercise');
+          const exercise = exercises[exerciseType];
+          modalTitle.textContent = exercise.title;
+          const randomSample = exercise.samples[Math.floor(Math.random() * exercise.samples.length)];
+          exerciseText.textContent = randomSample;
+          expectedText = randomSample.toLowerCase().replace(/[.,!?]/g, '');
+          exerciseInstructions.textContent = exercise.instructions;
+          exerciseText.classList.toggle('tongue-twister', exerciseType === 'tongue-twister');
+          resetModal();
+          modal.style.display = 'block';
+          hideLoading();
+        });
       });
-    });
 
-    window.addEventListener('appinstalled', () => {
-      console.log('App was installed');
-      localStorage.setItem('appInstalled', 'true');
-    });
-
-    const offlineNotification = document.createElement('div');
-    offlineNotification.style.cssText = `
-      position: fixed;
-      top: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--warning);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      display: none;
-      z-index: 2000;
-    `;
-    offlineNotification.textContent = 'Offline Mode';
-    document.body.appendChild(offlineNotification);
-
-    window.addEventListener('online', () => {
-      document.body.classList.remove('offline');
-      offlineNotification.style.display = 'none';
-    });
-    
-    window.addEventListener('offline', () => {
-      document.body.classList.add('offline');
-      offlineNotification.style.display = 'block';
-      setTimeout(() => offlineNotification.style.display = 'none', 3000);
-    });
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js', { scope: '/' })
-        .then(reg => {
-          console.log('Service Worker registered', reg);
-          reg.update();
-        })
-        .catch(err => console.log('Service Worker registration failed', err));
-    }
-
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', (event) => {
-      const now = new Date().getTime();
-      if (now - lastTouchEnd <= 300) {
-        event.preventDefault();
-      }
-      lastTouchEnd = now;
-    }, false);
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden && isRecording) {
-        recognition.stop();
-        resetModal();
+      closeBtn.addEventListener('click', () => {
         modal.style.display = 'none';
+        if (recognition) recognition.stop();
+        resetModal();
+      });
+
+      function createConfetti() {
+        for (let i = 0; i < 50; i++) {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = `${Math.random() * 100}%`;
+          confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+          confetti.style.animationDelay = `${Math.random() * 2}s`;
+          feedbackPanel.appendChild(confetti);
+          setTimeout(() => confetti.remove(), 3000);
+        }
+      }
+
+      function analyzeSpeechResult(result, expected) {
+        const spokenText = result.toLowerCase().replace(/[.,!?]/g, '').trim();
+        const expectedTextClean = expected.toLowerCase().replace(/[.,!?]/g, '').trim();
+        const endTime = Date.now();
+        const duration = Math.max(0, (endTime - startTime) / 1000);
+        const expectedWords = expectedTextClean.split(/\s+/);
+        const spokenWords = spokenText.split(/\s+/);
+        const wordAccuracy = spokenWords.filter((word, i) => i < expectedWords.length && word === expectedWords[i]).length / expectedWords.length * 100;
+        const roundedAccuracy = Math.round(wordAccuracy / 20) * 20;
+        const starRating = roundedAccuracy / 20;
+        const wps = duration > 0 ? spokenWords.length / duration : 0;
+
+        return { 
+          starRating,
+          spokenText, 
+          wordAccuracy: wordAccuracy.toFixed(1), 
+          wps: wps.toFixed(2) 
+        };
+      }
+
+      function displayStarRating(rating) {
+        ratingStars.innerHTML = '';
+        for (let i = 0; i < 5; i++) {
+          const star = document.createElement('i');
+          star.className = `fas fa-star star ${i < rating ? 'filled' : 'empty'}`;
+          ratingStars.appendChild(star);
+        }
+      }
+
+      recordBtn.addEventListener('click', async () => {
+        if (!recognition) {
+          recordStatus.textContent = 'Speech recognition not supported';
+          return;
+        }
+        if (!isRecording) {
+          showLoading();
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(track => track.stop());
+            isRecording = true;
+            startTime = Date.now();
+            recordBtn.classList.add('recording');
+            recordStatus.textContent = 'Recording... Speak now!';
+            recordStatus.classList.add('recording');
+            recognition.start();
+          } catch (err) {
+            recordStatus.textContent = 'Microphone access denied';
+            console.error(err);
+          } finally {
+            hideLoading();
+          }
+        }
+      });
+
+      if (recognition) {
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          recognition.stop();
+          isRecording = false;
+          recordBtn.classList.remove('recording');
+          recordStatus.classList.remove('recording');
+          recordStatus.textContent = 'Processing...';
+
+          const analysis = analyzeSpeechResult(transcript, expectedText);
+          
+          exerciseText.style.display = 'none';
+          exerciseInstructions.style.display = 'none';
+          recordingControls.style.display = 'none';
+          
+          displayStarRating(analysis.starRating);
+          feedbackMeterFill.style.width = `${(analysis.starRating / 5) * 100}%`;
+          feedbackStats.innerHTML = `
+            <div class="stat-item">
+              <div class="stat-value">${analysis.wordAccuracy}%</div>
+              <div class="stat-label">Word Accuracy</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">${analysis.wps}</div>
+              <div class="stat-label">Words/Sec</div>
+            </div>
+          `;
+          feedbackPanel.classList.add('active');
+          
+          if (analysis.starRating === 5) {
+            setTimeout(createConfetti, 500);
+          }
+
+          const username = state.session;
+          let profile = getUserProfile(username);
+          profile.drillsCompleted += 1;
+          saveUserProfile(username, profile);
+        };
+
+        recognition.onerror = (event) => {
+          isRecording = false;
+          recordBtn.classList.remove('recording');
+          recordStatus.textContent = `Error: ${event.error}`;
+        };
+
+        recognition.onend = () => {
+          if (isRecording) {
+            recordStatus.textContent = 'Recording stopped unexpectedly';
+            isRecording = false;
+            recordBtn.classList.remove('recording');
+          }
+        };
       }
     });
 
-    const lastSection = localStorage.getItem('lastSection') || 'drills';
-    switchSection(lastSection);
-    navItems.forEach(item => {
-      item.addEventListener('click', () => {
-        localStorage.setItem('lastSection', item.getAttribute('data-section'));
-      });
-    });
-
-    window.history.pushState(null, null, window.location.href);
-    window.addEventListener('popstate', () => {
-      window.history.pushState(null, null, window.location.href);
-    });
-
-    const preloadLink = document.createElement('link');
-    preloadLink.rel = 'preload';
-    preloadLink.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap';
-    preloadLink.as = 'style';
-    document.head.appendChild(preloadLink);
-
-    // Initialize flashcardsViewed on first load
-    const state = loadLearnState();
-    if (state.flashcardsViewed === 0) {
-      state.flashcardsViewed = 1; // Count the initial card
-      saveLearnState(state);
+    function goToHome() {
+      window.location.href = 'index.html';
     }
-  });
-</script>
+
+    window.addEventListener('load', () => {
+      if (!SpeechRecognition) {
+        document.getElementById('record-btn').disabled = true;
+        document.getElementById('record-status').textContent = 'Speech recognition not available';
+      }
+
+      document.body.style.touchAction = 'manipulation';
+      window.addEventListener('contextmenu', (e) => e.preventDefault());
+      
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const installBtn = document.createElement('button');
+        installBtn.className = 'btn btn-primary';
+        installBtn.textContent = 'Install App';
+        installBtn.style.position = 'fixed';
+        installBtn.style.bottom = '20px';
+        installBtn.style.right = '20px';
+        installBtn.style.zIndex = '2000';
+        document.body.appendChild(installBtn);
+        
+        installBtn.addEventListener('click', async () => {
+          installBtn.style.display = 'none';
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            console.log('User installed the app');
+          }
+          deferredPrompt = null;
+        });
+      });
+
+      window.addEventListener('appinstalled', () => {
+        console.log('App was installed');
+        localStorage.setItem('appInstalled', 'true');
+      });
+
+      const offlineNotification = document.createElement('div');
+      offlineNotification.style.cssText = `
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--warning);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: none;
+        z-index: 2000;
+      `;
+      offlineNotification.textContent = 'Offline Mode';
+      document.body.appendChild(offlineNotification);
+
+      window.addEventListener('online', () => {
+        document.body.classList.remove('offline');
+        offlineNotification.style.display = 'none';
+      });
+      
+      window.addEventListener('offline', () => {
+        document.body.classList.add('offline');
+        offlineNotification.style.display = 'block';
+        setTimeout(() => offlineNotification.style.display = 'none', 3000);
+      });
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          .then(reg => {
+            console.log('Service Worker registered', reg);
+            reg.update();
+          })
+          .catch(err => console.log('Service Worker registration failed', err));
+      }
+
+      let lastTouchEnd = 0;
+      document.addEventListener('touchend', (event) => {
+        const now = new Date().getTime();
+        if (now - lastTouchEnd <= 300) {
+          event.preventDefault();
+        }
+        lastTouchEnd = now;
+      }, false);
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && isRecording) {
+          recognition.stop();
+          resetModal();
+          modal.style.display = 'none';
+        }
+      });
+
+      const lastSection = localStorage.getItem('lastSection') || 'drills';
+      switchSection(lastSection);
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          localStorage.setItem('lastSection', item.getAttribute('data-section'));
+        });
+      });
+
+      window.history.pushState(null, null, window.location.href);
+      window.addEventListener('popstate', () => {
+        window.history.pushState(null, null, window.location.href);
+      });
+
+      const preloadLink = document.createElement('link');
+      preloadLink.rel = 'preload';
+      preloadLink.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap';
+      preloadLink.as = 'style';
+      document.head.appendChild(preloadLink);
+    });
+  </script>
 </body>
 </html>
