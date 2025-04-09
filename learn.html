@@ -1185,16 +1185,26 @@ ivano      justify-content: center;
     ];
 
     const puzzleData = [
-      { id: 1, title: "Synonym Match", question: "What's a synonym for 'quick'?", options: ["Slow", "Fast", "Steady", "Calm"], correct: "Fast", difficulty: 1 },
-      { id: 2, title: "Sentence Completion", question: "The day was so ___ that everyone smiled.", options: ["dull", "bright", "cold", "long"], correct: "bright", difficulty: 2 },
-      { id: 3, title: "Pronunciation Challenge", question: "Same vowel sound as 'bike'?", options: ["bit", "bite", "bet", "but"], correct: "bite", difficulty: 3 },
-      { id: 4, title: "Antonym Finder", question: "Opposite of 'increase'?", options: ["grow", "decrease", "rise", "expand"], correct: "decrease", difficulty: 2 },
-      { id: 5, title: "Word Stress", question: "Stresses first syllable?", options: ["present (n)", "present (v)", "record (v)", "project (v)"], correct: "present (n)", difficulty: 4 },
-      { id: 6, title: "Synonym Match", question: "What's a synonym for 'happy'?", options: ["Sad", "Joyful", "Angry", "Tired"], correct: "Joyful", difficulty: 1 },
-      { id: 7, title: "Sentence Completion", question: "The puzzle was ___ to solve.", options: ["impossible", "easy", "boring", "loud"], correct: "easy", difficulty: 1 },
-      { id: 8, title: "Pronunciation Challenge", question: "Same vowel sound as 'cat'?", options: ["cake", "cot", "cute", "cite"], correct: "cot", difficulty: 2 },
-      { id: 9, title: "Antonym Finder", question: "Opposite of 'dark'?", options: ["dim", "bright", "dull", "shadow"], correct: "bright", difficulty: 2 },
-      { id: 10, title: "Word Stress", question: "Stresses second syllable?", options: ["conduct (n)", "conduct (v)", "object (n)", "subject (n)"], correct: "conduct (v)", difficulty: 3 }
+      { id: 1, title: "Synonym Match", question: "What's a synonym for 'big'?", options: ["Small", "Large", "Tiny", "Short"], correct: "Large", difficulty: 1 },
+      { id: 2, title: "Sentence Completion", question: "The party was so ___ everyone stayed late.", options: ["boring", "fun", "quiet", "tiring"], correct: "fun", difficulty: 1 },
+      { id: 3, title: "Pronunciation Challenge", question: "Same vowel sound as 'pen'?", options: ["pin", "pine", "pane", "pun"], correct: "pin", difficulty: 2 },
+      { id: 4, title: "Antonym Finder", question: "Opposite of 'hot'?", options: ["Warm", "Cold", "Burning", "Mild"], correct: "Cold", difficulty: 1 },
+      { id: 5, title: "Word Stress", question: "Stresses first syllable?", options: ["record (n)", "record (v)", "permit (v)", "produce (v)"], correct: "record (n)", difficulty: 3 },
+      { id: 6, title: "Synonym Match", question: "What's a synonym for 'sad'?", options: ["Happy", "Gloomy", "Excited", "Calm"], correct: "Gloomy", difficulty: 2 },
+      { id: 7, title: "Sentence Completion", question: "The book was too ___ to put down.", options: ["dull", "exciting", "long", "heavy"], correct: "exciting", difficulty: 2 },
+      { id: 8, title: "Pronunciation Challenge", question: "Same vowel sound as 'book'?", options: ["boot", "buck", "bake", "bike"], correct: "buck", difficulty: 3 },
+      { id: 9, title: "Antonym Finder", question: "Opposite of 'fast'?", options: ["Quick", "Slow", "Rapid", "Swift"], correct: "Slow", difficulty: 1 },
+      { id: 10, title: "Word Stress", question: "Stresses second syllable?", options: ["object (n)", "object (v)", "conduct (n)", "subject (n)"], correct: "object (v)", difficulty: 4 },
+      { id: 11, title: "Synonym Match", question: "What's a synonym for 'smart'?", options: ["Dull", "Clever", "Slow", "Lazy"], correct: "Clever", difficulty: 2 },
+      { id: 12, title: "Sentence Completion", question: "The forest was ___ at night.", options: ["noisy", "silent", "bright", "crowded"], correct: "silent", difficulty: 2 },
+      { id: 13, title: "Pronunciation Challenge", question: "Same vowel sound as 'cake'?", options: ["cat", "cot", "cute", "cane"], correct: "cane", difficulty: 3 },
+      { id: 14, title: "Antonym Finder", question: "Opposite of 'high'?", options: ["Tall", "Low", "Steep", "Deep"], correct: "Low", difficulty: 2 },
+      { id: 15, title: "Word Stress", question: "Stresses first syllable?", options: ["present (v)", "project (n)", "progress (v)", "protest (v)"], correct: "project (n)", difficulty: 4 },
+      { id: 16, title: "Synonym Match", question: "What's a synonym for 'difficult'?", options: ["Easy", "Hard", "Simple", "Clear"], correct: "Hard", difficulty: 3 },
+      { id: 17, title: "Sentence Completion", question: "Her explanation was so ___ that I understood immediately.", options: ["confusing", "clear", "complex", "vague"], correct: "clear", difficulty: 3 },
+      { id: 18, title: "Pronunciation Challenge", question: "Same vowel sound as 'bird'?", options: ["bed", "bud", "beard", "burn"], correct: "burn", difficulty: 4 },
+      { id: 19, title: "Antonym Finder", question: "Opposite of 'simple'?", options: ["Easy", "Complex", "Plain", "Clear"], correct: "Complex", difficulty: 3 },
+      { id: 20, title: "Word Stress", question: "Stresses second syllable?", options: ["import (n)", "import (v)", "export (n)", "contract (n)"], correct: "import (v)", difficulty: 5 }
     ];
 
     function levenshteinDistance(a, b) {
