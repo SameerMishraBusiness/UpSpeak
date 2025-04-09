@@ -378,27 +378,66 @@
 
     <script>
         // State Management
-        function loadProfileState() {
-            const state = localStorage.getItem('profileState');
-            return state ? JSON.parse(state) : { name: null, personality: null };
+        function loadState() {
+            const state = localStorage.getItem('authState');
+            return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
         }
 
-        function saveProfileState(state) {
-            localStorage.setItem('profileState', JSON.stringify(state));
+        function saveState(state) {
+            localStorage.setItem('authState', JSON.stringify(state));
         }
 
-        function loadEvaluationState() {
-            const state = localStorage.getItem('evaluationState');
-            return state ? JSON.parse(state) : { speechesGiven: 0, speechesWithFivePlusStrengths: 0 };
+        function getUserProfile(username) {
+            const state = loadState();
+            if (!state.users[username]) {
+                state.users[username] = {
+                    firstName: username,
+                    lastName: "",
+                    age: "",
+                    email: "",
+                    password: "",
+                    salt: "",
+                    profile: {
+                        name: username,
+                        personality: null,
+                        puzzlesCompleted: 0,
+                        drillsCompleted: 0,
+                        speechesGiven: 0,
+                        speechesWithFivePlusStrengths: 0
+                    }
+                };
+                saveState(state);
+            } else if (!state.users[username].profile) {
+                state.users[username].profile = {
+                    name: username,
+                    personality: null,
+                    puzzlesCompleted: 0,
+                    drillsCompleted: 0,
+                    speechesGiven: 0,
+                    speechesWithFivePlusStrengths: 0
+                };
+                saveState(state);
+            }
+            return state.users[username].profile;
         }
 
-        function loadLearnState() {
-            const state = localStorage.getItem('learnState');
-            return state ? JSON.parse(state) : { puzzlesCompleted: 0, drillsCompleted: 0 };
+        function saveUserProfile(username, profile) {
+            const state = loadState();
+            state.users[username].profile = profile;
+            saveState(state);
         }
 
-        // Tab Navigation
+        // Tab Navigation and Initialization
         document.addEventListener('DOMContentLoaded', function () {
+            const state = loadState();
+            const currentSession = state.session;
+
+            if (!currentSession || (state.sessionExpiry && Date.now() > state.sessionExpiry)) {
+                alert('Please log in to access your profile.');
+                window.location.href = 'index.html';
+                return;
+            }
+
             const tabs = document.querySelectorAll('.profile-tab');
             const tabContents = document.querySelectorAll('.tab-content');
             const tabSlider = document.querySelector('.tab-slider');
@@ -436,28 +475,25 @@
             });
 
             // Initialize Profile
-            initializeProfile();
+            initializeProfile(currentSession);
         });
 
-        function initializeProfile() {
-            const profileState = loadProfileState();
-            if (!profileState.name) {
-                const name = prompt("Please enter your name:");
-                profileState.name = name || "User";
-                saveProfileState(profileState);
+        function initializeProfile(username) {
+            let profile = getUserProfile(username);
+            if (!profile.name || profile.name === username) {
+                const name = prompt("Please enter your name:") || username;
+                profile.name = name;
+                saveUserProfile(username, profile);
             }
-            document.getElementById('profileName').textContent = profileState.name;
+            document.getElementById('profileName').textContent = profile.name;
 
-            const evaluationState = loadEvaluationState();
-            const learnState = loadLearnState();
+            document.getElementById('puzzlesCompleted').textContent = profile.puzzlesCompleted;
+            document.getElementById('drillsCompleted').textContent = profile.drillsCompleted;
+            document.getElementById('speechesGiven').textContent = profile.speechesGiven;
 
-            document.getElementById('puzzlesCompleted').textContent = learnState.puzzlesCompleted;
-            document.getElementById('drillsCompleted').textContent = learnState.drillsCompleted;
-            document.getElementById('speechesGiven').textContent = evaluationState.speechesGiven;
-
-            updatePersonality(profileState.personality);
-            updateBadges(learnState.puzzlesCompleted, evaluationState.speechesGiven, learnState.drillsCompleted);
-            updateQuests(learnState.puzzlesCompleted + learnState.drillsCompleted, evaluationState.speechesWithFivePlusStrengths);
+            updatePersonality(profile.personality);
+            updateBadges(profile.puzzlesCompleted, profile.speechesGiven, profile.drillsCompleted);
+            updateQuests(profile.puzzlesCompleted + profile.drillsCompleted, profile.speechesWithFivePlusStrengths);
         }
 
         function updatePersonality(personalityKey) {
@@ -501,29 +537,24 @@
         }
 
         function updateBadges(puzzlesCompleted, speechesGiven, drillsCompleted) {
-            // Puzzle Decipher
             const puzzleProgress = Math.min((puzzlesCompleted / 20) * 100, 100);
             document.getElementById('puzzleDecipherProgress').style.width = `${puzzleProgress}%`;
             document.getElementById('puzzleDecipherStatus').textContent = `${puzzlesCompleted}/20 Puzzles Completed`;
 
-            // Savvy Speaker
             const speechProgress = Math.min((speechesGiven / 10) * 100, 100);
             document.getElementById('savvySpeakerProgress').style.width = `${speechProgress}%`;
             document.getElementById('savvySpeakerStatus').textContent = `${speechesGiven}/10 Speeches Given`;
 
-            // Driller
             const drillProgress = Math.min((drillsCompleted / 25) * 100, 100);
             document.getElementById('drillerProgress').style.width = `${drillProgress}%`;
             document.getElementById('drillerStatus').textContent = `${drillsCompleted}/25 Drills Completed`;
         }
 
         function updateQuests(learningExercisesCompleted, speechesWithFivePlusStrengths) {
-            // Avid Learner
             const learnerProgress = Math.min((learningExercisesCompleted / 50) * 100, 100);
             document.getElementById('avidLearnerProgress').style.width = `${learnerProgress}%`;
             document.getElementById('avidLearnerCounter').textContent = `${learningExercisesCompleted}/50 Exercises Completed`;
 
-            // Quality Speeches
             const qualityProgress = Math.min((speechesWithFivePlusStrengths / 25) * 100, 100);
             document.getElementById('qualitySpeechesProgress').style.width = `${qualityProgress}%`;
             document.getElementById('qualitySpeechesCounter').textContent = `${speechesWithFivePlusStrengths}/25 Quality Speeches Given`;
@@ -705,9 +736,11 @@
                 personalityResult = tiedPersonalities[randomIndex];
             }
 
-            const profileState = loadProfileState();
-            profileState.personality = personalityResult;
-            saveProfileState(profileState);
+            const state = loadState();
+            const username = state.session;
+            let profile = getUserProfile(username);
+            profile.personality = personalityResult;
+            saveUserProfile(username, profile);
             updatePersonality(personalityResult);
 
             document.getElementById('quizModal').style.display = 'none';
