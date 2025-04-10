@@ -1,732 +1,1819 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UpSpeak - Empowering Kids Through Effective Communication</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background: linear-gradient(135deg, #e6f2ff, #ffe6cc);
-            color: #333;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UpSpeak - Building Communication Confidence in Children</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --secondary: #ff7d00;
+      --secondary-light: #ffa348;
+      --accent: #7209b7;
+      --dark: #2b2d42;
+      --gray: #8d99ae;
+      --light-gray: #edf2f4;
+      --white: #ffffff;
+      --success: #06d6a0;
+      --error: #ef476f;
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --border-radius-sm: 4px;
+      --border-radius-md: 8px;
+      --border-radius-lg: 16px;
+      --transition: all 0.3s ease;
+    }
 
-        a { text-decoration: none; color: #007bff; }
-        a:hover { text-decoration: underline; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        header {
-            background-color: #fff;
-            padding: 20px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--dark);
+      background-color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    a {
+      text-decoration: none;
+      color: var(--primary);
+      transition: var(--transition);
+    }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #333;
-            display: flex;
-            align-items: center;
-        }
+    a:hover {
+      color: var(--primary-light);
+    }
 
-        .logo .microphone-icon { width: 70px; height: 70px; margin-right: 10px; }
-        .logo .upspeak-up { color: orange; }
-        .logo .upspeak-speak { color: blue; }
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
 
-        .nav-links {
-            list-style: none;
-            display: flex;
-            align-items: center;
-        }
+    header {
+      background-color: var(--white);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
 
-        .nav-links li { margin-left: 20px; }
-        .nav-links li a { color: #555; font-weight: 500; transition: color 0.3s ease; }
-        .nav-links li a:hover { color: #007bff; text-decoration: none; }
+    header.scrolled {
+      box-shadow: var(--shadow-md);
+    }
 
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            padding: 50px 20px;
-            text-align: center;
-        }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
 
-        .hero-content { max-width: 800px; }
-        .hero-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; }
-        .hero-subtitle { font-size: 1.2rem; color: #555; margin-bottom: 30px; }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 2.25rem;
+      font-weight: 700;
+    }
 
-        .changing-word {
-            font-size: 2.5rem;
-            font-weight: 700;
-            display: inline-block;
-            transition: opacity 0.5s ease, color 0.5s ease;
-        }
+    .logo svg {
+      width: 60px;
+      height: 60px;
+    }
 
-        .btn {
-            padding: 12px 30px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-block;
-            margin: 0 10px;
-        }
+    .logo .upspeak-up {
+      color: var(--secondary);
+      margin-right: -0.2rem;
+    }
 
-        .btn-primary { background-color: #007bff; }
-        .btn-secondary { background-color: #6c757d; }
-        .btn-primary:hover { background-color: #0056b3; }
-        .btn-secondary:hover { background-color: #545b62; }
-        .btn:disabled { opacity: 0.7; cursor: not-allowed; }
+    .logo .upspeak-speak {
+      color: var(--primary);
+    }
 
-        .mission {
-            background-color: #f8f9fa;
-            padding: 50px 20px;
-            text-align: center;
-        }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
 
-        .mission-title { font-size: 2rem; font-weight: 600; margin-bottom: 20px; }
-        .mission-content { max-width: 800px; margin: 0 auto; color: #555; }
+    .nav-links a {
+      color: var(--dark);
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
 
-        .testimonials {
-            padding: 50px 20px;
-            text-align: center;
-        }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary);
+      bottom: -5px;
+      left: 0;
+      transition: var(--transition);
+    }
 
-        .testimonial-title { font-size: 2rem; font-weight: 600; margin-bottom: 30px; }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
 
-        .testimonial-container {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-            height: 100px;
-        }
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+    }
 
-        .testimonial {
-            position: absolute;
-            width: 100%;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            font-size: 1.2rem;
-            color: #555;
-        }
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: var(--dark);
+    }
 
-        .testimonial.active { opacity: 1; }
+    .hero {
+      background: linear-gradient(135deg, #c7d2fe, #dbeafe);
+      padding: 6rem 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
 
-        .features {
-            background-color: #fff;
-            padding: 50px 20px;
-        }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 45%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+      opacity: 0.9;
+      z-index: 1;
+    }
 
-        .features-title { font-size: 2rem; font-weight: 600; text-align: center; margin-bottom: 40px; }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 2rem;
+      width: 100%;
+    }
 
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    .hero-text {
+      max-width: 600px;
+      flex: 1;
+    }
 
-        .feature-item {
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            text-align: center;
-        }
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      color: var(--dark);
+    }
 
-        .feature-item i { font-size: 3rem; margin-bottom: 15px; color: #007bff; }
-        .feature-item h3 { font-size: 1.5rem; margin-bottom: 10px; }
-        .feature-item p { color: #555; }
+    .hero-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 2.5rem;
+      color: var(--dark);
+      opacity: 0.9;
+    }
 
-        .contact {
-            background-color: #f5f5dc; /* Beige color */
-            padding: 50px 20px;
-            text-align: center;
-            margin: 50px auto;
-            max-width: 1000px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    .changing-word-container {
+      display: inline-block;
+      position: relative;
+    }
 
-        .contact .title {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 40px;
-            color: #333;
-        }
+    .changing-word {
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    }
 
-        .contact p {
-            margin-bottom: 20px;
-            color: #555;
-        }
+    .changing-word::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      border-radius: 5px;
+      transition: background-color 0.5s ease-in-out;
+    }
 
-        .contact a {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: 500;
-        }
+    .changing-word[data-word="speak"]::after {
+      background-color: var(--secondary);
+    }
 
-        footer {
-            background-color: #343a40;
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-        }
+    .changing-word[data-word="present"]::after {
+      background-color: var(--primary);
+    }
 
-        .popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
+    .changing-word[data-word="connect"]::after {
+      background-color: var(--accent);
+    }
 
-        .popup-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            width: 400px;
-            position: relative;
-            transition: transform 0.3s ease;
-        }
+    .changing-word[data-word="express"]::after {
+      background-color: var(--success);
+    }
 
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #555;
-        }
+    .hero-bottom {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-top: -1rem;
+    }
 
-        input {
-            margin-bottom: 1rem;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 100%;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+    }
 
-        .name-fields { display: flex; justify-content: space-between; }
-        .name-fields input { width: 48%; }
+    .youtube-container {
+      max-width: 800px;
+      flex: 1;
+    }
 
-        .popup-content .btn {
-            padding: 0.75rem 2rem;
-            font-size: 1rem;
-            display: block;
-            margin: 1rem auto;
-            width: fit-content;
-        }
+    .youtube-container iframe {
+      width: 100%;
+      height: 300px;
+      padding: 10px;
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-md);
+    }
 
-        .contact-title { font-size: 2rem; font-weight: 600; margin-bottom: 40px; }
-        .contact-details { max-width: 800px; margin: 0 auto; }
+    .stats {
+      background-color: var(--white);
+      padding: 4rem 0;
+      position: relative;
+      z-index: 3;
+      margin-top: -3rem;
+      border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    }
 
-        .error-message, .success-message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            text-align: center;
-        }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
 
-        .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
+    .stat-item {
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+    }
 
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
+    .stat-item:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
 
-        .loading {
-            text-align: center;
-            margin: 1rem 0;
-        }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
 
-        .loading::after {
-            content: "";
-            display: inline-block;
-            width: 1.5rem;
-            height: 1.5rem;
-            border: 3px solid rgba(0, 123, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #007bff;
-            animation: spin 1s ease-in-out infinite;
-        }
+    .stat-label {
+      font-size: 1rem;
+      color: var(--gray);
+    }
 
-        .form-step {
-            transition: opacity 0.3s ease;
-            opacity: 1;
-        }
+    .mission {
+      padding: 6rem 0;
+      background-color: var(--white);
+      position: relative;
+    }
 
-        .form-step.hidden {
-            display: none;
-            opacity: 0;
-        }
+    .mission::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(var(--light-gray) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.5;
+      z-index: 0;
+    }
 
-        .password-requirements {
-            font-size: 0.8rem;
-            color: #6c757d;
-            margin-bottom: 1rem;
-        }
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+      z-index: 1;
+    }
 
-        .password-requirements ul {
-            text-align: left;
-            margin-top: 5px;
-        }
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      width: 70px;
+      height: 4px;
+      background-color: var(--secondary);
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
 
-        @media (max-width: 768px) {
-            .navbar { flex-direction: column; align-items: flex-start; }
-            .nav-links { margin-top: 10px; flex-direction: column; }
-            .nav-links li { margin-left: 0; margin-bottom: 10px; }
-            .hero { min-height: auto; padding: 30px 20px; }
-            .hero-title { font-size: 2rem; }
-            .feature-grid { grid-template-columns: 1fr; }
-            .popup-content { width: 90%; }
-        }
-    </style>
+    .section-subtitle {
+      color: var(--gray);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .mission-content {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: var(--dark);
+      position: relative;
+      z-index: 1;
+    }
+
+    .features {
+      padding: 6rem 0;
+      background-color: var(--light-gray);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      z-index: 2;
+    }
+
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      background-color: rgba(67, 97, 238, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin: 2rem auto 1.5rem;
+    }
+
+    .feature-icon i {
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .feature-content {
+      padding: 0 2rem 2rem;
+      text-align: center;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .feature-description {
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    .testimonials {
+      padding: 6rem 0;
+      background-color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonials::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f0f0f0' fill-opacity='0.8' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+
+    .testimonial-slider {
+      position: relative;
+      height: 250px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .testimonial-item {
+      position: absolute;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      visibility: hidden;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .testimonial-item.active {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+
+    .testimonial-content {
+      background-color: var(--white);
+      padding: 2.5rem;
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .testimonial-content::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid var(--white);
+    }
+
+    .testimonial-quote {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--dark);
+      font-style: italic;
+    }
+
+    .testimonial-quote::before {
+      content: '\201C';
+      font-size: 4rem;
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      color: rgba(67, 97, 238, 0.1);
+      font-family: sans-serif;
+    }
+
+    .testimonial-author {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .testimonial-role {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    .testimonial-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 2rem;
+    }
+
+    .indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--light-gray);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .indicator.active {
+      background-color: var(--primary);
+      transform: scale(1.3);
+    }
+
+    .faq {
+      padding: 6rem 0;
+      background-color: var(--light-gray);
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .faq-item {
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-md);
+      transition: transform 0.6s ease;
+      position: relative;
+      transform-style: preserve-3d;
+      height: 150px;
+    }
+
+    .faq-item:hover {
+      transform: rotateY(180deg);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .faq-question {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 1rem;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backface-visibility: hidden;
+    }
+
+    .faq-answer {
+      color: var(--gray);
+      line-height: 1.7;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotateY(180deg);
+      backface-visibility: hidden;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .contact {
+      padding: 6rem 0;
+      background-color: var(--white);
+      position: relative;
+    }
+
+    .contact-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .contact-header {
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      padding: 2rem;
+      color: var(--white);
+      text-align: center;
+    }
+
+    .contact-header h3 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-body {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .contact-body p {
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-body i {
+      margin-right: 0.5rem;
+      color: var(--primary);
+    }
+
+    .newsletter {
+      padding: 6rem 0;
+      background-color: var(--light-gray);
+      position: relative;
+    }
+
+    .newsletter-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-md);
+      padding: 3rem;
+      box-shadow: var(--shadow-md);
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .newsletter-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+    }
+
+    .newsletter-form {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .newsletter-input {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius-sm);
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 400px;
+      transition: var(--transition);
+    }
+
+    .newsletter-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .newsletter-confirmation {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 1.2rem;
+      color: var(--success);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .newsletter-confirmation.show {
+      opacity: 1;
+    }
+
+    .newsletter-confirmation i {
+      font-size: 1.5rem;
+    }
+
+    footer {
+      background-color: var(--dark);
+      color: var(--light-gray);
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-column h4 {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .footer-column h4::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 1.5px;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links a {
+      color: var(--light-gray);
+      opacity: 0.7;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      opacity: 1;
+      padding-left: 5px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 2.5rem;
+      border-radius: var(--border-radius-sm);
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-light);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary);
+      color: var(--white);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--secondary-light);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn.btn-outline {
+      background-color: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary);
+      color: var(--white);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+
+    .popup-content {
+      background-color: var(--white);
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-lg);
+      width: 400px;
+      position: relative;
+      overflow: hidden;
+      transform: scale(0.9);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .popup.show .popup-content {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .popup-header {
+      background-color: var(--primary);
+      color: var(--white);
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      color: var(--white);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .close-btn:hover {
+      transform: rotate(90deg);
+    }
+
+    .popup-body {
+      padding: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 0.75rem; /* Reduced from 1.5rem */
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.25rem; /* Reduced from 0.5rem */
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.5rem 1rem; /* Reduced vertical padding from 0.75rem */
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius-sm);
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .name-fields {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .password-requirements {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 0.5rem;
+    }
+
+    .password-requirements ul {
+      list-style: none;
+      margin-top: 0.5rem;
+      padding-left: 0;
+    }
+
+    .password-requirements li {
+      margin-bottom: 0.25rem;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .password-requirements li::before {
+      content: '□';
+      position: absolute;
+      left: 0;
+      color: var(--gray);
+    }
+
+    .password-requirements li.checked::before {
+      content: '✔';
+      color: var(--success);
+    }
+
+    .form-footer {
+      text-align: center;
+      margin-top: 1rem; /* Reduced from 1.5rem */
+    }
+
+    .error-message,
+    .success-message {
+      padding: 0.75rem;
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .error-message {
+      background-color: rgba(239, 71, 111, 0.1);
+      color: var(--error);
+      border: 1px solid rgba(239, 71, 111, 0.3);
+    }
+
+    .success-message {
+      background-color: rgba(6, 214, 160, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(6, 214, 160, 0.3);
+    }
+
+    @media (max-width: 992px) {
+      .hero::before {
+        width: 40%;
+        clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%);
+      }
+
+      .hero-title {
+        font-size: 3rem;
+      }
+
+      .youtube-container {
+        max-width: 800px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        background-color: var(--white);
+        box-shadow: var(--shadow-md);
+        flex-direction: column;
+        padding: 1rem 0;
+        transform: translateY(-10px);
+        opacity: 0;
+        transition: var(--transition);
+      }
+
+      .nav-links.active {
+        display: flex;
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .nav-links li {
+        width: 100%;
+        text-align: center;
+        margin: 0.5rem 0;
+      }
+
+      .nav-links a::after {
+        display: none;
+      }
+
+      .hero::before {
+        display: none;
+      }
+
+      .hero {
+        flex-direction: column;
+        padding: 4rem 0;
+      }
+
+      .hero-content {
+        max-width: 100%;
+        text-align: center;
+        flex-direction: column;
+      }
+
+      .hero-text {
+        max-width: 100%;
+      }
+
+      .cta-buttons {
+        justify-content: center;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .feature-grid,
+      .stats-grid,
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-bottom {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .youtube-container {
+        max-width: 100%;
+        margin-top: 2rem;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+
+      .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+      }
+
+      .name-fields {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .popup-content {
+        width: 90%;
+      }
+
+      .youtube-container iframe {
+        height: 400px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="logo">
-                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <defs>
-                        <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
-                        </linearGradient> 
-                    </defs>
-                    <path fill="url(#microphone-gradient)" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
-                </svg>
-                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><button class="btn btn-primary" onclick="showLoginPopup()">Log In</button></li>
-                <li><button class="btn btn-secondary" onclick="showSignupPopup()">Sign Up</button></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">The most effective platform for kids to <span class="changing-word">speak</span></h1>
-            <p class="hero-subtitle">Empowering young voices through fun and engaging communication practice.</p>
+  <header id="header">
+    <div class="container">
+      <nav class="navbar">
+        <div class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#4361ee;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#ff7d00;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <path fill="url(#microphone-gradient)" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+          </svg>
+          <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
         </div>
-    </section>
 
-    <section class="mission">
-        <h2 class="mission-title">Our Mission</h2>
-        <p class="mission-content">To provide a safe, engaging, and effective platform for children to develop their communication skills, build confidence, and unlock their full potential.</p>
-    </section>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="fas fa-bars"></i>
+        </button>
 
-    <section class="testimonials" id="testimonials">
-        <h2 class="testimonial-title">What Parents & Kids Are Saying</h2>
-        <div class="testimonial-container">
-            <div class="testimonial active">"UpSpeak has been a game-changer for my child! Their confidence has soared." - Happy Parent</div>
-            <div class="testimonial">"I love how fun and interactive UpSpeak is!" - Excited Kid</div>
-            <div class="testimonial">"UpSpeak is helping my child become a confident communicator." - Another Parent</div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#mission">Our Mission</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><button class="btn btn-primary" onclick="showLoginPopup()">Log In</button></li>
+          <li><button class="btn btn-secondary" onclick="showSignupPopup()">Sign Up</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1 class="hero-title">Empower your child to <span class="changing-word-container"><span class="changing-word" data-word="speak"><b>speak</b></span></span> with confidence</h1>
+          <p class="hero-subtitle">UpSpeak helps children develop essential communication skills through fun, interactive exercises in a safe and supportive environment.</p>
         </div>
-    </section>
-
-    <section class="features" id="features">
-        <h2 class="features-title">Unlock the Power of Communication with UpSpeak</h2>
-        <div class="feature-grid">
-            <div class="feature-item">
-                <i class="fas fa-microphone"></i>
-                <h3>Practice</h3>
-                <p>Engage in interactive speaking exercises and activities designed to improve clarity and fluency.</p>
-            </div>
-            <div class="feature-item">
-                <i class="fas fa-book-open"></i>
-                <h3>Learn</h3>
-                <p>Access a library of resources and lessons on effective communication techniques and strategies.</p>
-            </div>
-            <div class="feature-item">
-                <i class="fas fa-user-circle"></i>
-                <h3>Profile</h3>
-                <p>Track progress, personalize learning paths, and showcase achievements in a dedicated profile.</p>
-            </div>
-            <div class="feature-item">
-                <i class="fas fa-video"></i>
-                <h3>Watch</h3>
-                <p>Learn from videos that are designed to help kids improve on their speaking skills</p>
-            </div>
+        <div class="youtube-container">
+          <iframe src="https://www.youtube.com/embed/AAzflSzziHA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section class="contact" id="contact">
-        <h2 class="contact-title">Contact Us</h2>
-        <div class="contact-details">
-            <p><a href="mailto:contactupspeak@gmail.com">contactupspeak@gmail.com</a></p>
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">300+</div>
+          <div class="stat-label">Happy Students</div>
         </div>
-    </section>
+        <div class="stat-item">
+          <div class="stat-number">95%</div>
+          <div class="stat-label">Confidence Improvement</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Interactive Activities</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">4.9</div>
+          <div class="stat-label">Parent Satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <footer>
+  <section class="mission" id="missionhandlung">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Our Mission</h2>
+        <p class="section-subtitle">What drives us every day</p>
+      </div>
+      <p class="mission-content">
+        At UpSpeak, we're committed to providing a safe, engaging, and effective platform for children to develop essential communication skills. We believe that confident communication is a foundational skill that empowers children throughout their lives - from classroom presentations to future career success.
+
+        Through our interactive exercises, personalized feedback, and supportive community, we help children overcome anxiety, develop clarity, and find their unique voice.
+      </p>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Our Features</h2>
+        <p class="section-subtitle">How UpSpeak helps children grow</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-microphone"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">AI-powered Feedback</h3>
+            <p class="feature-description">Real-time AI-powered feedback designed to encourage your child's strengths and gently suggest new areas for improvement</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Learning Exercises</h3>
+            <p class="feature-description">Drills, flashcards, and puzzles crafted to help your child on their personal speech journey</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-camera"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Speech Watching</h3>
+            <p class="feature-description">In-built videos to watch and learn from the greatest orators of all time</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Progress Tracking</h3>
+            <p class="feature-description">Gamified systems to track and evaluate progress with a unique speech persona for your child</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Child Safety First</h3>
+            <p class="feature-description">Age-appropriate content and robust privacy protections designed specifically for young learners.</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-map"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">Upcoming Features</h3>
+            <p class="feature-description">Immerse yourself in the upcoming UpSpeak features, including a game and blogs!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">What People Are Saying</h2>
+        <p class="section-subtitle">Success stories from our UpSpeak community</p>
+      </div>
+      <div class="testimonial-slider" id="testimonialSlider">
+        <div class="testimonial-item active" data-index="0">
+          <div class="testimonial-content">
+            <p class="testimonial-quote">My son used to dread class presentations. After just one month with UpSpeak, he's volunteering to speak in class. The difference in his confidence is incredible!</p>
+          </div>
+          <div class="testimonial-author">Sarah Johnson</div>
+          <div class="testimonial-role">Loving Mother</div>
+        </div>
+        <div class="testimonial-item" data-index="1">
+          <div class="testimonial-content">
+            <p class="testimonial-quote">A new innovation using the power of AI feedback to solve a critical issue debaters experience.</p>
+          </div>
+          <div class="testimonial-author">Krish Grover</div>
+          <div class="testimonial-role">3x National Champion Debater</div>
+        </div>
+        <div class="testimonial-item" data-index="2">
+          <div class="testimonial-content">
+            <p class="testimonial-quote">UpSpeak has become a favorite activity in our house! My daughter loves the interactive games, and I love seeing her become more articulate and confident each week.</p>
+          </div>
+          <div class="testimonial-author">Rohan Gupta</div>
+          <div class="testimonial-role">Devoted Dad</div>
+        </div>
+        <div class="testimonial-item" data-index="3">
+          <div class="testimonial-content">
+            <p class="testimonial-quote">Communication deficiencies are critical issues for our youth that need to be addressed.</p>
+          </div>
+          <div class="testimonial-author">Belal Aftab</div>
+          <div class="testimonial-role">Saratoga Mayor</div>
+        </div>
+        <div class="testimonial-item" data-index="4">
+          <div class="testimonial-content">
+            <p class="testimonial-quote">UpSpeak is helping me become more confident in school! I love watching and learning from amazing speakers!</p>
+          </div>
+          <div class="testimonial-author">Ashwin Babey</div>
+          <div class="testimonial-role">Dedicated Student</div>
+        </div>
+        <div class="testimonial-item" data-index="5">
+          <div class="testimonial-content">
+            <p class="testimonial-quote">UpSpeak is solving a key issue that impacts kids every day!</p>
+          </div>
+          <div class="testimonial-author">Pete Dailey</div>
+          <div class="testimonial-role">Los Altos Mayor</div>
+        </div>
+      </div>
+      <div class="testimonial-indicators">
+        <div class="indicator active" data-index="0"></div>
+        <div class="indicator" data-index="1"></div>
+        <div class="indicator" data-index="2"></div>
+        <div class="indicator" data-index="3"></div>
+        <div class="indicator" data-index="4"></div>
+        <div class="indicator" data-index="5"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Common questions about UpSpeak</p>
+      </div>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h3 class="faq-question">What age group is UpSpeak for?</h3>
+          <p class="faq-answer">UpSpeak is designed for children aged 6-12, with activities tailored to different developmental stages within this range.</p>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-question">How much does it cost?</h3>
+          <p class="faq-answer">UpSpeak is free, all the time! We are commited to giving you a free, enjoyable, and effective experience.</p>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-question">Is it safe for my child?</h3>
+          <p class="faq-answer">Yes, we prioritize child safety with age-appropriate content, strict privacy measures, and moderated community features.</p>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-question">How long until I see results?</h3>
+          <p class="faq-answer">Many parents notice improvements within weeks, though consistent use over 2-3 months typically yields significant confidence gains.</p>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-question">Can parents participate?</h3>
+          <p class="faq-answer">Yes, we offer parent resources and suggest activities you can do together to support your child's progress.</p>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-question">What devices are supported?</h3>
+          <p class="faq-answer">UpSpeak works on desktops, tablets, and smartphones via web browsers, with apps coming soon.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="section-subtitle">Have questions? We're here to help</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-header">
+          <h3>Contact Us</h3>
+          <p>We'd love to hear from you</p>
+        </div>
+        <div class="contact-body">
+          <p><i class="fas fa-envelope"></i> contactupspeak@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="newsletter" id="newsletter">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Stay Updated</h2>
+        <p class="section-subtitle">Subscribe to our newsletter for the latest updates and tips</p>
+      </div>
+      <div class="newsletter-card">
+        <form id="newsletterForm" class="newsletter-form">
+          <input type="email" id="newsletterEmail" class="newsletter-input" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+        <div class="newsletter-confirmation" id="newsletterConfirmation">
+          <i class="fas fa-check-circle"></i>
+          <span>You're in! Get ready for exciting updates and tips!</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="#mission">Our Mission</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <ul class="footer-links">
+            <li><a href="#newsletter">Newsletter</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#contact">Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Legal</h4>
+          <ul class="footer-links">
+            <li><a href="https://docs.google.com/document/d/1QPEDu5KmCBPVuusr8lW5EfMTzPBNeTXktOz8iGDKVM8/edit?tab=t.0#heading=h.6ciby3o6fji9" target="_blank">Terms of Service</a></li>
+            <li><a href="https://docs.google.com/document/d/1j1UiHYXhOcFg0_KdQcdFUyX85F-A5frhOaeiv-PdlY0/edit?tab=t.0#heading=h.a5728mmmzxhx" target="_blank">Privacy Policy</a></li>
+            <li><a href="https://docs.google.com/document/d/1eUhlnnbHsq3DIYxwsjiJFPWmFmtqWLd0POPv00EgZXs/edit?tab=t.0#heading=h.lz4luesmmzyl" target="_blank">Cookies Policy</a></li>
+            <li><a href="https://docs.google.com/document/d/1X8mt7pfLKqDAJvyNyt9mBZnCrUvfH1NRBPMGtq-jjos/edit?tab=t.0#heading=h.qrpamapyawaf" target="_blank">Child Safety</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
         <p>© 2025 UpSpeak. All rights reserved.</p>
-    </footer>
-
-    <!-- Login Popup -->
-    <div id="loginPopup" class="popup">
-        <div class="popup-content">
-            <span class="close-btn" onclick="closePopup('loginPopup')">×</span>
-            <div id="loginFormStep" class="form-step">
-                <h2>Log In</h2>
-                <div id="loginMessage" class="error-message" style="display: none;"></div>
-                <input type="text" id="loginUsername" placeholder="Username" required>
-                <input type="password" id="loginPassword" placeholder="Password" required>
-                <button class="btn btn-primary" onclick="login()">Log In</button>
-            </div>
-        </div>
+      </div>
     </div>
+  </footer>
 
-    <!-- Signup Popup -->
-    <div id="signupPopup" class="popup">
-        <div class="popup-content">
-            <span class="close-btn" onclick="closePopup('signupPopup')">×</span>
-            <div id="signupFormStep" class="form-step">
-                <h2>Sign Up</h2>
-                <div id="signupMessage" class="error-message" style="display: none;"></div>
-                <div class="name-fields">
-                    <input type="text" id="signupFirstName" placeholder="First Name" required>
-                    <input type="text" id="signupLastName" placeholder="Last Name" required>
-                </div>
-                <input type="number" id="signupAge" placeholder="Age" required min="1" max="150">
-                <input type="text" id="signupUsername" placeholder="Username" required>
-                <input type="email" id="signupEmail" placeholder="Email" required>
-                <input type="password" id="signupPassword" placeholder="Password" required>
-                <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
-                <div class="password-requirements">
-                    Password must have:
-                    <ul>
-                        <li>At least 8 characters</li>
-                        <li>At least one uppercase letter</li>
-                        <li>At least one number</li>
-                        <li>At least one special character</li>
-                    </ul>
-                </div>
-                <button class="btn btn-secondary" onclick="signup()">Sign Up</button>
-            </div>
-        </div>
+  <div class="popup" id="loginPopup">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h3>Log In</h3>
+        <span class="close-btn" onclick="closePopup('loginPopup')">×</span>
+      </div>
+      <div class="popup-body">
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="loginIdentifier" class="form-label">Username or Email</label>
+            <input type="text" id="loginIdentifier" class="form-control" placeholder="Enter username or email" required>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword" class="form-label">Password</label>
+            <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+          </div>
+          <div class="form-footer">
+            <button type="submit" class="btn btn-primary">Log In</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // Load and save state using localStorage
-        function loadState() {
-            const state = localStorage.getItem('authState');
-            return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
+  <div class="popup" id="signupPopup">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h3>Create Account</h3>
+        <span class="close-btn" onclick="closePopup('signupPopup')">×</span>
+      </div>
+      <div class="popup-body">
+        <form id="signupForm">
+          <div class="name-fields">
+            <div class="form-group">
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" id="firstName" class="form-control" placeholder="First name" required>
+            </div>
+            <div class="form-group">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" id="lastName" class="form-control" placeholder="Last name" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" class="form-control" placeholder="Choose a username" required>
+          </div>
+          <div class="form-group">
+            <label for="signupEmail" class="form-label">Email</label>
+            <input type="email" id="signupEmail" class="form-control" placeholder="Enter your email" required>
+          </div>
+          <div class="form-group">
+            <label for="age" class="form-label">Age</label>
+            <input type="number" id="age" class="form-control" placeholder="Enter your age" min="1" max="150" required>
+          </div>
+          <div class="form-group">
+            <label for="signupPassword" class="form-label">Password</label>
+            <input type="password" id="signupPassword" class="form-control" placeholder="Create a password" required>
+            <div class="password-requirements">
+              Password requirements:
+              <ul>
+                <li id="lengthReq">At least 8 characters</li>
+                <li id="upperReq">Include uppercase letter</li>
+                <li id="numberReq">Include at least one number</li>
+                <li id="specialReq">Include at least one special character</li>
+              </ul>
+            </div>
+          </div>
+          <div class="form-footer">
+            <button type="submit" class="btn btn-secondary">Create Account</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      if (window.scrollY > 10) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+      document.getElementById('navLinks').classList.toggle('active');
+    });
+
+    function showLoginPopup() {
+      closePopup('signupPopup');
+      const popup = document.getElementById('loginPopup');
+      popup.style.display = 'flex';
+      setTimeout(() => {
+        popup.classList.add('show');
+      }, 10);
+    }
+
+    function showSignupPopup() {
+      closePopup('loginPopup');
+      const popup = document.getElementById('signupPopup');
+      popup.style.display = 'flex';
+      setTimeout(() => {
+        popup.classList.add('show');
+      }, 10);
+    }
+
+    function closePopup(id) {
+      const popup = document.getElementById(id);
+      popup.classList.remove('show');
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 300);
+    }
+
+    window.addEventListener('click', function(event) {
+      const loginPopup = document.getElementById('loginPopup');
+      const signupPopup = document.getElementById('signupPopup');
+      if (event.target === loginPopup) {
+        closePopup('loginPopup');
+      }
+      if (event.target === signupPopup) {
+        closePopup('signupPopup');
+      }
+    });
+
+    // Load and save state using localStorage
+    function loadState() {
+      const state = localStorage.getItem('authState');
+      return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null, newsletter: [] };
+    }
+
+    function saveState(users, session, sessionExpiry = null, newsletter) {
+      const state = { 
+        users, 
+        session, 
+        sessionExpiry: sessionExpiry || (session ? Date.now() + 24 * 60 * 60 * 1000 : null),
+        newsletter
+      };
+      localStorage.setItem('authState', JSON.stringify(state));
+    }
+
+    // Password hashing function
+    function hashPassword(password, salt = Date.now().toString()) {
+      let hash = 0;
+      const combined = password + salt;
+      for (let i = 0; i < combined.length; i++) {
+        hash = ((hash << 5) - hash) + combined.charCodeAt(i);
+        hash = hash >>> 0;
+      }
+      return { hash: hash.toString(), salt };
+    }
+
+    // Validation functions
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function validateName(name) {
+      return /^[a-zA-Z\s]{1,50}$/.test(name);
+    }
+
+    function validateUsername(username) {
+      return /^[a-zA-Z0-9_]{3,20}$/.test(username);
+    }
+
+    function validateAge(age) {
+      return age >= 1 && age <= 150;
+    }
+
+    function validatePassword(password) {
+      return /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/.test(password);
+    }
+
+    // Login form submission
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const identifier = document.getElementById('loginIdentifier').value;
+      const password = document.getElementById('loginPassword').value;
+      const state = loadState();
+
+      let userFound = false;
+      for (const username in state.users) {
+        const user = state.users[username];
+        if (user.username === identifier || user.email === identifier) {
+          const { hash } = hashPassword(password, user.salt);
+          if (user.password === hash) {
+            saveState(state.users, username, null, state.newsletter);
+            window.location.href = 'home.html';
+            userFound = true;
+            break;
+          }
         }
+      }
 
-        function saveState(users, session, sessionExpiry = null) {
-            const state = { 
-                users, 
-                session, 
-                sessionExpiry: sessionExpiry || (session ? Date.now() + 24 * 60 * 60 * 1000 : null) // 24h session
-            };
-            localStorage.setItem('authState', JSON.stringify(state));
+      if (!userFound) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = 'Invalid username/email or password.';
+        const formFooter = this.querySelector('.form-footer');
+        if (!formFooter.querySelector('.error-message')) {
+          formFooter.insertBefore(errorDiv, formFooter.firstChild);
+          setTimeout(() => errorDiv.remove(), 3000);
         }
+      }
+    });
 
-        // Improved password hashing
-        function hashPassword(password, salt = Date.now().toString()) {
-            let hash = 0;
-            const combined = password + salt;
-            for (let i = 0; i < combined.length; i++) {
-                hash = ((hash << 5) - hash) + combined.charCodeAt(i);
-                hash = hash >>> 0; // Convert to unsigned 32-bit integer
-            }
-            return { hash: hash.toString(), salt };
+    // Signup form submission
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('signupEmail').value;
+      const age = parseInt(document.getElementById('age').value);
+      const password = document.getElementById('signupPassword').value;
+      const state = loadState();
+
+      if (!validateName(firstName) || !validateName(lastName)) {
+        showError('Names must be 1-50 letters only.');
+        return;
+      }
+      if (!validateUsername(username)) {
+        showError('Username must be 3-20 characters (letters, numbers, underscores).');
+        return;
+      }
+      if (!validateEmail(email)) {
+        showError('Invalid email format.');
+        return;
+      }
+      if (!validateAge(age)) {
+        showError('Age must be between 1 and 150.');
+        return;
+      }
+      if (!validatePassword(password)) {
+        showError('Password does not meet requirements.');
+        return;
+      }
+
+      for (const user in state.users) {
+        if (state.users[user].username === username) {
+          showError('Username already taken.');
+          return;
         }
-
-        // Input validation
-        function validateEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (state.users[user].email === email) {
+          showError('Email already registered.');
+          return;
         }
+      }
 
-        function validateUsername(username) {
-            return /^[a-zA-Z0-9_-]{3,20}$/.test(username);
-        }
+      const { hash, salt } = hashPassword(password);
+      state.users[username] = {
+        firstName,
+        lastName,
+        username,
+        email,
+        age,
+        password: hash,
+        salt
+      };
+      saveState(state.users, username, null, state.newsletter);
 
-        function validateName(name) {
-            return /^[a-zA-Z\s]{1,50}$/.test(name);
-        }
+      const successDiv = document.createElement('div');
+      successDiv.className = 'success-message';
+      successDiv.textContent = 'Account created successfully! Redirecting...';
+      const formFooter = this.querySelector('.form-footer');
+      formFooter.insertBefore(successDiv, formFooter.firstChild);
+      setTimeout(() => {
+        window.location.href = 'home.html';
+      }, 2000);
+    });
 
-        function validateAge(age) {
-            const numAge = parseInt(age);
-            return numAge >= 1 && numAge <= 150;
-        }
+    // Newsletter form submission
+    document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('newsletterEmail').value;
+      const state = loadState();
 
-        function validatePassword(password) {
-            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
-            return passwordRegex.test(password);
-        }
+      if (!validateEmail(email)) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = 'Please enter a valid email address.';
+        this.insertBefore(errorDiv, this.firstChild);
+        setTimeout(() => errorDiv.remove(), 3000);
+        return;
+      }
 
-        // UI helpers
-        function showMessage(elementId, message, isError = false) {
-            const msg = document.getElementById(elementId);
-            msg.textContent = message;
-            msg.className = isError ? 'error-message' : 'success-message';
-            msg.style.display = 'block';
-        }
+      if (!state.newsletter.includes(email)) {
+        state.newsletter.push(email);
+        saveState(state.users, state.session, state.sessionExpiry, state.newsletter);
+      }
 
-        function clearMessage(elementId) {
-            const msg = document.getElementById(elementId);
-            msg.style.display = 'none';
-            msg.textContent = '';
-        }
+      this.style.display = 'none';
+      const confirmation = document.getElementById('newsletterConfirmation');
+      confirmation.classList.add('show');
+    });
 
-        function showSignupPopup() {
-            document.getElementById('signupPopup').style.display = 'flex';
-            document.getElementById('signupFormStep').classList.remove('hidden');
-            clearInputs('signup');
-        }
+    function showError(message) {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error-message';
+      errorDiv.textContent = message;
+      const formFooter = document.getElementById('signupForm').querySelector('.form-footer');
+      if (!formFooter.querySelector('.error-message')) {
+        formFooter.insertBefore(errorDiv, formFooter.firstChild);
+        setTimeout(() => errorDiv.remove(), 3000);
+      }
+    }
 
-        function showLoginPopup() {
-            document.getElementById('loginPopup').style.display = 'flex';
-            document.getElementById('loginFormStep').classList.remove('hidden');
-            clearInputs('login');
-        }
+    // Password requirements checklist
+    document.getElementById('signupPassword').addEventListener('input', function() {
+      const password = this.value;
+      const lengthReq = document.getElementById('lengthReq');
+      const upperReq = document.getElementById('upperReq');
+      const numberReq = document.getElementById('numberReq');
+      const specialReq = document.getElementById('specialReq');
 
-        function closePopup(popupId) {
-            document.getElementById(popupId).style.display = 'none';
-        }
+      lengthReq.classList.toggle('checked', password.length >= 8);
+      upperReq.classList.toggle('checked', /[A-Z]/.test(password));
+      numberReq.classList.toggle('checked', /\d/.test(password));
+      specialReq.classList.toggle('checked', /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password));
+    });
 
-        function clearInputs(formType) {
-            if (formType === 'signup') {
-                document.getElementById('signupFirstName').value = '';
-                document.getElementById('signupLastName').value = '';
-                document.getElementById('signupAge').value = '';
-                document.getElementById('signupUsername').value = '';
-                document.getElementById('signupEmail').value = '';
-                document.getElementById('signupPassword').value = '';
-                document.getElementById('signupConfirmPassword').value = '';
-                clearMessage('signupMessage');
-            } else if (formType === 'login') {
-                document.getElementById('loginUsername').value = '';
-                document.getElementById('loginPassword').value = '';
-                clearMessage('loginMessage');
-            }
-        }
+    // Testimonial slider
+    let currentTestimonial = 0;
+    const testimonials = document.querySelectorAll('.testimonial-item');
+    const indicators = document.querySelectorAll('.indicator');
 
-        // State management
-        let state = loadState();
-        let users = state.users;
-        let currentSession = state.session;
-        let sessionExpiry = state.sessionExpiry;
+    function showTestimonial(index) {
+      testimonials.forEach(item => item.classList.remove('active'));
+      indicators.forEach(dot => dot.classList.remove('active'));
+      testimonials[index].classList.add('active');
+      indicators[index].classList.add('active');
+      currentTestimonial = index;
+    }
 
-        // Auth functions
-        function signup() {
-            const firstName = document.getElementById('signupFirstName').value.trim();
-            const lastName = document.getElementById('signupLastName').value.trim();
-            const age = document.getElementById('signupAge').value.trim();
-            const username = document.getElementById('signupUsername').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
-            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+    indicators.forEach(indicator => {
+      indicator.addEventListener('click', function() {
+        const index = parseInt(this.getAttribute('data-index'));
+        showTestimonial(index);
+      });
+    });
 
-            // Validation
-            if (!validateName(firstName)) {
-                showMessage('signupMessage', 'First name must be 1-50 letters only', true);
-                return;
-            }
-            if (!validateName(lastName)) {
-                showMessage('signupMessage', 'Last name must be 1-50 letters only', true);
-                return;
-            }
-            if (!validateAge(age)) {
-                showMessage('signupMessage', 'Age must be between 1 and 150', true);
-                return;
-            }
-            if (!validateUsername(username)) {
-                showMessage('signupMessage', 'Username must be 3-20 characters (letters, numbers, _, -)', true);
-                return;
-            }
-            if (!validateEmail(email)) {
-                showMessage('signupMessage', 'Invalid email format', true);
-                return;
-            }
-            if (!validatePassword(password)) {
-                showMessage('signupMessage', 'Password must be at least 8 characters with one uppercase, one number, and one special character', true);
-                return;
-            }
-            if (password !== confirmPassword) {
-                showMessage('signupMessage', 'Passwords do not match', true);
-                return;
-            }
-            if (users[username]) {
-                showMessage('signupMessage', 'Username already exists', true);
-                return;
-            }
+    testimonials.forEach(testimonial => {
+      testimonial.addEventListener('click', function() {
+        const index = parseInt(this.getAttribute('data-index'));
+        showTestimonial(index);
+      });
+    });
 
-            const { hash, salt } = hashPassword(password);
-            users[username] = {
-                firstName,
-                lastName,
-                age,
-                password: hash,
-                salt,
-                email,
-                createdAt: new Date().toISOString()
-            };
-            currentSession = username;
-            saveState(users, currentSession);
-            showMessage('signupMessage', 'Signup successful! Redirecting...', false);
-            setTimeout(() => {
-                window.location.href = "home.html";
-            }, 1500);
-        }
+    setInterval(() => {
+      currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+      showTestimonial(currentTestimonial);
+    }, 5000);
 
-        function login() {
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const user = users[username];
+    // Changing word animation
+    const changingWords = [{
+        text: '<b>speak</b>',
+        word: 'speak'
+      },
+      {
+        text: '<b>present</b>',
+        word: 'present'
+      },
+      {
+        text: '<b>connect</b>',
+        word: 'connect'
+      },
+      {
+        text: '<b>express</b>',
+        word: 'express'
+      }
+    ];
+    let wordIndex = 0;
 
-            if (!user) {
-                showMessage('loginMessage', 'Invalid credentials', true);
-                return;
-            }
-
-            const { hash } = hashPassword(password, user.salt);
-            if (user.password !== hash) {
-                showMessage('loginMessage', 'Invalid credentials', true);
-                return;
-            }
-
-            currentSession = username;
-            saveState(users, currentSession);
-            showMessage('loginMessage', 'Login successful! Redirecting...', false);
-            setTimeout(() => {
-                window.location.href = "home.html";
-            }, 1500);
-        }
-
-        // Session management
-        function checkSession() {
-            if (currentSession && sessionExpiry && Date.now() > sessionExpiry) {
-                currentSession = null;
-                sessionExpiry = null;
-                saveState(users, null);
-                showMessage('loginMessage', 'Session expired. Please login again.');
-            }
-            return !!currentSession;
-        }
-
-        // Initialize
-        if (checkSession()) {
-            console.log('User already logged in:', currentSession);
-        }
-
-        // Periodic session check
-        setInterval(checkSession, 60000); // Check every minute
-
-        // Define colors for rotating words
-        const wordColors = [
-            '#FF5733', // Red-orange
-            '#33A8FF', // Blue
-            '#33FF57', // Green
-            '#A633FF', // Purple
-            '#FFBD33', // Amber
-            '#FF33A8'  // Pink
-        ];
-
-        // Words to rotate
-        const wordsToRotate = ['speak', 'connect', 'engage', 'express', 'shine', 'grow'];
-        let currentWordIndex = 0;
-        let currentColorIndex = 0;
-
-        // Function to rotate words with different colors
-        function rotateWords() {
-            const wordElement = document.querySelector('.changing-word');
-
-            // Fade out
-            wordElement.style.opacity = 0;
-
-            setTimeout(() => {
-                // Change word
-                currentWordIndex = (currentWordIndex + 1) % wordsToRotate.length;
-                wordElement.textContent = wordsToRotate[currentWordIndex];
-                
-                // Change color - use a different color for each rotation
-                currentColorIndex = (currentColorIndex + 1) % wordColors.length;
-                wordElement.style.color = wordColors[currentColorIndex];
-
-                // Fade in
-                wordElement.style.opacity = 1;
-            }, 500);
-        }
-
-        // Rotate testimonials
-        let currentTestimonialIndex = 0;
-        const testimonials = document.querySelectorAll('.testimonial');
-
-        function rotateTestimonials() {
-            // Hide all testimonials
-            testimonials.forEach(testimonial => {
-                testimonial.classList.remove('active');
-            });
-
-            // Show next testimonial
-            currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
-            testimonials[currentTestimonialIndex].classList.add('active');
-        }
-
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set initial color for the first word
-            const wordElement = document.querySelector('.changing-word');
-            wordElement.style.color = wordColors[0];
-            
-            // Start word rotation
-            setInterval(rotateWords, 3000);
-
-            // Start testimonial rotation
-            setInterval(rotateTestimonials, 5000);
-
-            // Check if user is already logged in
-            const loggedInUser = currentSession;
-            if (loggedInUser) {
-                console.log('User already logged in:', loggedInUser);
-            }
-        });
-    </script>
+    function changeWord() {
+      const changingWord = document.querySelector('.changing-word');
+      changingWord.style.opacity = '0';
+      changingWord.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        wordIndex = (wordIndex + 1) % changingWords.length;
+        changingWord.innerHTML = changingWords[wordIndex].text;
+        changingWord.setAttribute('data-word', changingWords[wordIndex].word);
+        changingWord.style.opacity = '1';
+        changingWord.style.transform = 'translateY(0)';
+      }, 500);
+    }
+    setInterval(changeWord, 3000);
+  </script>
 </body>
 </html>
