@@ -298,7 +298,10 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
+        emailjs.init("OFpAE4YZWQ73EpEdW");
+
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = SpeechRecognition ? new SpeechRecognition() : null;
         if (recognition) {
@@ -307,7 +310,6 @@
             recognition.lang = 'en-US';
         }
 
-        // State Management aligned with profile.html
         function loadState() {
             const state = localStorage.getItem('authState');
             return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
@@ -351,10 +353,31 @@
             return state.users[username].profile;
         }
 
+        function getUserEmail(username) {
+            const state = loadState();
+            return state.users[username]?.email || "";
+        }
+
         function saveUserProfile(username, profile) {
             const state = loadState();
             state.users[username].profile = profile;
             saveState(state);
+        }
+
+        function sendFirstSpeechEmail(username, email, firstName) {
+            emailjs.send("service_dqlwwjg", "template_9zwyh3t", {
+                from_name: "UpSpeak Team",
+                from_email: "no-reply@upspeak.com",
+                to_email: email,
+                subject: "Congratulations on Your First Speech!",
+                message: `Dear ${firstName},\n\nCongratulations on completing your first speech with UpSpeak! We're thrilled to have you on this journey to improve your public speaking skills. Keep practicing, and watch your confidence soar!\n\nBest,\nThe UpSpeak Team`
+            })
+            .then(() => {
+                console.log("First speech email sent successfully to", email);
+            })
+            .catch((error) => {
+                console.error("Failed to send first speech email:", error);
+            });
         }
 
         let mediaRecorder;
@@ -473,8 +496,17 @@
                 const state = loadState();
                 const username = state.session;
                 let profile = getUserProfile(username);
+                const wasFirstSpeech = profile.speechesGiven === 0;
                 profile.speechesGiven += 1;
                 saveUserProfile(username, profile);
+
+                if (wasFirstSpeech) {
+                    const email = getUserEmail(username);
+                    const firstName = state.users[username].firstName || username;
+                    if (email) {
+                        sendFirstSpeechEmail(username, email, firstName);
+                    }
+                }
             }
         }
 
