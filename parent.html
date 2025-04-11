@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSpeak Parent Dashboard</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #ff9933;
+            --text-color: #2c3e50;
+            --background-gradient: linear-gradient(135deg, #ecf0f1, #d5dbdb);
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            --transition-speed: 0.3s;
+            --accent-color: #ff8c00;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #e17055;
+            --light-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --neutral-gray: #F5F5F5;
+            --dark-gray: #424242;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--background-gradient);
+            color: var(--text-color);
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 25px 0;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .logo:hover { transform: scale(1.08); }
+        .logo .microphone-icon { width: 55px; height: 55px; margin-right: 15px; filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1)); }
+        .logo .upspeak-up { color: var(--secondary-color); }
+        .logo .upspeak-speak { color: var(--primary-color); }
+
+        .nav-menu { list-style: none; display: flex; justify-content: center; align-items: center; padding: 0; margin: 0; }
+        .nav-menu li { margin: 0 30px; }
+        .nav-menu a { color: #555; font-weight: 500; text-decoration: none; transition: color var(--transition-speed) ease; }
+        .nav-menu a:hover { color: var(--primary-color); }
+
+        .profile-icon { font-size: 3rem; color: #777; transition: color var(--transition-speed) ease, transform var(--transition-speed) ease; }
+        .profile-icon:hover { color: var(--primary-color); transform: scale(1.15); }
+
+        .parent-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+
+        .overview-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .overview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .overview-title { font-size: 2rem; font-weight: 700; background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .child-selector { padding: 10px; border-radius: 10px; border: 1px solid #ddd; font-size: 1rem; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .stat-card { background: var(--light-bg); padding: 20px; border-radius: 15px; text-align: center; transition: transform var(--transition-speed) ease; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-icon { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 10px; }
+        .stat-number { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); }
+        .stat-label { font-size: 1rem; color: #666; }
+
+        .activity-timeline { background: var(--card-bg); border-radius: 20px; padding: 30px; box-shadow: var(--box-shadow); margin-bottom: 30px; }
+        .activity-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 20px; }
+        .activity-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
+        .activity-icon { font-size: 1.5rem; color: var(--accent-color); margin-right: 15px; }
+        .activity-details { flex: 1; }
+        .activity-text { font-size: 1rem; color: var(--text-color); }
+        .activity-time { font-size: 0.9rem; color: #777; }
+
+        .controls-card { background: var(--card-bg); border-radius: 20px; padding: 30px; box-shadow: var(--box-shadow); margin-bottom: 30px; }
+        .controls-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 20px; }
+        .control-group { margin-bottom: 20px; }
+        .control-label { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; }
+        .control-input { padding: 10px; width: 100%; border-radius: 10px; border: 1px solid #ddd; font-size: 1rem; }
+        .control-toggle { display: flex; align-items: center; gap: 10px; }
+        .toggle-switch { position: relative; width: 50px; height: 25px; background: #ddd; border-radius: 25px; cursor: pointer; }
+        .toggle-switch::before { content: ''; position: absolute; width: 21px; height: 21px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: transform var(--transition-speed) ease; }
+        .toggle-switch.active { background: var(--success-color); }
+        .toggle-switch.active::before { transform: translateX(25px); }
+
+        .control-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            margin-top: 10px;
+        }
+
+        .control-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+
+        .safety-card { background: var(--card-bg); border-radius: 20px; padding: 30px; box-shadow: var(--box-shadow); margin-bottom: 30px; }
+        .safety-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 20px; }
+        .safety-text { font-size: 1rem; color: #666; line-height: 1.6; }
+        .safety-link { color: var(--primary-color); text-decoration: none; font-weight: 500; }
+        .safety-link:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .overview-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .activity-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animated { animation: fadeIn 0.8s ease forwards; }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo" onclick="goToHome()">
+                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <defs>
+                        <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#007bff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#microphone-gradient)" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                </svg>
+                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="parent.html">Dashboard</a></li>
+                <li><a href="child-profile.html">Child Profile</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="support.html">Support</a></li>
+            </ul>
+            <a href="parent-account.html"><i class="fas fa-user-circle profile-icon"></i></a>
+        </nav>
+    </header>
+
+    <div class="parent-container">
+        <div class="overview-card animated">
+            <div class="overview-header">
+                <h2 class="overview-title">Child Progress Overview</h2>
+                <select id="childSelector" class="child-selector">
+                    <option value="">Select Child</option>
+                </select>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-puzzle-piece stat-icon"></i>
+                    <div id="puzzlesCompleted" class="stat-number">0</div>
+                    <div class="stat-label">Puzzles Completed</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-dumbbell stat-icon"></i>
+                    <div id="drillsCompleted" class="stat-number">0</div>
+                    <div class="stat-label">Drills Completed</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-microphone stat-icon"></i>
+                    <div id="speechesGiven" class="stat-number">0</div>
+                    <div class="stat-label">Speeches Given</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-user stat-icon"></i>
+                    <div id="personalityType" class="stat-number">Unknown</div>
+                    <div class="stat-label">Personality Type</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-timeline animated">
+            <h2 class="activity-title">Recent Activities</h2>
+            <div id="activityList">
+                <!-- Activities populated dynamically -->
+            </div>
+        </div>
+
+        <div class="controls-card animated">
+            <h2 class="controls-title">Parental Controls</h2>
+            <div class="control-group">
+                <div class="control-label">Daily Time Limit</div>
+                <input type="number" id="timeLimit" class="control-input" placeholder="Minutes per day" min="0" max="180">
+            </div>
+            <div class="control-group">
+                <div class="control-label">Content Access</div>
+                <div class="control-toggle">
+                    <label>Allow Speech Recording</label>
+                    <div id="recordingToggle" class="toggle-switch"></div>
+                </div>
+                <div class="control-toggle">
+                    <label>Allow Video Content</label>
+                    <div id="videoToggle" class="toggle-switch"></div>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label">Notifications</div>
+                <div class="control-toggle">
+                    <label>Receive Progress Updates</label>
+                    <div id="progressToggle" class="toggle-switch"></div>
+                </div>
+            </div>
+            <button id="saveControls" class="control-btn">Save Changes</button>
+        </div>
+
+        <div class="safety-card animated">
+            <h2 class="safety-title">Safety & Privacy</h2>
+            <p class="safety-text">Your child's data is protected with industry-standard encryption. We do not share personal information with third parties. Learn more about our <a href="privacy.html" class="safety-link">Privacy Policy</a>.</p>
+            <p class="safety-text">To update account security, visit <a href="security.html" class="safety-link">Account Settings</a>.</p>
+        </div>
+    </div>
+
+    <script>
+        // State Management (aligned with child profile)
+        function loadState() {
+            const state = localStorage.getItem('authState');
+            return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null, parent: {} };
+        }
+
+        function saveState(state) {
+            localStorage.setItem('authState', JSON.stringify(state));
+        }
+
+        function getParentProfile(parentId) {
+            const state = loadState();
+            if (!state.parent[parentId]) {
+                state.parent[parentId] = {
+                    children: [],
+                    settings: {
+                        timeLimit: 60,
+                        allowRecording: true,
+                        allowVideo: true,
+                        progressNotifications: true
+                    }
+                };
+                saveState(state);
+            }
+            return state.parent[parentId];
+        }
+
+        function saveParentProfile(parentId, profile) {
+            const state = loadState();
+            state.parent[parentId] = profile;
+            saveState(state);
+        }
+
+        function getUserProfile(username) {
+            const state = loadState();
+            return state.users[username]?.profile || null;
+        }
+
+        // Initialize Dashboard
+        document.addEventListener('DOMContentLoaded', function () {
+            const state = loadState();
+            const parentId = state.session; // Assuming parent session is stored similarly
+
+            if (!parentId || (state.sessionExpiry && Date.now() > state.sessionExpiry)) {
+                alert('Please log in to access the parent dashboard.');
+                window.location.href = 'parent-login.html';
+                return;
+            }
+
+            const parentProfile = getParentProfile(parentId);
+            initializeDashboard(parentId, parentProfile);
+        });
+
+        function initializeDashboard(parentId, parentProfile) {
+            const childSelector = document.getElementById('childSelector');
+            childSelector.innerHTML = '<option value="">Select Child</option>';
+            parentProfile.children.forEach(child => {
+                const option = document.createElement('option');
+                option.value = child;
+                option.textContent = child;
+                childSelector.appendChild(option);
+            });
+
+            childSelector.addEventListener('change', () => {
+                const selectedChild = childSelector.value;
+                if (selectedChild) {
+                    loadChildData(selectedChild);
+                } else {
+                    clearChildData();
+                }
+            });
+
+            // Load parental controls
+            document.getElementById('timeLimit').value = parentProfile.settings.timeLimit;
+            document.getElementById('recordingToggle').classList.toggle('active', parentProfile.settings.allowRecording);
+            document.getElementById('videoToggle').classList.toggle('active', parentProfile.settings.allowVideo);
+            document.getElementById('progressToggle').classList.toggle('active', parentProfile.settings.progressNotifications);
+
+            // Save controls
+            document.getElementById('saveControls').addEventListener('click', () => {
+                parentProfile.settings = {
+                    timeLimit: parseInt(document.getElementById('timeLimit').value) || 60,
+                    allowRecording: document.getElementById('recordingToggle').classList.contains('active'),
+                    allowVideo: document.getElementById('videoToggle').classList.contains('active'),
+                    progressNotifications: document.getElementById('progressToggle').classList.contains('active')
+                };
+                saveParentProfile(parentId, parentProfile);
+                alert('Settings saved successfully!');
+            });
+
+            // Toggle switches
+            ['recordingToggle', 'videoToggle', 'progressToggle'].forEach(id => {
+                document.getElementById(id).addEventListener('click', function () {
+                    this.classList.toggle('active');
+                });
+            });
+
+            // Animation observer
+            const animatedElements = document.querySelectorAll('.animated');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(el);
+            });
+        }
+
+        function loadChildData(childUsername) {
+            const profile = getUserProfile(childUsername);
+            if (!profile) {
+                alert('Child profile not found.');
+                return;
+            }
+
+            // Update stats
+            document.getElementById('puzzlesCompleted').textContent = profile.puzzlesCompleted;
+            document.getElementById('drillsCompleted').textContent = profile.drillsCompleted;
+            document.getElementById('speechesGiven').textContent = profile.speechesGiven;
+            document.getElementById('personalityType').textContent = profile.personality ? personalities[profile.personality]?.title || 'Unknown' : 'Unknown';
+
+            // Update activity timeline (mock data for example)
+            const activities = [
+                { icon: 'fa-puzzle-piece', text: 'Completed a puzzle', time: new Date().toLocaleString() },
+                { icon: 'fa-microphone', text: 'Gave a speech', time: new Date(Date.now() - 86400000).toLocaleString() }
+            ];
+            const activityList = document.getElementById('activityList');
+            activityList.innerHTML = activities.map(activity => `
+                <div class="activity-item">
+                    <i class="fas ${activity.icon} activity-icon"></i>
+                    <div class="activity-details">
+                        <div class="activity-text">${activity.text}</div>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearChildData() {
+            document.getElementById('puzzlesCompleted').textContent = '0';
+            document.getElementById('drillsCompleted').textContent = '0';
+            document.getElementById('speechesGiven').textContent = '0';
+            document.getElementById('personalityType').textContent = 'Unknown';
+            document.getElementById('activityList').innerHTML = '<p>No child selected.</p>';
+        }
+
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+
+        // Personality data (aligned with child profile)
+        const personalities = {
+            peacock: { title: "The Peacock" },
+            fox: { title: "The Fox" },
+            owl: { title: "The Owl" },
+            dolphin: { title: "The Dolphin" }
+        };
+    </script>
+</body>
+
+</html>
