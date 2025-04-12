@@ -6,43 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UpSpeak - Your Dashboard</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
-        /* General Styles */
         :root {
             --primary-color: #007bff;
             --secondary-color: #ff9933;
             --text-color: #2c3e50;
             --background-gradient: linear-gradient(135deg, #e6f2ff, #ffe6cc);
-            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             --transition-speed: 0.3s;
             --accent-color: #ff8c00;
-            --light-bg: rgba(255, 255, 255, 0.8);
+            --light-bg: rgba(255, 255, 255, 0.85);
             --card-bg: rgba(255, 255, 255, 0.95);
-            --neutral-gray: #F5F5F5;
             --success-color: #00b894;
+            --glow-color: rgba(0, 123, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
             background: var(--background-gradient);
             color: var(--text-color);
-            overflow-x: hidden;
             min-height: 100vh;
-            line-height: 1.8;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
 
         /* Header Styles */
         header {
             background-color: rgba(255, 255, 255, 0.95);
-            padding: 25px 0;
+            padding: 20px 0;
             box-shadow: var(--box-shadow);
             position: sticky;
             top: 0;
@@ -60,7 +60,7 @@
         }
 
         .logo {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--text-color);
             display: flex;
@@ -70,14 +70,14 @@
         }
 
         .logo:hover {
-            transform: scale(1.08);
+            transform: scale(1.05);
         }
 
         .logo .microphone-icon {
-            width: 55px;
-            height: 55px;
-            margin-right: 15px;
-            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+            width: 50px;
+            height: 50px;
+            margin-right: 12px;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
         }
 
         .logo .upspeak-up {
@@ -91,25 +91,23 @@
         .nav-menu {
             list-style: none;
             display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 0;
             margin: 0;
         }
 
         .nav-menu li {
-            margin: 0 30px;
+            margin: 0 25px;
             position: relative;
         }
 
         .nav-menu > li > a {
             color: #555;
             font-weight: 500;
-            transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            text-decoration: none;
-            padding-bottom: 4px;
+            padding: 8px 0;
+            transition: color var(--transition-speed) ease, border-bottom var(--transition-speed) ease;
         }
 
         .nav-menu > li > a:hover {
@@ -118,8 +116,8 @@
         }
 
         .nav-menu .carrot {
-            margin-left: 7px;
-            font-size: 0.9em;
+            margin-left: 6px;
+            font-size: 0.85em;
             transition: transform var(--transition-speed) ease;
         }
 
@@ -130,35 +128,33 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.98);
-            min-width: 240px;
+            background-color: var(--card-bg);
+            min-width: 220px;
             box-shadow: var(--box-shadow);
-            padding: 20px 30px;
+            padding: 15px 25px;
             z-index: 1;
             top: 100%;
             left: 50%;
             transform: translateX(-50%);
-            text-align: left;
-            border-radius: 15px;
+            border-radius: 12px;
             opacity: 0;
             transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
-            transform-origin: top center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
         }
 
         .nav-menu li:hover .dropdown-content {
             display: block;
             opacity: 1;
-            transform: translateX(-50%) translateY(10px);
+            transform: translateX(-50%) translateY(8px);
         }
 
         .dropdown-content a {
             color: var(--text-color);
-            padding: 12px 0;
+            padding: 10px 0;
             text-decoration: none;
             display: block;
             transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-            border-radius: 8px;
+            border-radius: 6px;
         }
 
         .dropdown-content a:hover {
@@ -167,90 +163,303 @@
         }
 
         .profile-icon {
-            font-size: 3rem;
+            font-size: 2.8rem;
             color: #777;
             transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
         }
 
         .profile-icon:hover {
             color: var(--primary-color);
-            transform: scale(1.15);
+            transform: scale(1.1);
         }
 
-        /* Dashboard Styles */
+        /* Dashboard Layout */
         .dashboard-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 40px auto;
             padding: 0 20px;
+            display: flex;
+            gap: 30px;
         }
 
-        .welcome-section {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--box-shadow);
+        .main-content {
+            flex: 3;
+        }
+
+        /* Left Sidebar (Buttons) */
+        .action-sidebar {
+            flex: 1;
+            max-width: 250px;
+        }
+
+        .action-sidebar h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
             text-align: center;
-            margin-bottom: 40px;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-button i {
+            font-size: 1.4rem;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--glow-color);
+        }
+
+        /* Right Sidebar (Metrics) */
+        .metrics-sidebar {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .metrics-sidebar h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
             position: relative;
             overflow: hidden;
         }
 
-        .welcome-section::before {
+        .metric-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            height: 5px;
+            width: 100%;
+            height: 4px;
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
         }
 
-        .welcome-section h1 {
-            font-size: 2.5rem;
-            margin: 0 0 10px;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--glow-color);
+        }
+
+        .metric-icon {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
-        .welcome-section p {
-            font-size: 1.2rem;
+        .metric-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 0.95rem;
             color: #666;
         }
 
-        .stats-section {
+        /* Persona Section */
+        .persona-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .persona-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .persona-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: pulse 2s infinite;
+        }
+
+        .persona-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .persona-description {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Progress Overview */
+        .progress-section {
             margin-bottom: 40px;
         }
 
-        .stats-section h2 {
+        .progress-section h2 {
             font-size: 2rem;
             text-align: center;
             margin-bottom: 30px;
             color: var(--text-color);
         }
 
-        .stats-grid {
+        .progress-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
         }
 
-        .stat-card {
+        .progress-card {
             background: var(--card-bg);
             border-radius: 15px;
-            padding: 20px;
-            text-align: center;
+            padding: 25px;
             box-shadow: var(--box-shadow);
             transition: transform var(--transition-speed) ease;
         }
 
-        .stat-card:hover {
+        .progress-card:hover {
             transform: translateY(-5px);
         }
 
-        .stat-icon {
-            font-size: 2.5rem;
+        .progress-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 1s ease;
+        }
+
+        .progress-status {
+            font-size: 0.95rem;
+            color: #666;
+            text-align: right;
+        }
+
+        /* Quote Section */
+        .quote-section {
+            background: var(--light-bg);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            position: relative;
+        }
+
+        .quote-text {
+            font-size: 1.8rem;
+            font-style: italic;
+            color: var(--text-color);
+            margin-bottom: 15px;
+        }
+
+        .quote-author {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            margin-bottom: 40px;
+        }
+
+        .tips-section h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-color);
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .tip-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            transition: transform var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tip-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tip-icon {
+            font-size: 2rem;
             margin-bottom: 15px;
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             -webkit-background-clip: text;
@@ -258,122 +467,68 @@
             color: transparent;
         }
 
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            color: #777;
-        }
-
-        .activity-section {
-            margin-bottom: 40px;
-        }
-
-        .activity-section h2 {
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--text-color);
-        }
-
-        .activity-list {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--box-shadow);
-        }
-
-        .activity-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-
-        .activity-icon {
-            font-size: 1.8rem;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: white;
-            margin-right: 20px;
-        }
-
-        .activity-details {
-            flex: 1;
-        }
-
-        .activity-details p {
-            margin: 0;
-            font-size: 1.1rem;
-            color: var(--text-color);
-        }
-
-        .activity-details span {
-            font-size: 0.9rem;
-            color: #777;
-        }
-
-        .quick-actions {
-            text-align: center;
-        }
-
-        .action-button {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all var(--transition-speed) ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        .tip-title {
+            font-size: 1.3rem;
             font-weight: 600;
-            margin: 10px;
-            display: inline-block;
-            text-decoration: none;
+            margin-bottom: 10px;
+            color: var(--text-color);
         }
 
-        .action-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        .tip-description {
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        /* Animations */
+        .animated {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .action-sidebar, .metrics-sidebar {
+                max-width: 100%;
+            }
+
+            .action-sidebar {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .action-button {
+                flex: 1;
+                min-width: 200px;
+            }
+        }
+
         @media (max-width: 768px) {
-            .welcome-section h1 {
+            .persona-title {
                 font-size: 2rem;
             }
 
-            .welcome-section p {
-                font-size: 1rem;
-            }
-
-            .stats-grid {
+            .progress-grid, .tips-grid {
                 grid-template-columns: 1fr;
             }
 
-            .activity-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .activity-icon {
-                margin-right: 0;
+            .quote-text {
+                font-size: 1.5rem;
             }
         }
 
@@ -387,24 +542,8 @@
             }
 
             .action-button {
-                padding: 12px 25px;
                 font-size: 1rem;
-            }
-        }
-
-        /* Animation */
-        .animated {
-            animation: fadeIn 0.8s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+                padding: 12px 15px;
             }
         }
     </style>
@@ -470,50 +609,98 @@
     </header>
 
     <main class="dashboard-container">
-        <section class="welcome-section animated">
-            <h1>Welcome Back, <span id="userName">User</span>!</h1>
-            <p>Your speech persona: <span id="userPersonality">Mystery Persona</span></p>
-        </section>
+        <aside class="action-sidebar animated">
+            <h2>Your Actions</h2>
+            <a href="evaluation.html" class="action-button"><i class="fas fa-microphone"></i> Record</a>
+            <a href="learn.html" class="action-button"><i class="fas fa-book-open"></i> Learn</a>
+            <a href="profile.html" class="action-button"><i class="fas fa-user"></i> Profile</a>
+            <a href="watch.html" class="action-button"><i class="fas fa-video"></i> Watch</a>
+        </aside>
 
-        <section class="stats-section animated">
-            <h2>Your Progress</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <i class="fas fa-puzzle-piece stat-icon"></i>
-                    <div class="stat-number" id="puzzlesCompleted">0</div>
-                    <div class="stat-label">Puzzles Completed</div>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-dumbbell stat-icon"></i>
-                    <div class="stat-number" id="drillsCompleted">0</div>
-                    <div class="stat-label">Drills Completed</div>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-microphone-alt stat-icon"></i>
-                    <div class="stat-number" id="speechesGiven">0</div>
-                    <div class="stat-label">Speeches Given</div>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-trophy stat-icon"></i>
-                    <div class="stat-number" id="badgesEarned">0</div>
-                    <div class="stat-label">Badges Earned</div>
-                </div>
+        <section class="main-content">
+            <div class="persona-section animated">
+                <i id="personaIcon" class="fas fa-question-circle persona-icon"></i>
+                <h1 id="personaTitle" class="persona-title">Mystery Persona</h1>
+                <p id="personaDescription" class="persona-description">Your unique speaking style is waiting to be discovered! Take the personality quiz to reveal it.</p>
             </div>
+
+            <section class="progress-section animated">
+                <h2>Your Achievements</h2>
+                <div class="progress-grid">
+                    <div class="progress-card">
+                        <div class="progress-title">Puzzle Decipher</div>
+                        <div class="progress-bar">
+                            <div id="puzzleProgress" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div id="puzzleStatus" class="progress-status">0/20 Puzzles</div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-title">Savvy Speaker</div>
+                        <div class="progress-bar">
+                            <div id="speechProgress" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div id="speechStatus" class="progress-status">0/10 Speeches</div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-title">Driller</div>
+                        <div class="progress-bar">
+                            <div id="drillProgress" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div id="drillStatus" class="progress-status">0/25 Drills</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="quote-section animated">
+                <blockquote class="quote-text"></blockquote>
+                <p class="quote-author"></p>
+            </section>
+
+            <section class="tips-section animated">
+                <h2>Quick Tips</h2>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <i class="fas fa-lightbulb tip-icon"></i>
+                        <h3 class="tip-title">Speak Clearly</h3>
+                        <p class="tip-description">Practice enunciating each word to make your speech crystal clear.</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-heart tip-icon"></i>
+                        <h3 class="tip-title">Be Yourself</h3>
+                        <p class="tip-description">Let your personality shine through to connect with your audience.</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-clock tip-icon"></i>
+                        <h3 class="tip-title">Pace Yourself</h3>
+                        <p class="tip-description">Take your time to breathe and keep your audience engaged.</p>
+                    </div>
+                </div>
+            </section>
         </section>
 
-        <section class="activity-section animated">
-            <h2>Recent Activity</h2>
-            <div class="activity-list" id="activityList">
-                <!-- Activities will be populated by JavaScript -->
+        <aside class="metrics-sidebar animated">
+            <h2>Your Stats</h2>
+            <div class="metric-card">
+                <i class="fas fa-puzzle-piece metric-icon"></i>
+                <div id="puzzlesCompleted" class="metric-number">0</div>
+                <div class="metric-label">Puzzles Completed</div>
             </div>
-        </section>
-
-        <section class="quick-actions animated">
-            <h2>Keep Going!</h2>
-            <a href="evaluation.html" class="action-button">Practice a Speech</a>
-            <a href="learn.html" class="action-button">Learn Something New</a>
-            <a href="profile.html" class="action-button">Check Your Profile</a>
-        </section>
+            <div class="metric-card">
+                <i class="fas fa-dumbbell metric-icon"></i>
+                <div id="drillsCompleted" class="metric-number">0</div>
+                <div class="metric-label">Drills Completed</div>
+            </div>
+            <div class="metric-card">
+                <i class="fas fa-microphone-alt metric-icon"></i>
+                <div id="speechesGiven" class="metric-number">0</div>
+                <div class="metric-label">Speeches Given</div>
+            </div>
+            <div class="metric-card">
+                <i class="fas fa-trophy metric-icon"></i>
+                <div id="badgesEarned" class="metric-number">0</div>
+                <div class="metric-label">Badges Earned</div>
+            </div>
+        </aside>
     </main>
 
     <script>
@@ -539,8 +726,7 @@
                         puzzlesCompleted: 0,
                         drillsCompleted: 0,
                         speechesGiven: 0,
-                        speechesWithFivePlusStrengths: 0,
-                        activityLog: []
+                        speechesWithFivePlusStrengths: 0
                     }
                 };
                 localStorage.setItem('authState', JSON.stringify(state));
@@ -551,8 +737,7 @@
                     puzzlesCompleted: 0,
                     drillsCompleted: 0,
                     speechesGiven: 0,
-                    speechesWithFivePlusStrengths: 0,
-                    activityLog: []
+                    speechesWithFivePlusStrengths: 0
                 };
                 localStorage.setItem('authState', JSON.stringify(state));
             }
@@ -561,11 +746,36 @@
 
         // Personalities Data
         const personalities = {
-            peacock: { title: "The Peacock", icon: "fa-solid fa-feather-pointed" },
-            fox: { title: "The Fox", icon: "fa-solid fa-paw" },
-            owl: { title: "The Owl", icon: "fa-solid fa-owl" },
-            dolphin: { title: "The Dolphin", icon: "fa-solid fa-water" }
+            peacock: {
+                title: "The Peacock",
+                icon: "fa-solid fa-feather-pointed",
+                description: "You dazzle with vibrant stories and charisma, captivating every listener with your flair."
+            },
+            fox: {
+                title: "The Fox",
+                icon: "fa-solid fa-paw",
+                description: "Your quick wit and adaptability shine, turning any speech into an engaging adventure."
+            },
+            owl: {
+                title: "The Owl",
+                icon: "fa-solid fa-owl",
+                description: "You deliver clear, precise presentations, earning trust with your wisdom and logic."
+            },
+            dolphin: {
+                title: "The Dolphin",
+                icon: "fa-solid fa-water",
+                description: "Your empathy creates connections, making every speech a heartfelt conversation."
+            }
         };
+
+        // Quotes Data
+        const quotes = [
+            { text: "Why fit in when you were born to stand out?", author: "Dr. Seuss" },
+            { text: "Words are our most inexhaustible source of magic.", author: "Harry Potter Series" },
+            { text: "The most important thing a leader needs is words.", author: "Katniss Everdeen" },
+            { text: "Imagination is the only weapon in the war against reality.", author: "Alice in Wonderland" },
+            { text: "Even the smallest person can change the course of the future.", author: "The Lord of the Rings" }
+        ];
 
         // Initialize Dashboard
         document.addEventListener('DOMContentLoaded', () => {
@@ -581,7 +791,18 @@
             const profile = getUserProfile(currentSession);
             initializeDashboard(currentSession, profile);
 
-            // Animate elements on scroll
+            // Quote Rotator
+            let quoteIndex = 0;
+            function rotateQuote() {
+                const quote = quotes[quoteIndex];
+                document.querySelector('.quote-text').textContent = quote.text;
+                document.querySelector('.quote-author').textContent = `- ${quote.author}`;
+                quoteIndex = (quoteIndex + 1) % quotes.length;
+            }
+            rotateQuote();
+            setInterval(rotateQuote, 10000);
+
+            // Animations
             const animatedElements = document.querySelectorAll('.animated');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -600,58 +821,48 @@
         });
 
         function initializeDashboard(username, profile) {
-            // Update Welcome Section
-            document.getElementById('userName').textContent = profile.name || username;
-            document.getElementById('userPersonality').textContent = profile.personality && personalities[profile.personality]
-                ? personalities[profile.personality].title
-                : 'Mystery Persona';
+            // Update Persona
+            const personaIcon = document.getElementById('personaIcon');
+            const personaTitle = document.getElementById('personaTitle');
+            const personaDescription = document.getElementById('personaDescription');
+            if (profile.personality && personalities[profile.personality]) {
+                const persona = personalities[profile.personality];
+                personaIcon.className = `${persona.icon} persona-icon`;
+                personaTitle.textContent = persona.title;
+                personaDescription.textContent = persona.description;
+            } else {
+                personaIcon.className = 'fas fa-question-circle persona-icon';
+                personaTitle.textContent = 'Mystery Persona';
+                personaDescription.textContent = 'Your unique speaking style is waiting to be discovered! Take the personality quiz to reveal it.';
+            }
 
-            // Update Stats
-            document.getElementById('puzzlesCompleted').textContent = profile.puzzlesCompleted || 0;
-            document.getElementById('drillsCompleted').textContent = profile.drillsCompleted || 0;
-            document.getElementById('speechesGiven').textContent = profile.speechesGiven || 0;
+            // Update Metrics
+            const puzzles = profile.puzzlesCompleted || 0;
+            const drills = profile.drillsCompleted || 0;
+            const speeches = profile.speechesGiven || 0;
+            document.getElementById('puzzlesCompleted').textContent = puzzles;
+            document.getElementById('drillsCompleted').textContent = drills;
+            document.getElementById('speechesGiven').textContent = speeches;
 
-            // Calculate Badges Earned
+            // Calculate Badges
             let badgesEarned = 0;
-            if (profile.puzzlesCompleted >= 20) badgesEarned++;
-            if (profile.speechesGiven >= 10) badgesEarned++;
-            if (profile.drillsCompleted >= 25) badgesEarned++;
+            if (puzzles >= 20) badgesEarned++;
+            if (speeches >= 10) badgesEarned++;
+            if (drills >= 25) badgesEarned++;
             document.getElementById('badgesEarned').textContent = badgesEarned;
 
-            // Populate Activity Log
-            const activityList = document.getElementById('activityList');
-            const activities = profile.activityLog || [];
-            if (activities.length === 0) {
-                activityList.innerHTML = '<p>No recent activity yet. Start exploring!</p>';
-            } else {
-                activityList.innerHTML = '';
-                activities.slice(-5).reverse().forEach(activity => {
-                    const item = document.createElement('div');
-                    item.className = 'activity-item';
-                    item.innerHTML = `
-                        <div class="activity-icon"><i class="${activity.icon}"></i></div>
-                        <div class="activity-details">
-                            <p>${activity.description}</p>
-                            <span>${new Date(activity.timestamp).toLocaleString()}</span>
-                        </div>
-                    `;
-                    activityList.appendChild(item);
-                });
-            }
-        }
+            // Update Progress
+            const puzzleProgress = Math.min((puzzles / 20) * 100, 100);
+            document.getElementById('puzzleProgress').style.width = `${puzzleProgress}%`;
+            document.getElementById('puzzleStatus').textContent = `${puzzles}/20 Puzzles`;
 
-        // Example function to add activity (for demo purposes; should be called from other pages)
-        function addActivity(username, description, icon) {
-            const state = loadState();
-            if (!state.users[username].profile.activityLog) {
-                state.users[username].profile.activityLog = [];
-            }
-            state.users[username].profile.activityLog.push({
-                description,
-                icon,
-                timestamp: Date.now()
-            });
-            localStorage.setItem('authState', JSON.stringify(state));
+            const speechProgress = Math.min((speeches / 10) * 100, 100);
+            document.getElementById('speechProgress').style.width = `${speechProgress}%`;
+            document.getElementById('speechStatus').textContent = `${speeches}/10 Speeches`;
+
+            const drillProgress = Math.min((drills / 25) * 100, 100);
+            document.getElementById('drillProgress').style.width = `${drillProgress}%`;
+            document.getElementById('drillStatus').textContent = `${drills}/25 Drills`;
         }
     </script>
 </body>
