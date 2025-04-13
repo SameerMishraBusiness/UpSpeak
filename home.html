@@ -6,19 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UpSpeak - Your Dashboard</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #1a73e8;
-            --secondary-color: #fbbc05;
-            --text-color: #202124;
-            --background-color: #f8f9fa;
+            --primary-orange: #ff6200;
+            --primary-blue: #007bff;
+            --text-color: #2c3e50;
+            --background-color: #f5f6f8;
             --card-bg: #ffffff;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
             --transition: 0.3s ease;
             --border-radius: 12px;
-            --accent-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --accent-gradient: linear-gradient(135deg, var(--primary-orange), var(--primary-blue));
+            --record-color: #ff6200;
+            --learn-color: #007bff;
+            --profile-color: #28a745;
+            --watch-color: #fa8072;
         }
 
         * {
@@ -28,7 +32,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: var(--background-color);
             color: var(--text-color);
             min-height: 100vh;
@@ -37,7 +41,7 @@
 
         /* Header Styles */
         header {
-            background: #ffffff;
+            background: var(--card-bg);
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
@@ -57,31 +61,36 @@
         .logo {
             display: flex;
             align-items: center;
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
             color: var(--text-color);
             text-decoration: none;
+            transition: transform var(--transition);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .logo .microphone-icon {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             margin-right: 12px;
         }
 
         .logo .upspeak-up {
-            color: var(--secondary-color);
+            color: var(--primary-orange);
         }
 
         .logo .upspeak-speak {
-            color: var(--primary-color);
+            color: var(--primary-blue);
         }
 
         .nav-menu {
             display: flex;
             list-style: none;
             align-items: center;
-            gap: 32px;
+            gap: 24px;
         }
 
         .nav-menu li {
@@ -95,15 +104,16 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            padding: 8px 0;
             transition: color var(--transition);
         }
 
         .nav-menu a:hover {
-            color: var(--primary-color);
+            color: var(--primary-blue);
         }
 
         .carrot {
-            font-size: 0.9em;
+            font-size: 0.85em;
             transition: transform var(--transition);
         }
 
@@ -114,71 +124,77 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            background: #ffffff;
+            background: var(--card-bg);
             box-shadow: var(--shadow);
             border-radius: var(--border-radius);
             padding: 12px 0;
-            min-width: 200px;
+            min-width: 220px;
             top: 100%;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
+            opacity: 0;
+            transition: opacity var(--transition), transform var(--transition);
         }
 
         .nav-menu li:hover .dropdown-content {
             display: block;
-            animation: slideIn 0.2s ease forwards;
+            opacity: 1;
+            transform: translateX(-50%) translateY(4px);
         }
 
         .dropdown-content a {
             padding: 10px 20px;
             display: block;
             font-weight: 400;
+            color: var(--text-color);
+            transition: background var(--transition), color var(--transition);
         }
 
         .dropdown-content a:hover {
-            background: #f1f3f4;
-            color: var(--primary-color);
+            background: #e9ecef;
+            color: var(--primary-blue);
         }
 
         .profile-icon {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             color: var(--text-color);
-            transition: color var(--transition);
+            transition: color var(--transition), transform var(--transition);
         }
 
         .profile-icon:hover {
-            color: var(--primary-color);
+            color: var(--primary-blue);
+            transform: scale(1.1);
         }
 
-        /* Main Content */
+        /* Dashboard Layout */
         .dashboard {
             max-width: 1280px;
-            margin: 32px auto;
+            margin: 40px auto;
             padding: 0 24px;
             display: grid;
-            grid-template-columns: 3fr 1fr;
-            gap: 24px;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
         }
 
         .main-section {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 32px;
         }
 
-        /* Persona Card */
-        .persona-card {
+        /* Welcome Card */
+        .welcome-card {
             background: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
-            padding: 32px;
+            padding: 40px;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        .persona-card::before {
+        .welcome-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -188,25 +204,27 @@
             background: var(--accent-gradient);
         }
 
-        .persona-icon {
-            font-size: 3.5rem;
+        .welcome-icon {
+            font-size: 4rem;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             margin-bottom: 16px;
+            animation: pulse 2s infinite;
         }
 
-        .persona-title {
-            font-size: 2rem;
+        .welcome-title {
+            font-size: 2.2rem;
             font-weight: 600;
             margin-bottom: 12px;
+            color: var(--text-color);
         }
 
-        .persona-description {
-            font-size: 1rem;
-            color: #5f6368;
-            max-width: 500px;
+        .welcome-description {
+            font-size: 1.1rem;
+            color: #6c757d;
+            max-width: 600px;
             margin: 0 auto;
         }
 
@@ -215,36 +233,44 @@
             background: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
-            padding: 24px;
+            padding: 32px;
         }
 
         .progress-section h2 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            color: var(--text-color);
         }
 
         .progress-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
         }
 
-        .progress-item {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .progress-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform var(--transition);
+        }
+
+        .progress-card:hover {
+            transform: translateY(-4px);
         }
 
         .progress-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 500;
+            margin-bottom: 12px;
+            color: var(--text-color);
         }
 
         .progress-bar {
-            height: 8px;
-            background: #e8eaed;
-            border-radius: 4px;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
             overflow: hidden;
         }
 
@@ -255,8 +281,9 @@
         }
 
         .progress-status {
-            font-size: 0.9rem;
-            color: #5f6368;
+            font-size: 0.95rem;
+            color: #6c757d;
+            margin-top: 8px;
             text-align: right;
         }
 
@@ -265,25 +292,27 @@
             background: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
-            padding: 24px;
+            padding: 32px;
         }
 
         .tips-section h2 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            color: var(--text-color);
         }
 
         .tips-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
         }
 
         .tip-card {
-            padding: 16px;
+            background: #ffffff;
             border-radius: 8px;
-            background: #f1f3f4;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             transition: transform var(--transition);
         }
 
@@ -292,49 +321,50 @@
         }
 
         .tip-icon {
-            font-size: 1.5rem;
-            color: var(--primary-color);
+            font-size: 1.8rem;
+            color: var(--primary-blue);
             margin-bottom: 12px;
         }
 
         .tip-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 500;
             margin-bottom: 8px;
+            color: var(--text-color);
         }
 
         .tip-description {
-            font-size: 0.9rem;
-            color: #5f6368;
+            font-size: 0.95rem;
+            color: #6c757d;
         }
 
         /* Sidebar */
         .sidebar {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 32px;
         }
 
-        .actions-card, .metrics-card {
+        .actions-card, .stats-card {
             background: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
-            padding: 24px;
+            padding: 32px;
         }
 
-        .actions-card h2, .metrics-card h2 {
-            font-size: 1.5rem;
+        .actions-card h2, .stats-card h2 {
+            font-size: 1.8rem;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            color: var(--text-color);
         }
 
         .action-button {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: var(--accent-gradient);
             color: #ffffff;
-            padding: 12px 16px;
+            padding: 14px 20px;
             border-radius: 8px;
             text-decoration: none;
             font-weight: 500;
@@ -344,58 +374,79 @@
 
         .action-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .action-button i {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
 
-        .metric-item {
+        .action-button.record {
+            background: var(--record-color);
+        }
+
+        .action-button.learn {
+            background: var(--learn-color);
+        }
+
+        .action-button.profile {
+            background: var(--profile-color);
+        }
+
+        .action-button.watch {
+            background: var(--watch-color);
+        }
+
+        .stat-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid #e8eaed;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid #e9ecef;
         }
 
-        .metric-item:last-child {
+        .stat-item:last-child {
             border-bottom: none;
         }
 
-        .metric-icon {
-            font-size: 1.5rem;
-            color: var(--primary-color);
+        .stat-icon {
+            font-size: 1.8rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .metric-info {
+        .stat-info {
             flex: 1;
         }
 
-        .metric-number {
-            font-size: 1.2rem;
+        .stat-number {
+            font-size: 1.5rem;
             font-weight: 600;
+            color: var(--primary-blue);
         }
 
-        .metric-label {
-            font-size: 0.9rem;
-            color: #5f6368;
+        .stat-label {
+            font-size: 0.95rem;
+            color: #6c757d;
         }
 
         /* Animations */
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .fade-in {
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeIn 0.5s ease forwards;
+            animation: fadeIn 0.6s ease forwards;
         }
 
         @keyframes fadeIn {
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         /* Responsive Design */
@@ -420,8 +471,12 @@
                 grid-template-columns: 1fr;
             }
 
-            .persona-title {
+            .welcome-title {
                 font-size: 1.8rem;
+            }
+
+            .welcome-icon {
+                font-size: 3.5rem;
             }
         }
 
@@ -434,9 +489,13 @@
                 font-size: 0.9rem;
             }
 
+            .dropdown-content {
+                min-width: 180px;
+            }
+
             .action-button {
                 font-size: 0.9rem;
-                padding: 10px 12px;
+                padding: 12px 16px;
             }
         }
     </style>
@@ -449,8 +508,8 @@
                 <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <defs>
                         <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#1a73e8;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#fbbc05;stop-opacity:1" />
+                            <stop offset="0%" style="stop-color:#ff6200;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#007bff;stop-opacity:1" />
                         </linearGradient>
                     </defs>
                     <path fill="url(#microphone-gradient)"
@@ -503,30 +562,30 @@
 
     <main class="dashboard">
         <section class="main-section">
-            <div class="persona-card fade-in">
-                <i id="personaIcon" class="fas fa-question-circle persona-icon"></i>
-                <h1 id="personaTitle" class="persona-title">Mystery Persona</h1>
-                <p id="personaDescription" class="persona-description">Your unique speaking style is waiting to be discovered! Take the personality quiz to reveal it.</p>
+            <div class="welcome-card fade-in">
+                <i id="personaIcon" class="fas fa-question-circle welcome-icon"></i>
+                <h1 id="personaTitle" class="welcome-title">Welcome to Your Journey</h1>
+                <p id="personaDescription" class="welcome-description">Discover your unique speaking style by taking the personality quiz and start mastering your voice today!</p>
             </div>
 
             <section class="progress-section fade-in">
                 <h2>Your Progress</h2>
                 <div class="progress-grid">
-                    <div class="progress-item">
+                    <div class="progress-card">
                         <div class="progress-title">Puzzle Decipher</div>
                         <div class="progress-bar">
                             <div id="puzzleProgress" class="progress-fill" style="width: 0%"></div>
                         </div>
                         <div id="puzzleStatus" class="progress-status">0/20 Puzzles</div>
                     </div>
-                    <div class="progress-item">
+                    <div class="progress-card">
                         <div class="progress-title">Savvy Speaker</div>
                         <div class="progress-bar">
                             <div id="speechProgress" class="progress-fill" style="width: 0%"></div>
                         </div>
                         <div id="speechStatus" class="progress-status">0/10 Speeches</div>
                     </div>
-                    <div class="progress-item">
+                    <div class="progress-card">
                         <div class="progress-title">Driller</div>
                         <div class="progress-bar">
                             <div id="drillProgress" class="progress-fill" style="width: 0%"></div>
@@ -545,40 +604,40 @@
         <aside class="sidebar">
             <div class="actions-card fade-in">
                 <h2>Quick Actions</h2>
-                <a href="evaluation.html" class="action-button"><i class="fas fa-microphone"></i> Record</a>
-                <a href="learn.html" class="action-button"><i class="fas fa-book-open"></i> Learn</a>
-                <a href="profile.html" class="action-button"><i class="fas fa-user"></i> Profile</a>
-                <a href="watch.html" class="action-button"><i class="fas fa-video"></i> Watch</a>
+                <a href="evaluation.html" class="action-button record"><i class="fas fa-microphone"></i> Record</a>
+                <a href="learn.html" class="action-button learn"><i class="fas fa-book-open"></i> Learn</a>
+                <a href="profile.html" class="action-button profile"><i class="fas fa-user"></i> Profile</a>
+                <a href="watch.html" class="action-button watch"><i class="fas fa-video"></i> Watch</a>
             </div>
 
-            <div class="metrics-card fade-in">
+            <div class="stats-card fade-in">
                 <h2>Your Stats</h2>
-                <div class="metric-item">
-                    <i class="fas fa-puzzle-piece metric-icon"></i>
-                    <div class="metric-info">
-                        <div id="puzzlesCompleted" class="metric-number">0</div>
-                        <div class="metric-label">Puzzles Completed</div>
+                <div class="stat-item">
+                    <i class="fas fa-puzzle-piece stat-icon"></i>
+                    <div class="stat-info">
+                        <div id="puzzlesCompleted" class="stat-number">0</div>
+                        <div class="stat-label">Puzzles Completed</div>
                     </div>
                 </div>
-                <div class="metric-item">
-                    <i class="fas fa-dumbbell metric-icon"></i>
-                    <div class="metric-info">
-                        <div id="drillsCompleted" class="metric-number">0</div>
-                        <div class="metric-label">Drills Completed</div>
+                <div class="stat-item">
+                    <i class="fas fa-dumbbell stat-icon"></i>
+                    <div class="stat-info">
+                        <div id="drillsCompleted" class="stat-number">0</div>
+                        <div class="stat-label">Drills Completed</div>
                     </div>
                 </div>
-                <div class="metric-item">
-                    <i class="fas fa-microphone-alt metric-icon"></i>
-                    <div class="metric-info">
-                        <div id="speechesGiven" class="metric-number">0</div>
-                        <div class="metric-label">Speeches Given</div>
+                <div class="stat-item">
+                    <i class="fas fa-microphone-alt stat-icon"></i>
+                    <div class="stat-info">
+                        <div id="speechesGiven" class="stat-number">0</div>
+                        <div class="stat-label">Speeches Given</div>
                     </div>
                 </div>
-                <div class="metric-item">
-                    <i class="fas fa-trophy metric-icon"></i>
-                    <div class="metric-info">
-                        <div id="badgesEarned" class="metric-number">0</div>
-                        <div class="metric-label">Badges Earned</div>
+                <div class="stat-item">
+                    <i class="fas fa-trophy stat-icon"></i>
+                    <div class="stat-info">
+                        <div id="badgesEarned" class="stat-number">0</div>
+                        <div class="stat-label">Badges Earned</div>
                     </div>
                 </div>
             </div>
@@ -631,41 +690,41 @@
             peacock: {
                 title: "The Peacock",
                 icon: "fa-solid fa-feather-pointed",
-                description: "You dazzle with vibrant stories and charisma, captivating every listener with your flair."
+                description: "Your vibrant stories and charisma captivate every listener with unmatched flair."
             },
             fox: {
                 title: "The Fox",
                 icon: "fa-solid fa-paw",
-                description: "Your quick wit and adaptability shine, turning any speech into an engaging adventure."
+                description: "Quick wit and adaptability make your speeches engaging and dynamic."
             },
             owl: {
                 title: "The Owl",
                 icon: "fa-solid fa-owl",
-                description: "You deliver clear, precise presentations, earning trust with your wisdom and logic."
+                description: "Clear, precise presentations earn trust with your wisdom and logic."
             },
             dolphin: {
                 title: "The Dolphin",
                 icon: "fa-solid fa-water",
-                description: "Your empathy creates connections, making every speech a heartfelt conversation."
+                description: "Empathy creates heartfelt connections, making every speech resonate."
             }
         };
 
         // Tips Data (Scaled by Progress)
         const tips = {
             beginner: [
-                { icon: "fas fa-lightbulb", title: "Speak Clearly", description: "Enunciate each word to ensure your audience understands you." },
-                { icon: "fas fa-heart", title: "Be Authentic", description: "Let your personality shine to build a connection with listeners." },
-                { icon: "fas fa-clock", title: "Pace Yourself", description: "Speak slowly and pause to keep your audience engaged." }
+                { icon: "fas fa-lightbulb", title: "Start Clear", description: "Focus on pronouncing each word distinctly to ensure clarity." },
+                { icon: "fas fa-smile", title: "Be You", description: "Show your personality to make your speech authentic and relatable." },
+                { icon: "fas fa-hourglass", title: "Take Your Time", description: "Pause between points to let your message sink in." }
             ],
             intermediate: [
-                { icon: "fas fa-bullhorn", title: "Vary Your Tone", description: "Use vocal variety to emphasize key points and maintain interest." },
-                { icon: "fas fa-users", title: "Know Your Audience", description: "Tailor your message to resonate with your listeners' interests." },
-                { icon: "fas fa-hand-sparkles", title: "Use Gestures", description: "Incorporate purposeful gestures to enhance your delivery." }
+                { icon: "fas fa-music", title: "Vary Your Voice", description: "Use tone changes to highlight key ideas and keep listeners engaged." },
+                { icon: "fas fa-user-friends", title: "Connect with Listeners", description: "Adapt your content to match your audience's interests." },
+                { icon: "fas fa-hand-paper", title: "Gesture Naturally", description: "Use hand movements to emphasize points without overdoing it." }
             ],
             advanced: [
-                { icon: "fas fa-brain", title: "Master Storytelling", description: "Weave narratives to make your speeches memorable and impactful." },
-                { icon: "fas fa-eye", title: "Engage Visually", description: "Maintain eye contact to build trust and connection with your audience." },
-                { icon: "fas fa-rocket", title: "Handle Nerves", description: "Use breathing techniques to stay calm and confident under pressure." }
+                { icon: "fas fa-book-open", title: "Tell Stories", description: "Craft narratives to make your speeches memorable and impactful." },
+                { icon: "fas fa-eye", title: "Lock Eyes", description: "Maintain eye contact to build trust and strengthen your delivery." },
+                { icon: "fas fa-wind", title: "Stay Calm", description: "Practice deep breathing to manage nerves during high-stakes moments." }
             ]
         };
 
@@ -697,18 +756,22 @@
         });
 
         function initializeDashboard(username, profile) {
-            // Update Persona
+            // Update Welcome Card
             const personaIcon = document.getElementById('personaIcon');
             const personaTitle = document.getElementById('personaTitle');
             const personaDescription = document.getElementById('personaDescription');
             if (profile.personality && personalities[profile.personality]) {
                 const persona = personalities[profile.personality];
-                personaIcon.className = `${persona.icon} persona-icon`;
+                personaIcon.className = `${persona.icon} welcome-icon`;
                 personaTitle.textContent = persona.title;
                 personaDescription.textContent = persona.description;
+            } else {
+                personaIcon.className = 'fas fa-question-circle welcome-icon';
+                personaTitle.textContent = 'Welcome to Your Journey';
+                personaDescription.textContent = 'Discover your unique speaking style by taking the personality quiz and start mastering your voice today!';
             }
 
-            // Update Metrics
+            // Update Stats
             const puzzles = profile.puzzlesCompleted || 0;
             const drills = profile.drillsCompleted || 0;
             const speeches = profile.speechesGiven || 0;
