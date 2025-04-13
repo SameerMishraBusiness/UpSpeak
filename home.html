@@ -6,22 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UpSpeak - Your Dashboard</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
         :root {
-            --primary-color: #007bff;
-            --secondary-color: #ff9933;
-            --text-color: #2c3e50;
-            --background-gradient: linear-gradient(135deg, #e6f2ff, #ffe6cc);
-            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            --transition-speed: 0.3s;
-            --accent-color: #ff8c00;
-            --light-bg: rgba(255, 255, 255, 0.85);
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --success-color: #00b894;
-            --glow-color: rgba(0, 123, 255, 0.3);
+            --primary-color: #1a73e8;
+            --secondary-color: #fbbc05;
+            --text-color: #202124;
+            --background-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: 0.3s ease;
+            --border-radius: 12px;
+            --accent-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
         }
 
         * {
@@ -31,53 +28,45 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--background-gradient);
+            font-family: 'Inter', sans-serif;
+            background: var(--background-color);
             color: var(--text-color);
             min-height: 100vh;
             line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
         }
 
         /* Header Styles */
         header {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 20px 0;
-            box-shadow: var(--box-shadow);
+            background: #ffffff;
+            box-shadow: var(--shadow);
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
+            padding: 16px 0;
         }
 
         .navbar {
+            max-width: 1280px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
 
         .logo {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--text-color);
             display: flex;
             align-items: center;
-            cursor: pointer;
-            transition: transform var(--transition-speed) ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
         }
 
         .logo .microphone-icon {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             margin-right: 12px;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
         }
 
         .logo .upspeak-up {
@@ -89,36 +78,33 @@
         }
 
         .nav-menu {
-            list-style: none;
             display: flex;
+            list-style: none;
             align-items: center;
-            margin: 0;
+            gap: 32px;
         }
 
         .nav-menu li {
-            margin: 0 25px;
             position: relative;
         }
 
-        .nav-menu > li > a {
-            color: #555;
-            font-weight: 500;
+        .nav-menu a {
+            color: var(--text-color);
             text-decoration: none;
+            font-weight: 500;
             display: flex;
             align-items: center;
-            padding: 8px 0;
-            transition: color var(--transition-speed) ease, border-bottom var(--transition-speed) ease;
+            gap: 6px;
+            transition: color var(--transition);
         }
 
-        .nav-menu > li > a:hover {
+        .nav-menu a:hover {
             color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
         }
 
-        .nav-menu .carrot {
-            margin-left: 6px;
-            font-size: 0.85em;
-            transition: transform var(--transition-speed) ease;
+        .carrot {
+            font-size: 0.9em;
+            transition: transform var(--transition);
         }
 
         .nav-menu li:hover .carrot {
@@ -128,422 +114,329 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: var(--card-bg);
-            min-width: 220px;
-            box-shadow: var(--box-shadow);
-            padding: 15px 25px;
-            z-index: 1;
+            background: #ffffff;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            padding: 12px 0;
+            min-width: 200px;
             top: 100%;
             left: 50%;
             transform: translateX(-50%);
-            border-radius: 12px;
-            opacity: 0;
-            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
-            backdrop-filter: blur(8px);
+            z-index: 10;
         }
 
         .nav-menu li:hover .dropdown-content {
             display: block;
-            opacity: 1;
-            transform: translateX(-50%) translateY(8px);
+            animation: slideIn 0.2s ease forwards;
         }
 
         .dropdown-content a {
-            color: var(--text-color);
-            padding: 10px 0;
-            text-decoration: none;
+            padding: 10px 20px;
             display: block;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-            border-radius: 6px;
+            font-weight: 400;
         }
 
         .dropdown-content a:hover {
-            background-color: rgba(0, 123, 255, 0.1);
+            background: #f1f3f4;
             color: var(--primary-color);
         }
 
         .profile-icon {
-            font-size: 2.8rem;
-            color: #777;
-            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            font-size: 2.2rem;
+            color: var(--text-color);
+            transition: color var(--transition);
         }
 
         .profile-icon:hover {
             color: var(--primary-color);
-            transform: scale(1.1);
         }
 
-        /* Dashboard Layout */
-        .dashboard-container {
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 0 20px;
+        /* Main Content */
+        .dashboard {
+            max-width: 1280px;
+            margin: 32px auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 24px;
+        }
+
+        .main-section {
             display: flex;
-            gap: 30px;
+            flex-direction: column;
+            gap: 24px;
         }
 
-        .main-content {
-            flex: 3;
-        }
-
-        /* Left Sidebar (Buttons) */
-        .action-sidebar {
-            flex: 1;
-            max-width: 250px;
-        }
-
-        .action-sidebar h2 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: var(--text-color);
+        /* Persona Card */
+        .persona-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 32px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .persona-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-gradient);
+        }
+
+        .persona-icon {
+            font-size: 3.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .persona-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .persona-description {
+            font-size: 1rem;
+            color: #5f6368;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+        }
+
+        .progress-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .progress-item {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .progress-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e8eaed;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            transition: width 1s ease;
+        }
+
+        .progress-status {
+            font-size: 0.9rem;
+            color: #5f6368;
+            text-align: right;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+        }
+
+        .tips-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .tip-card {
+            padding: 16px;
+            border-radius: 8px;
+            background: #f1f3f4;
+            transition: transform var(--transition);
+        }
+
+        .tip-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .tip-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+
+        .tip-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .tip-description {
+            font-size: 0.9rem;
+            color: #5f6368;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .actions-card, .metrics-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+        }
+
+        .actions-card h2, .metrics-card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
         }
 
         .action-button {
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: white;
-            padding: 15px 20px;
-            margin-bottom: 15px;
-            border-radius: 12px;
+            gap: 12px;
+            background: var(--accent-gradient);
+            color: #ffffff;
+            padding: 12px 16px;
+            border-radius: 8px;
             text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .action-button i {
-            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+            transition: transform var(--transition), box-shadow var(--transition);
         }
 
         .action-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px var(--glow-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        /* Right Sidebar (Metrics) */
-        .metrics-sidebar {
-            flex: 1;
-            max-width: 300px;
+        .action-button i {
+            font-size: 1.2rem;
         }
 
-        .metrics-sidebar h2 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: var(--text-color);
-            text-align: center;
+        .metric-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e8eaed;
         }
 
-        .metric-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            text-align: center;
-            box-shadow: var(--box-shadow);
-            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        }
-
-        .metric-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px var(--glow-color);
+        .metric-item:last-child {
+            border-bottom: none;
         }
 
         .metric-icon {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .metric-info {
+            flex: 1;
         }
 
         .metric-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 5px;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
 
         .metric-label {
-            font-size: 0.95rem;
-            color: #666;
-        }
-
-        /* Persona Section */
-        .persona-section {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--box-shadow);
-            margin-bottom: 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .persona-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        }
-
-        .persona-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: pulse 2s infinite;
-        }
-
-        .persona-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 10px;
-        }
-
-        .persona-description {
-            font-size: 1.1rem;
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Progress Overview */
-        .progress-section {
-            margin-bottom: 40px;
-        }
-
-        .progress-section h2 {
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--text-color);
-        }
-
-        .progress-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .progress-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: var(--box-shadow);
-            transition: transform var(--transition-speed) ease;
-        }
-
-        .progress-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .progress-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--text-color);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background: #eee;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            transition: width 1s ease;
-        }
-
-        .progress-status {
-            font-size: 0.95rem;
-            color: #666;
-            text-align: right;
-        }
-
-        /* Quote Section */
-        .quote-section {
-            background: var(--light-bg);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 40px;
-            text-align: center;
-            box-shadow: var(--box-shadow);
-            position: relative;
-        }
-
-        .quote-text {
-            font-size: 1.8rem;
-            font-style: italic;
-            color: var(--text-color);
-            margin-bottom: 15px;
-        }
-
-        .quote-author {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #555;
-        }
-
-        /* Tips Section */
-        .tips-section {
-            margin-bottom: 40px;
-        }
-
-        .tips-section h2 {
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--text-color);
-        }
-
-        .tips-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        .tip-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: var(--box-shadow);
-            transition: transform var(--transition-speed) ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tip-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        }
-
-        .tip-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .tip-icon {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .tip-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--text-color);
-        }
-
-        .tip-description {
-            font-size: 0.95rem;
-            color: #666;
+            font-size: 0.9rem;
+            color: #5f6368;
         }
 
         /* Animations */
-        .animated {
-            animation: fadeIn 0.8s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Responsive Design */
         @media (max-width: 1024px) {
-            .dashboard-container {
-                flex-direction: column;
+            .dashboard {
+                grid-template-columns: 1fr;
             }
 
-            .action-sidebar, .metrics-sidebar {
-                max-width: 100%;
-            }
-
-            .action-sidebar {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 15px;
-            }
-
-            .action-button {
-                flex: 1;
-                min-width: 200px;
+            .sidebar {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
             }
         }
 
         @media (max-width: 768px) {
-            .persona-title {
-                font-size: 2rem;
-            }
-
             .progress-grid, .tips-grid {
                 grid-template-columns: 1fr;
             }
 
-            .quote-text {
-                font-size: 1.5rem;
+            .sidebar {
+                grid-template-columns: 1fr;
+            }
+
+            .persona-title {
+                font-size: 1.8rem;
             }
         }
 
         @media (max-width: 576px) {
-            .nav-menu li {
-                margin: 0 15px;
+            .nav-menu {
+                gap: 16px;
             }
 
-            .dropdown-content {
-                min-width: 180px;
+            .nav-menu a {
+                font-size: 0.9rem;
             }
 
             .action-button {
-                font-size: 1rem;
-                padding: 12px 15px;
+                font-size: 0.9rem;
+                padding: 10px 12px;
             }
         }
     </style>
@@ -552,19 +445,19 @@
 <body>
     <header>
         <nav class="navbar">
-            <div class="logo">
+            <a href="index.html" class="logo">
                 <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <defs>
                         <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
+                            <stop offset="0%" style="stop-color:#1a73e8;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#fbbc05;stop-opacity:1" />
                         </linearGradient>
                     </defs>
                     <path fill="url(#microphone-gradient)"
                         d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
                 </svg>
                 <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
-            </div>
+            </a>
 
             <ul class="nav-menu">
                 <li>
@@ -608,40 +501,32 @@
         </nav>
     </header>
 
-    <main class="dashboard-container">
-        <aside class="action-sidebar animated">
-            <h2>Your Actions</h2>
-            <a href="evaluation.html" class="action-button"><i class="fas fa-microphone"></i> Record</a>
-            <a href="learn.html" class="action-button"><i class="fas fa-book-open"></i> Learn</a>
-            <a href="profile.html" class="action-button"><i class="fas fa-user"></i> Profile</a>
-            <a href="watch.html" class="action-button"><i class="fas fa-video"></i> Watch</a>
-        </aside>
-
-        <section class="main-content">
-            <div class="persona-section animated">
+    <main class="dashboard">
+        <section class="main-section">
+            <div class="persona-card fade-in">
                 <i id="personaIcon" class="fas fa-question-circle persona-icon"></i>
                 <h1 id="personaTitle" class="persona-title">Mystery Persona</h1>
                 <p id="personaDescription" class="persona-description">Your unique speaking style is waiting to be discovered! Take the personality quiz to reveal it.</p>
             </div>
 
-            <section class="progress-section animated">
-                <h2>Your Achievements</h2>
+            <section class="progress-section fade-in">
+                <h2>Your Progress</h2>
                 <div class="progress-grid">
-                    <div class="progress-card">
+                    <div class="progress-item">
                         <div class="progress-title">Puzzle Decipher</div>
                         <div class="progress-bar">
                             <div id="puzzleProgress" class="progress-fill" style="width: 0%"></div>
                         </div>
                         <div id="puzzleStatus" class="progress-status">0/20 Puzzles</div>
                     </div>
-                    <div class="progress-card">
+                    <div class="progress-item">
                         <div class="progress-title">Savvy Speaker</div>
                         <div class="progress-bar">
                             <div id="speechProgress" class="progress-fill" style="width: 0%"></div>
                         </div>
                         <div id="speechStatus" class="progress-status">0/10 Speeches</div>
                     </div>
-                    <div class="progress-card">
+                    <div class="progress-item">
                         <div class="progress-title">Driller</div>
                         <div class="progress-bar">
                             <div id="drillProgress" class="progress-fill" style="width: 0%"></div>
@@ -651,54 +536,51 @@
                 </div>
             </section>
 
-            <section class="quote-section animated">
-                <blockquote class="quote-text"></blockquote>
-                <p class="quote-author"></p>
-            </section>
-
-            <section class="tips-section animated">
-                <h2>Quick Tips</h2>
-                <div class="tips-grid">
-                    <div class="tip-card">
-                        <i class="fas fa-lightbulb tip-icon"></i>
-                        <h3 class="tip-title">Speak Clearly</h3>
-                        <p class="tip-description">Practice enunciating each word to make your speech crystal clear.</p>
-                    </div>
-                    <div class="tip-card">
-                        <i class="fas fa-heart tip-icon"></i>
-                        <h3 class="tip-title">Be Yourself</h3>
-                        <p class="tip-description">Let your personality shine through to connect with your audience.</p>
-                    </div>
-                    <div class="tip-card">
-                        <i class="fas fa-clock tip-icon"></i>
-                        <h3 class="tip-title">Pace Yourself</h3>
-                        <p class="tip-description">Take your time to breathe and keep your audience engaged.</p>
-                    </div>
-                </div>
+            <section class="tips-section fade-in">
+                <h2>Personalized Tips</h2>
+                <div id="tipsGrid" class="tips-grid"></div>
             </section>
         </section>
 
-        <aside class="metrics-sidebar animated">
-            <h2>Your Stats</h2>
-            <div class="metric-card">
-                <i class="fas fa-puzzle-piece metric-icon"></i>
-                <div id="puzzlesCompleted" class="metric-number">0</div>
-                <div class="metric-label">Puzzles Completed</div>
+        <aside class="sidebar">
+            <div class="actions-card fade-in">
+                <h2>Quick Actions</h2>
+                <a href="evaluation.html" class="action-button"><i class="fas fa-microphone"></i> Record</a>
+                <a href="learn.html" class="action-button"><i class="fas fa-book-open"></i> Learn</a>
+                <a href="profile.html" class="action-button"><i class="fas fa-user"></i> Profile</a>
+                <a href="watch.html" class="action-button"><i class="fas fa-video"></i> Watch</a>
             </div>
-            <div class="metric-card">
-                <i class="fas fa-dumbbell metric-icon"></i>
-                <div id="drillsCompleted" class="metric-number">0</div>
-                <div class="metric-label">Drills Completed</div>
-            </div>
-            <div class="metric-card">
-                <i class="fas fa-microphone-alt metric-icon"></i>
-                <div id="speechesGiven" class="metric-number">0</div>
-                <div class="metric-label">Speeches Given</div>
-            </div>
-            <div class="metric-card">
-                <i class="fas fa-trophy metric-icon"></i>
-                <div id="badgesEarned" class="metric-number">0</div>
-                <div class="metric-label">Badges Earned</div>
+
+            <div class="metrics-card fade-in">
+                <h2>Your Stats</h2>
+                <div class="metric-item">
+                    <i class="fas fa-puzzle-piece metric-icon"></i>
+                    <div class="metric-info">
+                        <div id="puzzlesCompleted" class="metric-number">0</div>
+                        <div class="metric-label">Puzzles Completed</div>
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <i class="fas fa-dumbbell metric-icon"></i>
+                    <div class="metric-info">
+                        <div id="drillsCompleted" class="metric-number">0</div>
+                        <div class="metric-label">Drills Completed</div>
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <i class="fas fa-microphone-alt metric-icon"></i>
+                    <div class="metric-info">
+                        <div id="speechesGiven" class="metric-number">0</div>
+                        <div class="metric-label">Speeches Given</div>
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <i class="fas fa-trophy metric-icon"></i>
+                    <div class="metric-info">
+                        <div id="badgesEarned" class="metric-number">0</div>
+                        <div class="metric-label">Badges Earned</div>
+                    </div>
+                </div>
             </div>
         </aside>
     </main>
@@ -768,14 +650,24 @@
             }
         };
 
-        // Quotes Data
-        const quotes = [
-            { text: "Why fit in when you were born to stand out?", author: "Dr. Seuss" },
-            { text: "Words are our most inexhaustible source of magic.", author: "Harry Potter Series" },
-            { text: "The most important thing a leader needs is words.", author: "Katniss Everdeen" },
-            { text: "Imagination is the only weapon in the war against reality.", author: "Alice in Wonderland" },
-            { text: "Even the smallest person can change the course of the future.", author: "The Lord of the Rings" }
-        ];
+        // Tips Data (Scaled by Progress)
+        const tips = {
+            beginner: [
+                { icon: "fas fa-lightbulb", title: "Speak Clearly", description: "Enunciate each word to ensure your audience understands you." },
+                { icon: "fas fa-heart", title: "Be Authentic", description: "Let your personality shine to build a connection with listeners." },
+                { icon: "fas fa-clock", title: "Pace Yourself", description: "Speak slowly and pause to keep your audience engaged." }
+            ],
+            intermediate: [
+                { icon: "fas fa-bullhorn", title: "Vary Your Tone", description: "Use vocal variety to emphasize key points and maintain interest." },
+                { icon: "fas fa-users", title: "Know Your Audience", description: "Tailor your message to resonate with your listeners' interests." },
+                { icon: "fas fa-hand-sparkles", title: "Use Gestures", description: "Incorporate purposeful gestures to enhance your delivery." }
+            ],
+            advanced: [
+                { icon: "fas fa-brain", title: "Master Storytelling", description: "Weave narratives to make your speeches memorable and impactful." },
+                { icon: "fas fa-eye", title: "Engage Visually", description: "Maintain eye contact to build trust and connection with your audience." },
+                { icon: "fas fa-rocket", title: "Handle Nerves", description: "Use breathing techniques to stay calm and confident under pressure." }
+            ]
+        };
 
         // Initialize Dashboard
         document.addEventListener('DOMContentLoaded', () => {
@@ -791,33 +683,17 @@
             const profile = getUserProfile(currentSession);
             initializeDashboard(currentSession, profile);
 
-            // Quote Rotator
-            let quoteIndex = 0;
-            function rotateQuote() {
-                const quote = quotes[quoteIndex];
-                document.querySelector('.quote-text').textContent = quote.text;
-                document.querySelector('.quote-author').textContent = `- ${quote.author}`;
-                quoteIndex = (quoteIndex + 1) % quotes.length;
-            }
-            rotateQuote();
-            setInterval(rotateQuote, 10000);
-
             // Animations
-            const animatedElements = document.querySelectorAll('.animated');
-            const observer = new IntersectionObserver((entries) => {
+            const elements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
+                        entry.target.classList.add('fade-in');
+                        observer.unobserve(entry.target);
                     }
                 });
             });
-            animatedElements.forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-                observer.observe(el);
-            });
+            elements.forEach(el => observer.observe(el));
         });
 
         function initializeDashboard(username, profile) {
@@ -830,10 +706,6 @@
                 personaIcon.className = `${persona.icon} persona-icon`;
                 personaTitle.textContent = persona.title;
                 personaDescription.textContent = persona.description;
-            } else {
-                personaIcon.className = 'fas fa-question-circle persona-icon';
-                personaTitle.textContent = 'Mystery Persona';
-                personaDescription.textContent = 'Your unique speaking style is waiting to be discovered! Take the personality quiz to reveal it.';
             }
 
             // Update Metrics
@@ -863,6 +735,30 @@
             const drillProgress = Math.min((drills / 25) * 100, 100);
             document.getElementById('drillProgress').style.width = `${drillProgress}%`;
             document.getElementById('drillStatus').textContent = `${drills}/25 Drills`;
+
+            // Update Tips Based on Progress
+            const totalProgress = puzzles + drills + speeches;
+            let selectedTips;
+            if (totalProgress < 20) {
+                selectedTips = tips.beginner;
+            } else if (totalProgress < 50) {
+                selectedTips = tips.intermediate;
+            } else {
+                selectedTips = tips.advanced;
+            }
+
+            const tipsGrid = document.getElementById('tipsGrid');
+            tipsGrid.innerHTML = '';
+            selectedTips.forEach(tip => {
+                const tipCard = document.createElement('div');
+                tipCard.className = 'tip-card';
+                tipCard.innerHTML = `
+                    <i class="${tip.icon} tip-icon"></i>
+                    <h3 class="tip-title">${tip.title}</h3>
+                    <p class="tip-description">${tip.description}</p>
+                `;
+                tipsGrid.appendChild(tipCard);
+            });
         }
     </script>
 </body>
