@@ -595,6 +595,8 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Content</span> Add depth (${sentences.length} sentences, ${wordCount} words)`);
             }
 
+
+            // Add actual complex sentences filter, not based on word length
             const complexSentences = sentences.filter(s => s.split(' ').length > 15);
             if (complexSentences.length > 2) {
                 overallScore += 15;
@@ -603,6 +605,8 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Vocabulary</span> Try more complex sentences (${complexSentences.length} found)`);
             }
 
+
+            //Add many more example phrases
             const gratitudePhrases = ["thank you", "i appreciate", "grateful", "thanks"];
             if (gratitudePhrases.some(p => finalTranscript.toLowerCase().includes(p))) {
                 overallScore += 10;
@@ -610,7 +614,7 @@
             } else {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Connection</span> Add a heartfelt phrase`);
             }
-
+            //Add many more example phrases
             const transitionWords = ["however", "therefore", "moreover", "for example", "in addition"];
             const transitionsUsed = transitionWords.filter(word => finalTranscript.toLowerCase().includes(word));
             if (transitionsUsed.length >= 3) {
@@ -619,7 +623,8 @@
             } else {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Flow</span> Add transitions (${transitionsUsed.length}/3 used)`);
             }
-
+            //Add many more example phrases 
+            //Make detection of um, and uh
             const fillerWords = ["um", "uh", "like", "you know"];
             const fillerTotal = fillerWords.reduce((sum, word) => sum + (finalTranscript.match(new RegExp(`\\b${word}\\b`, "gi")) || []).length, 0);
             if (fillerTotal === 0) {
@@ -631,7 +636,7 @@
             } else {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Clarity</span> Reduce ${fillerTotal} fillers`);
             }
-
+            //Fix consistency issue, instead of overall average wpm, add sub feedback points to slow then fast or sudden speed changes
             const wordsPerMinute = Math.floor((wordCount / durationSeconds) * 60);
             if (wordsPerMinute > 200) {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Pace</span> Slow down (${wordsPerMinute} wpm)`);
@@ -641,7 +646,7 @@
                 overallScore += 15;
                 strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Pace</span> Ideal pace (${wordsPerMinute} wpm)`);
             }
-
+            //Add many more example phrases
             const persuasiveWords = ["must", "essential", "crucial", "important"];
             if (persuasiveWords.filter(word => finalTranscript.toLowerCase().includes(word)).length >= 3) {
                 overallScore += 10;
@@ -649,7 +654,7 @@
             } else {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Persuasion</span> Add persuasive words`);
             }
-
+            //Add many more example phrases
             const callToAction = ["let's", "join", "start", "consider"];
             if (callToAction.some(word => finalTranscript.toLowerCase().includes(word))) {
                 overallScore += 10;
