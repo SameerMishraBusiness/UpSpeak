@@ -1,756 +1,1653 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UpSpeak Profile</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <style>
-        :root {
-            --primary-color: #007bff;
-            --secondary-color: #ff9933;
-            --text-color: #2c3e50;
-            --background-gradient: linear-gradient(135deg, #ecf0f1, #d5dbdb);
-            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            --transition-speed: 0.3s;
-            --accent-color: #ff8c00;
-            --success-color: #00b894;
-            --warning-color: #fdcb6e;
-            --danger-color: #e17055;
-            --light-bg: rgba(255, 255, 255, 0.8);
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --neutral-gray: #F5F5F5;
-            --dark-gray: #424242;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#4361ee">
+  <title>UpSpeak Profile - Master Your Voice</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icon-192x192.png">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a54d0;
+      --secondary: #ff9f1c;
+      --secondary-dark: #e58e19;
+      --tertiary: #10b981;
+      --tertiary-dark: #0d9668;
+      --text: #2c3e50;
+      --text-light: #64748b;
+      --bg: #f0f4f8;
+      --bg-card: #ffffff;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --gradient: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      --gradient-secondary: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+      --gradient-tertiary: linear-gradient(135deg, var(--tertiary), var(--tertiary-dark));
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --star-gold: #ffd700;
+      --star-shadow: #b8860b;
+      --primary-color: #007bff;
+      --secondary-color: #ff9933;
+      --text-color: #2c3e50;
+      --background-gradient: linear-gradient(135deg, #e6f0f1, #d5dbdb);
+      --transition-speed: 0.3s;
+      --accent-color: #ff8c00;
+      --light-bg: rgba(255, 255, 255, 0.8);
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --neutral-gray: #F5F5F5;
+      --dark-gray: #424242;
+    }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background: var(--background-gradient);
-            color: var(--text-color);
-            overflow-x: hidden;
-            min-height: 100vh;
-            line-height: 1.8;
-            -webkit-font-smoothing: antialiased;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      touch-action: manipulation;
+    }
 
-        header {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 25px 0;
-            box-shadow: var(--box-shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
+    html {
+      height: 100%;
+      -webkit-text-size-adjust: 100%;
+      overscroll-behavior: none;
+    }
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        .logo {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: transform var(--transition-speed) ease;
-        }
+    header {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 25px 0;
+      box-shadow: var(--box-shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      width: 100%;
+      text-align: center;
+    }
 
-        .logo:hover { transform: scale(1.08); }
-        .logo .microphone-icon { width: 55px; height: 55px; margin-right: 15px; filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1)); }
-        .logo .upspeak-up { color: var(--secondary-color); }
-        .logo .upspeak-speak { color: var(--primary-color); }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
 
-        .nav-menu { list-style: none; display: flex; justify-content: center; align-items: center; padding: 0; margin: 0; }
-        .nav-menu li { margin: 0 30px; position: relative; }
-        .nav-menu > li > a { color: #555; font-weight: 500; transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease; display: flex; align-items: center; text-decoration: none; padding-bottom: 4px; }
-        .nav-menu > li > a:hover { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); }
-        .nav-menu .carrot { margin-left: 7px; font-size: 0.9em; transition: transform var(--transition-speed) ease; }
-        .nav-menu li:hover .carrot { transform: rotate(180deg); }
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: transform var(--transition-speed) ease;
+    }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.98);
-            min-width: 240px;
-            box-shadow: var(--box-shadow);
-            padding: 20px 30px;
-            z-index: 1;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: left;
-            border-radius: 15px;
-            opacity: 0;
-            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
-            transform-origin: top center;
-            backdrop-filter: blur(10px);
-        }
+    .logo:hover {
+      transform: scale(1.08);
+    }
 
-        .nav-menu li:hover .dropdown-content { display: block; opacity: 1; transform: translateX(-50%) translateY(10px); }
-        .dropdown-content a { color: var(--text-color); padding: 12px 0; text-decoration: none; display: block; transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease; border-radius: 8px; }
-        .dropdown-content a:hover { background-color: rgba(0, 123, 255, 0.1); color: var(--primary-color); }
+    .logo .microphone-icon {
+      width: 55px;
+      height: 55px;
+      margin-right: 15px;
+      filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+    }
 
-        .profile-icon { font-size: 3rem; color: #777; transition: color var(--transition-speed) ease, transform var(--transition-speed) ease; }
-        .profile-icon:hover { color: var(--primary-color); transform: scale(1.15); }
+    .logo .upspeak-up {
+      color: var(--secondary-color);
+    }
 
-        .profile-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+    .logo .upspeak-speak {
+      color: var(--primary-color);
+    }
 
-        .profile-header { display: flex; align-items: center; justify-content: space-between; background: var(--card-bg); border-radius: 20px; padding: 30px; box-shadow: var(--box-shadow); margin-bottom: 30px; position: relative; overflow: hidden; }
-        .profile-header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color)); z-index: 1; }
+    .nav-menu {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      margin: 0;
+    }
 
-        .profile-info { display: flex; align-items: center; gap: 20px; }
-        .profile-avatar { width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(45deg, var(--primary-color), var(--accent-color)); display: flex; align-items: center; justify-content: center; color: white; font-size: 3.5rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); border: 4px solid white; }
-        .profile-details { display: flex; flex-direction: column; }
-        .profile-name { font-size: 2.2rem; font-weight: 700; margin: 0; background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .profile-tagline { font-size: 1.1rem; color: #666; margin: 5px 0 15px; }
-        .profile-stats { display: flex; gap: 20px; }
-        .stat { display: flex; flex-direction: column; align-items: center; padding: 10px 15px; background: var(--light-bg); border-radius: 15px; transition: transform 0.3s ease; }
-        .stat:hover { transform: translateY(-5px); }
-        .stat-number { font-size: 1.6rem; font-weight: 700; color: var(--primary-color); }
-        .stat-label { font-size: 0.85rem; color: #777; }
+    .nav-menu li {
+      margin: 0 30px;
+      position: relative;
+    }
 
-        .profile-tabs { display: flex; background: var(--card-bg); border-radius: 50px; padding: 5px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); position: relative; z-index: 1; }
-        .profile-tab { flex: 1; text-align: center; padding: 15px 20px; font-weight: 600; cursor: pointer; border-radius: 50px; transition: all 0.3s ease; color: #666; position: relative; z-index: 2; }
-        .profile-tab.active { color: white; }
-        .tab-slider { position: absolute; height: 85%; top: 7.5%; left: 0.5%; width: 33.33%; background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); border-radius: 50px; transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 1; }
+    .nav-menu > li > a {
+      color: #555;
+      font-weight: 500;
+      transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      padding-bottom: 4px;
+    }
 
-        .tab-content { display: none; opacity: 0; transition: opacity 0.5s ease; }
-        .tab-content.active { display: block; opacity: 1; }
+    .nav-menu > li > a:hover {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
+    }
 
-        .personality-card { background: var(--card-bg); border-radius: 20px; padding: 40px; box-shadow: var(--box-shadow); text-align: center; position: relative; overflow: hidden; margin-bottom: 30px; }
-        .personality-icon { font-size: 5rem; margin-bottom: 20px; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block; position: relative; z-index: 1; }
-        .personality-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; background: linear-gradient(135deg, var(--accent-color), var(--primary-color)); -webkit-background-clip: text; background-clip: text; color: transparent; position: relative; z-index: 1; }
-        .personality-description { font-size: 1.2rem; color: #555; max-width: 800px; margin: 0 auto 30px; position: relative; z-index: 1; }
-        .personality-traits { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; position: relative; z-index: 1; }
-        .trait { background: var(--light-bg); padding: 10px 20px; border-radius: 50px; font-weight: 500; color: var(--text-color); box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; }
-        .trait:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); background: var(--primary-color); color: white; }
-        .take-quiz-btn, .copy-link-btn { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; border: none; padding: 15px 30px; font-size: 1.1rem; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); position: relative; z-index: 1; font-weight: 600; margin: 10px; }
-        .take-quiz-btn:hover, .copy-link-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); }
+    .nav-menu .carrot {
+      margin-left: 7px;
+      font-size: 0.9em;
+      transition: transform var(--transition-speed) ease;
+    }
 
-        .badges-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .badge-card { background: var(--card-bg); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; align-items: center; box-shadow: var(--box-shadow); transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .badge-icon { font-size: 3.5rem; margin-bottom: 20px; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); }
-        .badge-name { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; }
-        .badge-description { color: #666; text-align: center; margin-bottom: 20px; font-size: 0.95rem; }
-        .badge-progress { width: 100%; height: 10px; background: #eee; border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
-        .badge-progress-bar { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); transition: width 1s ease; }
-        .badge-status { font-size: 0.9rem; color: #777; }
+    .nav-menu li:hover .carrot {
+      transform: rotate(180deg);
+    }
 
-        .quests-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 25px; }
-        .quest-card { background: var(--card-bg); border-radius: 20px; padding: 30px; box-shadow: var(--box-shadow); transition: all 0.3s ease; position: relative; }
-        .quest-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .quest-title { font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-        .quest-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: white; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); font-size: 1.2rem; }
-        .quest-badge { padding: 5px 15px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; background: var(--light-bg); color: var(--primary-color); }
-        .quest-description { color: #666; margin-bottom: 20px; line-height: 1.6; }
-        .quest-progress { width: 100%; height: 10px; background: #eee; border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
-        .quest-progress-bar { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); transition: width 1s ease; }
-        .quest-status { display: flex; justify-content: space-between; align-items: center; }
-        .quest-counter { font-size: 0.95rem; color: #777; }
-        .quest-reward { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; padding: 5px 12px; background: rgba(255, 153, 51, 0.1); border-radius: 50px; color: var(--secondary-color); font-weight: 600; }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.98);
+      min-width: 240px;
+      box-shadow: var(--box-shadow);
+      padding: 20px 30px;
+      z-index: 1;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: left;
+      border-radius: 15px;
+      opacity: 0;
+      transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
+      transform-origin: top center;
+      backdrop-filter: blur(10px);
+    }
 
-        .quiz-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 2000; align-items: center; justify-content: center; overflow-y: auto; }
-        .quiz-container { background: var(--card-bg); border-radius: 25px; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2); max-width: 1000px; width: 95%; padding: 50px; position: relative; transition: var(--transition-speed); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
-        .quiz-container h1 { text-align: center; background: linear-gradient(45deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 3em; margin-bottom: 30px; }
-        .progress-container { margin-bottom: 40px; }
-        .progress-bar { height: 12px; width: 100%; background-color: var(--neutral-gray); border-radius: 6px; overflow: hidden; }
-        .progress { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); transition: width 0.7s ease; }
-        .progress-text { text-align: right; font-weight: 600; color: var(--primary-color); margin-top: 5px; }
-        .question p { font-weight: 600; font-size: 1.3em; color: var(--text-color); margin-bottom: 25px; text-align: center; }
-        .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .option { background-color: var(--neutral-gray); padding: 25px 20px; border-radius: 15px; cursor: pointer; transition: var(--transition-speed); border: 3px solid transparent; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); display: flex; align-items: center; gap: 15px; }
-        .option:hover { background-color: var(--primary-color); color: white; transform: translateY(-5px); }
-        .option.selected { border-color: var(--success-color); background-color: var(--success-color); color: white; }
-        .option-icon { font-size: 28px; width: 40px; text-align: center; }
-        .option-text { font-weight: 500; font-size: 1.1em; }
-        .quiz-btn { background: linear-gradient(45deg, var(--primary-color), var(--accent-color)); color: white; border: none; padding: 18px 35px; font-size: 1.2em; cursor: pointer; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 50px; transition: var(--transition-speed); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); }
-        .quiz-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2); }
-        .quiz-btn:disabled { background: var(--neutral-gray); color: var(--dark-gray); cursor: not-allowed; box-shadow: none; }
+    .nav-menu li:hover .dropdown-content {
+      display: block;
+      opacity: 1;
+      transform: translateX(-50%) translateY(10px);
+    }
 
-        @media (max-width: 992px) {
-            .profile-header { flex-direction: column; align-items: flex-start; gap: 20px; }
-            .profile-stats { justify-content: flex-start; }
-            .quests-grid { grid-template-columns: 1fr; }
-        }
+    .dropdown-content a {
+      color: var(--text-color);
+      padding: 12px 0;
+      text-decoration: none;
+      display: block;
+      transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+      border-radius: 8px;
+    }
 
-        @media (max-width: 768px) {
-            .profile-info { flex-direction: column; align-items: flex-start; }
-            .profile-tabs { flex-direction: column; border-radius: 20px; }
-            .profile-tab { text-align: left; padding: 15px; }
-            .tab-slider { display: none; }
-            .personality-traits { flex-direction: column; align-items: center; }
-        }
+    .dropdown-content a:hover {
+      background-color: rgba(0, 123, 255, 0.1);
+      color: var(--primary-color);
+    }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .animated { animation: fadeIn 0.8s ease forwards; }
-    </style>
+    .profile-icon {
+      font-size: 3rem;
+      color: #777;
+      transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+    }
+
+    .profile-icon:hover {
+      color: var(--primary-color);
+      transform: scale(1.15);
+    }
+
+    .app-container {
+      display: flex;
+      flex: 1;
+      margin-top: 70px;
+    }
+
+    .sidebar {
+      width: 280px;
+      background: var(--bg-card);
+      height: calc(100vh - 95px);
+      position: fixed;
+      top: 95px;
+      left: 0;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      z-index: 10;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .nav-item i {
+      font-size: 1.2rem;
+      transition: var(--transition);
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: var(--gradient);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .nav-item:hover i,
+    .nav-item.active i {
+      transform: scale(1.2);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+      height: calc(100vh - 70px);
+    }
+
+    .section {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section.active { display: block; }
+
+    .section-header {
+      text-align: center;
+      padding: 20px 0 40px;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-header p {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--box-shadow);
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--gradient);
+      z-index: 1;
+    }
+
+    .profile-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border: 4px solid white;
+    }
+
+    .profile-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profile-name {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .profile-tagline {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      margin: 5px 0 15px;
+    }
+
+    .profile-stats {
+      display: flex;
+      gap: 20px;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 15px;
+      background: var(--bg);
+      border-radius: 15px;
+      transition: var(--transition);
+    }
+
+    .stat:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-number {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .profile-tabs {
+      display: flex;
+      background: var(--bg-card);
+      border-radius: 50px;
+      padding: 5px;
+      margin-bottom: 30px;
+      box-shadow: var(--box-shadow);
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-tab {
+      flex: 1;
+      text-align: center;
+      padding: 15px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 50px;
+      transition: var(--transition);
+      color: var(--text-light);
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-tab.active {
+      color: white;
+    }
+
+    .tab-slider {
+      position: absolute;
+      height: 85%;
+      top: 7.5%;
+      left: 0.5%;
+      width: 33.33%;
+      background: var(--gradient);
+      border-radius: 50px;
+      transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      z-index: 1;
+    }
+
+    .tab-content {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .personality-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: var(--box-shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .personality-icon {
+      font-size: 5rem;
+      margin-bottom: 20px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+      position: relative;
+      z-index: 1;
+    }
+
+    .personality-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: var(--gradient-secondary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      z-index: 1;
+    }
+
+    .personality-description {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 800px;
+      margin: 0 auto 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .personality-traits {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .trait {
+      background: var(--bg);
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: 500;
+      color: var(--text);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+    }
+
+    .trait:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      background: var(--primary);
+      color: white;
+    }
+
+    .take-quiz-btn,
+    .copy-link-btn {
+      background: var(--gradient);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--box-shadow);
+      position: relative;
+      z-index: 1;
+      font-weight: 600;
+      margin: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .take-quiz-btn:hover,
+    .copy-link-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+    }
+
+    .badge-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .badge-icon {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--gradient);
+    }
+
+    .badge-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .badge-description {
+      color: var(--text-light);
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+
+    .badge-progress {
+      width: 100%;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .badge-progress-bar {
+      height: 100%;
+      border-radius: 10px;
+      background: var(--gradient);
+      transition: width 1s ease;
+    }
+
+    .badge-status {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .quests-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 25px;
+    }
+
+    .quest-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .quest-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .quest-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quest-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      color: white;
+      background: var(--gradient);
+      font-size: 1.2rem;
+    }
+
+    .quest-badge {
+      padding: 5px 15px;
+      border-radius: 50px;
+      font-size:
+
+ 0.85rem;
+      font-weight: 600;
+      background: var(--bg);
+      color: var(--primary);
+    }
+
+    .quest-description {
+      color: var(--text-light);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .quest-progress {
+      width: 100%;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+
+    .quest-progress-bar {
+      height: 100%;
+      border-radius: 10px;
+      background: var(--gradient);
+      transition: width 1s ease;
+    }
+
+    .quest-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .quest-counter {
+      font-size: 0.95rem;
+      color: var(--text-light);
+    }
+
+    .quest-reward {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      padding: 5px 12px;
+      background: rgba(255, 159, 28, 0.1);
+      border-radius: 50px;
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      width: 90%;
+      max-width: 900px;
+      border-radius: 30px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 85vh;
+      max-height: 650px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 40px;
+      background: var(--gradient);
+      color: white;
+    }
+
+    .modal-header h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .close {
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .close:hover {
+      transform: rotate(90deg);
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .quiz-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .quiz-container h1 {
+      text-align: center;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .progress-container {
+      margin-bottom: 30px;
+    }
+
+    .progress-bar {
+      height: 12px;
+      width: 100%;
+      background-color: var(--bg);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: var(--gradient);
+      transition: width 0.7s ease;
+    }
+
+    .progress-text {
+      text-align: right;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 5px;
+    }
+
+    .question p {
+      font-weight: 600;
+      font-size: 1.3rem;
+      color: var(--text);
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .option {
+      background-color: var(--bg);
+      padding: 25px 20px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 3px solid transparent;
+      box-shadow: var(--box-shadow);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .option:hover {
+      background-color: var(--primary);
+      color: white;
+      transform: translateY(-5px);
+    }
+
+    .option.selected {
+      border-color: var(--success);
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .option-icon {
+      font-size: 28px;
+      width: 40px;
+      text-align: center;
+    }
+
+    .option-text {
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+
+    .quiz-btn {
+      background: var(--gradient);
+      color: white;
+      border: none;
+      padding: 18px 35px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border-radius: 10px;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 30px;
+      transition: var(--transition);
+      box-shadow: var(--box-shadow);
+    }
+
+    .quiz-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .quiz-btn:disabled {
+      background: var(--neutral-gray);
+      color: var(--dark-gray);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      display: none;
+    }
+
+    .loading.active {
+      display: flex;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #fff;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 992px) {
+      .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+      .profile-stats {
+        justify-content: flex-start;
+      }
+      .quests-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 10px 0; }
+      .navbar { padding: 0 15px; }
+      .logo { font-size: 1.5rem; }
+      .logo .microphone-icon { width: 40px; height: 40px; margin-right: 10px; }
+      .nav-menu { gap: 15px; }
+      .nav-menu li { margin: 0 15px; }
+      .nav-menu > li > a { font-size: 0.9rem; }
+      .dropdown-content { min-width: 200px; padding: 15px 20px; }
+      .profile-icon { font-size: 2rem; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 15px;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+      .nav-item { padding: 10px; margin-bottom: 0; font-size: 0.9rem; }
+      .main-content { margin-left: 0; padding: 20px; }
+      .section-header h2 { font-size: 2rem; }
+      .profile-info { flex-direction: column; align-items: flex-start; }
+      .profile-tabs { flex-direction: column; border-radius: 20px; }
+      .profile-tab { text-align: left; padding: 15px; }
+      .tab-slider { display: none; }
+      .personality-traits { flex-direction: column; align-items: center; }
+      .modal-content { width: 95%; height: 90vh; }
+      .modal-header { padding: 15px 20px; }
+      .modal-body { padding: 20px; }
+      .quiz-container h1 { font-size: 2rem; }
+      .question p { font-size: 1.1rem; }
+      .option { padding: 20px 15px; }
+      .option-text { font-size: 1rem; }
+      .quiz-btn { padding: 15px 25px; font-size: 1rem; }
+    }
+  </style>
 </head>
 
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="logo" onclick="goToHome()">
-                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <defs>
-                        <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#007bff;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                    <path fill="url(#microphone-gradient)" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
-                </svg>
-                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="evaluation.html">Recording Studio</a>
-                    </div>
-                </li>
-                <li><a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="learn.html">Videos</a>
-                        <a href="learn.html">Puzzles</a>
-                        <a href="learn.html">Drills</a>
-                    </div>
-                </li>
-                <li><a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="profile.html">Personality</a>
-                        <a href="profile.html">Badges</a>
-                        <a href="profile.html">Quests</a>
-                    </div>
-                </li>
-                <li><a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="watch.html">Speech Archive</a>
-                        <a href="watch.html">Famous Speeches</a>
-                    </div>
-                </li>
-                <li><a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="about.html">UpSpeak Credentials</a>
-                    </div>
-                </li>
-            </ul>
-            <a href="user.html"><i class="fas fa-user-circle profile-icon"></i></a>
-        </nav>
-    </header>
+  <header id="mainHeader">
+    <nav class="navbar">
+      <div class="logo" onclick="goToHome()">
+        <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <defs>
+            <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <path fill="url(#microphone-gradient)"
+            d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+        </svg>
+        <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
+      </div>
+      <ul class="nav-menu">
+        <li>
+          <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
+          <div class="dropdown-content">
+            <a href="evaluation.html">Recording Studio</a>
+          </div>
+        </li>
+        <li>
+          <a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
+          <div class="dropdown-content">
+            <a href="learn.html">Videos</a>
+            <a href="learn.html">Puzzles</a>
+            <a href="learn.html">Drills</a>
+          </div>
+        </li>
+        <li>
+          <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
+          <div class="dropdown-content">
+            <a href="profile.html">Personality</a>
+            <a href="profile.html">Badges</a>
+            <a href="profile.html">Quests</a>
+          </div>
+        </li>
+        <li>
+          <a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
+          <div class="dropdown-content">
+            <a href="watch.html">Speech Archive</a>
+            <a href="watch.html">Famous Speeches</a>
+          </div>
+        </li>
+        <li>
+          <a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
+          <div class="dropdown-content">
+            <a href="about.html">UpSpeak Credentials</a>
+          </div>
+        </li>
+      </ul>
+      <a href="user.html"><i class="fas fa-user-circle profile-icon"></i></a>
+    </nav>
+  </header>
 
-    <div class="profile-container">
+  <div class="app-container">
+    <div class="sidebar">
+      <div class="nav-item active" data-section="personality"><i class="fas fa-user"></i> Personality</div>
+      <div class="nav-item" data-section="badges"><i class="fas fa-award"></i> Badges</div>
+      <div class="nav-item" data-section="quests"><i class="fas fa-trophy"></i> Quests</div>
+    </div>
+
+    <div class="main-content">
+      <section id="personality" class="section active">
+        <div class="section-header">
+          <h2>Your Speech Persona</h2>
+          <p>Discover your unique speaking style</p>
+        </div>
         <div class="profile-header">
-            <div class="profile-info">
-                <div class="profile-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="profile-details">
-                    <h1 id="profileName" class="profile-name"></h1>
-                    <p class="profile-tagline">Free UpSpeak Member</p>
-                    <div class="profile-stats">
-                        <div class="stat">
-                            <span id="puzzlesCompleted" class="stat-number">0</span>
-                            <span class="stat-label">Puzzles</span>
-                        </div>
-                        <div class="stat">
-                            <span id="drillsCompleted" class="stat-number">0</span>
-                            <span class="stat-label">Drills</span>
-                        </div>
-                        <div class="stat">
-                            <span id="speechesGiven" class="stat-number">0</span>
-                            <span class="stat-label">Speeches</span>
-                        </div>
-                    </div>
-                </div>
+          <div class="profile-info">
+            <div class="profile-avatar">
+              <i class="fas fa-user"></i>
             </div>
-        </div>
-
-        <div class="profile-tabs">
-            <div class="profile-tab active" data-tab="personality">Personality</div>
-            <div class="profile-tab" data-tab="badges">Badges</div>
-            <div class="profile-tab" data-tab="quests">Quests</div>
-            <div class="tab-slider"></div>
-        </div>
-
-        <div id="personality" class="tab-content active">
-            <div class="personality-card animated" id="personalityCard"></div>
-        </div>
-
-        <div id="badges" class="tab-content">
-            <div class="badges-grid">
-                <div class="badge-card animated">
-                    <div class="badge-icon"><i class="fas fa-award"></i></div>
-                    <h3 class="badge-name">Puzzle Decipher</h3>
-                    <p class="badge-description">Answer 20 Puzzles</p>
-                    <div class="badge-progress">
-                        <div id="puzzleDecipherProgress" class="badge-progress-bar"></div>
-                    </div>
-                    <span id="puzzleDecipherStatus" class="badge-status">0/20 Puzzles Completed</span>
+            <div class="profile-details">
+              <h1 id="profileName" class="profile-name"></h1>
+              <p class="profile-tagline">Free UpSpeak Member</p>
+              <div class="profile-stats">
+                <div class="stat">
+                  <span id="activitiesCompleted" class="stat-number">0</span>
+                  <span class="stat-label">Activities</span>
                 </div>
-                <div class="badge-card animated">
-                    <div class="badge-icon"><i class="fas fa-microphone-alt"></i></div>
-                    <h3 class="badge-name">Savvy Speaker</h3>
-                    <p class="badge-description">Complete 10 Structured Speeches</p>
-                    <div class="badge-progress">
-                        <div id="savvySpeakerProgress" class="badge-progress-bar"></div>
-                    </div>
-                    <span id="savvySpeakerStatus" class="badge-status">0/10 Speeches Given</span>
+                <div class="stat">
+                  <span id="puzzlesCompleted" class="stat-number">0</span>
+                  <span class="stat-label">Puzzles</span>
                 </div>
-                <div class="badge-card animated">
-                    <div class="badge-icon"><i class="fas fa-dumbbell"></i></div>
-                    <h3 class="badge-name">Driller</h3>
-                    <p class="badge-description">Complete 25 Drills</p>
-                    <div class="badge-progress">
-                        <div id="drillerProgress" class="badge-progress-bar"></div>
-                    </div>
-                    <span id="drillerStatus" class="badge-status">0/25 Drills Completed</span>
+                <div class="stat">
+                  <span id="drillsCompleted" class="stat-number">0</span>
+                  <span class="stat-label">Drills</span>
                 </div>
+                <div class="stat">
+                  <span id="speechesGiven" class="stat-number">0</span>
+                  <span class="stat-label">Speeches</span>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+        <div class="personality-card" id="personalityCard"></div>
+      </section>
 
-        <div id="quests" class="tab-content">
-            <div class="quests-grid">
-                <div class="quest-card animated">
-                    <div class="quest-header">
-                        <div class="quest-title">
-                            <div class="quest-icon"><i class="fas fa-book"></i></div>
-                            Avid Learner
-                        </div>
-                        <div class="quest-badge active">Active</div>
-                    </div>
-                    <p class="quest-description">Complete 50 Learning Exercises</p>
-                    <div class="quest-progress">
-                        <div id="avidLearnerProgress" class="quest-progress-bar"></div>
-                    </div>
-                    <div class="quest-status">
-                        <span id="avidLearnerCounter" class="quest-counter">0/50 Exercises Completed</span>
-                        <span class="quest-reward"><i class="fas fa-trophy"></i> 500 XP</span>
-                    </div>
-                </div>
-                <div class="quest-card animated">
-                    <div class="quest-header">
-                        <div class="quest-title">
-                            <div class="quest-icon"><i class="fas fa-microphone"></i></div>
-                            Quality Speeches
-                        </div>
-                        <div class="quest-badge active">Active</div>
-                    </div>
-                    <p class="quest-description">Provide 25 speeches with 5+ strengths</p>
-                    <div class="quest-progress">
-                        <div id="qualitySpeechesProgress" class="quest-progress-bar"></div>
-                    </div>
-                    <div class="quest-status">
-                        <span id="qualitySpeechesCounter" class="quest-counter">0/25 Quality Speeches Given</span>
-                        <span class="quest-reward"><i class="fas fa-trophy"></i> 750 XP</span>
-                    </div>
-                </div>
-            </div>
+      <section id="badges" class="section">
+        <div class="section-header">
+          <h2>Your Achievements</h2>
+          <p>Track your progress and earn badges</p>
         </div>
+        <div class="badges-grid">
+          <div class="badge-card">
+            <div class="badge-icon"><i class="fas fa-award"></i></div>
+            <h3 class="badge-name">Puzzle Decipher</h3>
+            <p class="badge-description">Answer 20 Puzzles</p>
+            <div class="badge-progress">
+              <div id="puzzleDecipherProgress" class="badge-progress-bar"></div>
+            </div>
+            <span id="puzzleDecipherStatus" class="badge-status">0/20 Puzzles Completed</span>
+          </div>
+          <div class="badge-card">
+            <div class="badge-icon"><i class="fas fa-microphone-alt"></i></div>
+            <h3 class="badge-name">Savvy Speaker</h3>
+            <p class="badge-description">Complete 10 Structured Speeches</p>
+            <div class="badge-progress">
+              <div id="savvySpeakerProgress" class="badge-progress-bar"></div>
+            </div>
+            <span id="savvySpeakerStatus" class="badge-status">0/10 Speeches Given</span>
+          </div>
+          <div class="badge-card">
+            <div class="badge-icon"><i class="fas fa-dumbbell"></i></div>
+            <h3 class="badge-name">Driller</h3>
+            <p class="badge-description">Complete 25 Drills</p>
+            <div class="badge-progress">
+              <div id="drillerProgress" class="badge-progress-bar"></div>
+            </div>
+            <span id="drillerStatus" class="badge-status">0/25 Drills Completed</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="quests" class="section">
+        <div class="section-header">
+          <h2>Your Quests</h2>
+          <p>Complete challenges to earn rewards</p>
+        </div>
+        <div class="quests-grid">
+          <div class="quest-card">
+            <div class="quest-header">
+              <div class="quest-title">
+                <div class="quest-icon"><i class="fas fa-book"></i></div>
+                Avid Learner
+              </div>
+              <div class="quest-badge active">Active</div>
+            </div>
+            <p class="quest-description">Complete 50 Learning Exercises</p>
+            <div class="quest-progress">
+              <div id="avidLearnerProgress" class="quest-progress-bar"></div>
+            </div>
+            <div class="quest-status">
+              <span id="avidLearnerCounter" class="quest-counter">0/50 Exercises Completed</span>
+              <span class="quest-reward"><i class="fas fa-trophy"></i> 500 XP</span>
+            </div>
+          </div>
+          <div class="quest-card">
+            <div class="quest-header">
+              <div class="quest-title">
+                <div class="quest-icon"><i class="fas fa-microphone"></i></div>
+                Quality Speeches
+              </div>
+              <div class="quest-badge active">Active</div>
+            </div>
+            <p class="quest-description">Provide 25 speeches with 5+ strengths</p>
+            <div class="quest-progress">
+              <div id="qualitySpeechesProgress" class="quest-progress-bar"></div>
+            </div>
+            <div class="quest-status">
+              <span id="qualitySpeechesCounter" class="quest-counter">0/25 Quality Speeches Given</span>
+              <span class="quest-reward"><i class="fas fa-trophy"></i> 750 XP</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
+  </div>
 
-    <div id="quizModal" class="quiz-modal">
+  <div id="quizModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Discover Your Speech Persona</h2>
+        <span class="close" onclick="closeQuizModal()">×</span>
+      </div>
+      <div class="modal-body">
         <div class="quiz-container">
-            <h1>Discover Your Speech Persona</h1>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress"></div>
-                </div>
-                <div class="progress-text"></div>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress"></div>
             </div>
-            <div id="quiz"></div>
-            <button onclick="nextQuestion()" id="nextBtn" class="quiz-btn" disabled>Next Question</button>
+            <div class="progress-text"></div>
+          </div>
+          <div id="quiz"></div>
+          <button onclick="nextQuestion()" id="nextBtn" class="quiz-btn" disabled>Next Question</button>
         </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // State Management
-        function loadState() {
-            const state = localStorage.getItem('authState');
-            return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
-        }
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+  </div>
 
-        function saveState(state) {
-            localStorage.setItem('authState', JSON.stringify(state));
-        }
+  <script>
+    function loadState() {
+      const state = localStorage.getItem('authState');
+      return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
+    }
 
-        function getUserProfile(username) {
-            const state = loadState();
-            if (!state.users[username]) {
-                state.users[username] = {
-                    firstName: username,
-                    lastName: "",
-                    age: "",
-                    email: "",
-                    password: "",
-                    salt: "",
-                    profile: {
-                        name: username,
-                        personality: null,
-                        puzzlesCompleted: 0,
-                        drillsCompleted: 0,
-                        speechesGiven: 0,
-                        speechesWithFivePlusStrengths: 0
-                    }
-                };
-                saveState(state);
-            } else if (!state.users[username].profile) {
-                state.users[username].profile = {
-                    name: username,
-                    personality: null,
-                    puzzlesCompleted: 0,
-                    drillsCompleted: 0,
-                    speechesGiven: 0,
-                    speechesWithFivePlusStrengths: 0
-                };
-                saveState(state);
-            }
-            return state.users[username].profile;
-        }
+    function saveState(state) {
+      localStorage.setItem('authState', JSON.stringify(state));
+    }
 
-        function saveUserProfile(username, profile) {
-            const state = loadState();
-            state.users[username].profile = profile;
-            saveState(state);
-        }
-
-        // Tab Navigation and Initialization
-        document.addEventListener('DOMContentLoaded', function () {
-            const state = loadState();
-            const currentSession = state.session;
-
-            if (!currentSession || (state.sessionExpiry && Date.now() > state.sessionExpiry)) {
-                alert('Please log in to access your profile.');
-                window.location.href = 'index.html';
-                return;
-            }
-
-            const tabs = document.querySelectorAll('.profile-tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            const tabSlider = document.querySelector('.tab-slider');
-
-            tabs.forEach((tab, index) => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    tabSlider.style.transform = `translateX(${index * 100}%)`;
-                    const tabId = tab.getAttribute('data-tab');
-                    tabContents.forEach(content => {
-                        content.classList.remove('active');
-                        if (content.id === tabId) {
-                            content.classList.add('active');
-                        }
-                    });
-                });
-            });
-
-            // Animation on scroll
-            const animatedElements = document.querySelectorAll('.animated');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            });
-            animatedElements.forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-                observer.observe(el);
-            });
-
-            // Initialize Profile
-            initializeProfile(currentSession);
-        });
-
-        function initializeProfile(username) {
-            let profile = getUserProfile(username);
-            if (!profile.name || profile.name === username) {
-                const name = prompt("Please enter your name:") || username;
-                profile.name = name;
-                saveUserProfile(username, profile);
-            }
-            document.getElementById('profileName').textContent = profile.name;
-
-            document.getElementById('puzzlesCompleted').textContent = profile.puzzlesCompleted;
-            document.getElementById('drillsCompleted').textContent = profile.drillsCompleted;
-            document.getElementById('speechesGiven').textContent = profile.speechesGiven;
-
-            updatePersonality(profile.personality);
-            updateBadges(profile.puzzlesCompleted, profile.speechesGiven, profile.drillsCompleted);
-            updateQuests(profile.puzzlesCompleted + profile.drillsCompleted, profile.speechesWithFivePlusStrengths);
-        }
-
-        function updatePersonality(personalityKey) {
-            const personalityCard = document.getElementById('personalityCard');
-            if (!personalityKey || !personalities[personalityKey]) {
-                personalityCard.innerHTML = `
-                    <i class="fas fa-question-circle personality-icon"></i>
-                    <h2 class="personality-title">Mystery Persona</h2>
-                    <p class="personality-description">Your speech persona is yet to be revealed. Take the quiz to discover your unique speaking style!</p>
-                    <div class="personality-traits">
-                        <div class="trait">Unknown</div>
-                    </div>
-                    <button class="take-quiz-btn" onclick="startQuiz()">
-                        <i class="fas fa-redo"></i> Take Personality Quiz
-                    </button>
-                `;
-            } else {
-                const resultData = personalities[personalityKey];
-                personalityCard.innerHTML = `
-                    <i class="${resultData.icon} personality-icon"></i>
-                    <h2 class="personality-title">${resultData.title}</h2>
-                    <p class="personality-description">${resultData.description}</p>
-                    <div class="personality-traits">
-                        ${resultData.traits.map(trait => `<div class="trait">${trait}</div>`).join('')}
-                    </div>
-                    <button class="take-quiz-btn" onclick="startQuiz()">
-                        <i class="fas fa-redo"></i> Retake Personality Quiz
-                    </button>
-                    <button class="copy-link-btn" onclick="copyPersonalityLink('${resultData.title}')">
-                        <i class="fas fa-link"></i> Copy Link
-                    </button>
-                `;
-            }
-        }
-
-        function copyPersonalityLink(personalityTitle) {
-            const text = `I'm ${personalityTitle}. What are you? Test at upspeak.onrender.com`;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Link copied to clipboard!');
-            });
-        }
-
-        function updateBadges(puzzlesCompleted, speechesGiven, drillsCompleted) {
-            const puzzleProgress = Math.min((puzzlesCompleted / 20) * 100, 100);
-            document.getElementById('puzzleDecipherProgress').style.width = `${puzzleProgress}%`;
-            document.getElementById('puzzleDecipherStatus').textContent = `${puzzlesCompleted}/20 Puzzles Completed`;
-
-            const speechProgress = Math.min((speechesGiven / 10) * 100, 100);
-            document.getElementById('savvySpeakerProgress').style.width = `${speechProgress}%`;
-            document.getElementById('savvySpeakerStatus').textContent = `${speechesGiven}/10 Speeches Given`;
-
-            const drillProgress = Math.min((drillsCompleted / 25) * 100, 100);
-            document.getElementById('drillerProgress').style.width = `${drillProgress}%`;
-            document.getElementById('drillerStatus').textContent = `${drillsCompleted}/25 Drills Completed`;
-        }
-
-        function updateQuests(learningExercisesCompleted, speechesWithFivePlusStrengths) {
-            const learnerProgress = Math.min((learningExercisesCompleted / 50) * 100, 100);
-            document.getElementById('avidLearnerProgress').style.width = `${learnerProgress}%`;
-            document.getElementById('avidLearnerCounter').textContent = `${learningExercisesCompleted}/50 Exercises Completed`;
-
-            const qualityProgress = Math.min((speechesWithFivePlusStrengths / 25) * 100, 100);
-            document.getElementById('qualitySpeechesProgress').style.width = `${qualityProgress}%`;
-            document.getElementById('qualitySpeechesCounter').textContent = `${speechesWithFivePlusStrengths}/25 Quality Speeches Given`;
-        }
-
-        // Quiz Data
-        const questions = [
-            {
-                question: "Which speech-related title intrigues you the most?",
-                options: [
-                    { text: "The Art of Storytelling", icon: "fa-solid fa-book-open", value: "peacock" },
-                    { text: "Mastering Impromptu Speeches", icon: "fa-solid fa-bolt", value: "fox" },
-                    { text: "Data-Driven Presentations", icon: "fa-solid fa-chart-bar", value: "owl" },
-                    { text: "Emotional Connection with Audience", icon: "fa-solid fa-heart", value: "dolphin" }
-                ]
-            },
-            {
-                question: "Which excerpt resonates with you more?",
-                options: [
-                    { text: "Confidence is key.", icon: "fa-solid fa-star", value: "peacock" },
-                    { text: "Energy is contagious.", icon: "fa-solid fa-fire", value: "fox" },
-                    { text: "Accuracy is paramount.", icon: "fa-solid fa-check-circle", value: "owl" },
-                    { text: "Empathy builds bridges.", icon: "fa-solid fa-handshake", value: "dolphin" }
-                ]
-            },
-            {
-                question: "How do you prefer to prepare for a speech?",
-                options: [
-                    { text: "Memorize every word", icon: "fa-solid fa-file-alt", value: "owl" },
-                    { text: "Create a basic outline and improvise", icon: "fa-solid fa-pencil-alt", value: "fox" },
-                    { text: "Focus on key themes and stories", icon: "fa-solid fa-comment-dots", value: "peacock" },
-                    { text: "Understand audience needs and adapt", icon: "fa-solid fa-users", value: "dolphin" }
-                ]
-            },
-            {
-                question: "Which aspect of public speaking do you enjoy most?",
-                options: [
-                    { text: "Crafting a compelling narrative", icon: "fa-solid fa-scroll", value: "peacock" },
-                    { text: "Engaging in Q&A sessions", icon: "fa-solid fa-question-circle", value: "dolphin" },
-                    { text: "Presenting complex information clearly", icon: "fa-solid fa-brain", value: "owl" },
-                    { text: "Adapting to unexpected challenges", icon: "fa-solid fa-wrench", value: "fox" }
-                ]
-            },
-            {
-                question: "What's your preferred method of emphasizing key points?",
-                options: [
-                    { text: "Using vivid metaphors and analogies", icon: "fa-solid fa-lightbulb", value: "peacock" },
-                    { text: "Dramatic pauses and voice inflections", icon: "fa-solid fa-volume-up", value: "fox" },
-                    { text: "Citing credible research and data", icon: "fa-solid fa-chart-pie", value: "owl" },
-                    { text: "Sharing personal anecdotes", icon: "fa-solid fa-id-card", value: "dolphin" }
-                ]
-            }
-        ];
-
-        const personalities = {
-            peacock: {
-                title: "The Peacock",
-                icon: "fa-solid fa-feather-pointed",
-                description: "You captivate audiences with vibrant storytelling and natural flair. Your speeches are an art form, designed to leave a lasting impression through creative metaphors and charisma.",
-                traits: ["Expressive", "Charismatic", "Creative", "Inspiring", "Storyteller"]
-            },
-            fox: {
-                title: "The Fox",
-                icon: "fa-solid fa-paw",
-                description: "You excel in impromptu situations with quick wit and adaptability. Your dynamic energy keeps audiences engaged, turning challenges into opportunities to shine.",
-                traits: ["Witty", "Adaptable", "Energetic", "Quick-Thinking", "Engaging"]
-            },
-            owl: {
-                title: "The Owl",
-                icon: "fa-solid fa-owl",
-                description: "You deliver data-driven presentations with remarkable precision and clarity. Your thorough research and logical structure establish you as a trusted authority.",
-                traits: ["Precise", "Analytical", "Logical", "Credible", "Methodical"]
-            },
-            dolphin: {
-                title: "The Dolphin",
-                icon: "fa-solid fa-water",
-                description: "You connect emotionally with audiences, fostering empathy and trust. Your authentic and collaborative approach makes every speech a meaningful conversation.",
-                traits: ["Empathetic", "Authentic", "Relatable", "Supportive", "Intuitive"]
-            }
+    function getUserProfile(username) {
+      const state = loadState();
+      if (!state.users[username]) {
+        state.users[username] = {
+          firstName: username,
+          lastName: "",
+          age: "",
+          email: "",
+          password: "",
+          salt: "",
+          profile: {
+            name: username,
+            personality: null,
+            activitiesCompleted: 0,
+            puzzlesCompleted: 0,
+            drillsCompleted: 0,
+            speechesGiven: 0,
+            speechesWithFivePlusStrengths: 0
+          }
         };
+        saveState(state);
+      } else if (!state.users[username].profile) {
+        state.users[username].profile = {
+          name: username,
+          personality: null,
+          activitiesCompleted: 0,
+          puzzlesCompleted: 0,
+          drillsCompleted: 0,
+          speechesGiven: 0,
+          speechesWithFivePlusStrengths: 0
+        };
+        saveState(state);
+      }
+      return state.users[username].profile;
+    }
 
-        let currentQuestion = 0;
-        const userAnswers = { peacock: 0, fox: 0, owl: 0, dolphin: 0 };
+    function saveUserProfile(username, profile) {
+      const state = loadState();
+      state.users[username].profile = profile;
+      saveState(state);
+    }
 
-        function startQuiz() {
-            document.getElementById('quizModal').style.display = 'flex';
-            currentQuestion = 0;
-            for (let key in userAnswers) userAnswers[key] = 0;
-            renderQuestion(currentQuestion);
+    function showLoading() {
+      document.getElementById('loading').classList.add('active');
+    }
+
+    function hideLoading() {
+      document.getElementById('loading').classList.remove('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const state = loadState();
+      const currentSession = state.session;
+
+      if (!currentSession || (state.sessionExpiry && Date.now() > state.sessionExpiry)) {
+        alert('Please log in to access your profile.');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      const navItems = document.querySelectorAll('.sidebar .nav-item');
+      const sections = document.querySelectorAll('.section');
+
+      function switchSection(sectionId) {
+        sections.forEach(section => section.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        navItems.forEach(item => item.classList.remove('active'));
+        const activeSidebarNav = Array.from(navItems).find(item => item.getAttribute('data-section') === sectionId);
+        if (activeSidebarNav) activeSidebarNav.classList.add('active');
+      }
+
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const section = item.getAttribute('data-section');
+          switchSection(section);
+          localStorage.setItem('lastProfileSection', section);
+        });
+      });
+
+      initializeProfile(currentSession);
+
+      const lastSection = localStorage.getItem('lastProfileSection') || 'personality';
+      switchSection(lastSection);
+    });
+
+    function initializeProfile(username) {
+      showLoading();
+      let profile = getUserProfile(username);
+      if (!profile.name || profile.name === username) {
+        const name = prompt("Please enter your name:") || username;
+        profile.name = name;
+        saveUserProfile(username, profile);
+      }
+      document.getElementById('profileName').textContent = profile.name;
+
+      document.getElementById('activitiesCompleted').textContent = profile.activitiesCompleted;
+      document.getElementById('puzzlesCompleted').textContent = profile.puzzlesCompleted;
+      document.getElementById('drillsCompleted').textContent = profile.drillsCompleted;
+      document.getElementById('speechesGiven').textContent = profile.speechesGiven;
+
+      updatePersonality(profile.personality);
+      updateBadges(profile.puzzlesCompleted, profile.speechesGiven, profile.drillsCompleted);
+      updateQuests(profile.activitiesCompleted + profile.puzzlesCompleted + profile.drillsCompleted, profile.speechesWithFivePlusStrengths);
+      hideLoading();
+    }
+
+    function updatePersonality(personalityKey) {
+      const personalityCard = document.getElementById('personalityCard');
+      if (!personalityKey || !personalities[personalityKey]) {
+        personalityCard.innerHTML = `
+          <i class="fas fa-question-circle personality-icon"></i>
+          <h2 class="personality-title">Mystery Persona</h2>
+          <p class="personality-description">Your speech persona is yet to be revealed. Take the quiz to discover your unique speaking style!</p>
+          <div class="personality-traits">
+            <div class="trait">Unknown</div>
+          </div>
+          <button class="take-quiz-btn" onclick="startQuiz()">
+            <i class="fas fa-redo"></i> Take Personality Quiz
+          </button>
+        `;
+      } else {
+        const resultData = personalities[personalityKey];
+        personalityCard.innerHTML = `
+          <i class="${resultData.icon} personality-icon"></i>
+          <h2 class="personality-title">${resultData.title}</h2>
+          <p class="personality-description">${resultData.description}</p>
+          <div class="personality-traits">
+            ${resultData.traits.map(trait => `<div class="trait">${trait}</div>`).join('')}
+          </div>
+          <button class="take-quiz-btn" onclick="startQuiz()">
+            <i class="fas fa-redo"></i> Retake Personality Quiz
+          </button>
+          <button class="copy-link-btn" onclick="copyPersonalityLink('${resultData.title}')">
+            <i class="fas fa-link"></i> Copy Link
+          </button>
+        `;
+      }
+    }
+
+    function copyPersonalityLink(personalityTitle) {
+      const text = `I'm ${personalityTitle}. What are you? Test at upspeak.onrender.com`;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Link copied to clipboard!');
+      });
+    }
+
+    function updateBadges(puzzlesCompleted, speechesGiven, drillsCompleted) {
+      const puzzleProgress = Math.min((puzzlesCompleted / 20) * 100, 100);
+      document.getElementById('puzzleDecipherProgress').style.width = `${puzzleProgress}%`;
+      document.getElementById('puzzleDecipherStatus').textContent = `${puzzlesCompleted}/20 Puzzles Completed`;
+
+      const speechProgress = Math.min((speechesGiven / 10) * 100, 100);
+      document.getElementById('savvySpeakerProgress').style.width = `${speechProgress}%`;
+      document.getElementById('savvySpeakerStatus').textContent = `${speechesGiven}/10 Speeches Given`;
+
+      const drillProgress = Math.min((drillsCompleted / 25) * 100, 100);
+      document.getElementById('drillerProgress').style.width = `${drillProgress}%`;
+      document.getElementById('drillerStatus').textContent = `${drillsCompleted}/25 Drills Completed`;
+    }
+
+    function updateQuests(learningExercisesCompleted, speechesWithFivePlusStrengths) {
+      const learnerProgress = Math.min((learningExercisesCompleted / 50) * 100, 100);
+      document.getElementById('avidLearnerProgress').style.width = `${learnerProgress}%`;
+      document.getElementById('avidLearnerCounter').textContent = `${learningExercisesCompleted}/50 Exercises Completed`;
+
+      const qualityProgress = Math.min((speechesWithFivePlusStrengths / 25) * 100, 100);
+      document.getElementById('qualitySpeechesProgress').style.width = `${qualityProgress}%`;
+      document.getElementById('qualitySpeechesCounter').textContent = `${speechesWithFivePlusStrengths}/25 Quality Speeches Given`;
+    }
+
+    const questions = [
+      {
+        question: "Which speech-related title intrigues you the most?",
+        options: [
+          { text: "The Art of Storytelling", icon: "fa-solid fa-book-open", value: "peacock" },
+          { text: "Mastering Impromptu Speeches", icon: "fa-solid fa-bolt", value: "fox" },
+          { text: "Data-Driven Presentations", icon: "fa-solid fa-chart-bar", value: "owl" },
+          { text: "Emotional Connection with Audience", icon: "fa-solid fa-heart", value: "dolphin" }
+        ]
+      },
+      {
+        question: "Which excerpt resonates with you more?",
+        options: [
+          { text: "Confidence is key.", icon: "fa-solid fa-star", value: "peacock" },
+          { text: "Energy is contagious.", icon: "fa-solid fa-fire", value: "fox" },
+          { text: "Accuracy is paramount.", icon: "fa-solid fa-check-circle", value: "owl" },
+          { text: "Empathy builds bridges.", icon: "fa-solid fa-handshake", value: "dolphin" }
+        ]
+      },
+      {
+        question: "How do you prefer to prepare for a speech?",
+        options: [
+          { text: "Memorize every word", icon: "fa-solid fa-file-alt", value: "owl" },
+          { text: "Create a basic outline and improvise", icon: "fa-solid fa-pencil-alt", value: "fox" },
+          { text: "Focus on key themes and stories", icon: "fa-solid fa-comment-dots", value: "peacock" },
+          { text: "Understand audience needs and adapt", icon: "fa-solid fa-users", value: "dolphin" }
+        ]
+      },
+      {
+        question: "Which aspect of public speaking do you enjoy most?",
+        options: [
+          { text: "Crafting a compelling narrative", icon: "fa-solid fa-scroll", value: "peacock" },
+          { text: "Engaging in Q&A sessions", icon: "fa-solid fa-question-circle", value: "dolphin" },
+          { text: "Presenting complex information clearly", icon: "fa-solid fa-brain", value: "owl" },
+          { text: "Adapting to unexpected challenges", icon: "fa-solid fa-wrench", value: "fox" }
+        ]
+      },
+      {
+        question: "What's your preferred method of emphasizing key points?",
+        options: [
+          { text: "Using vivid metaphors and analogies", icon: "fa-solid fa-lightbulb", value: "peacock" },
+          { text: "Dramatic pauses and voice inflections", icon: "fa-solid fa-volume-up", value: "fox" },
+          { text: "Citing credible research and data", icon: "fa-solid fa-chart-pie", value: "owl" },
+          { text: "Sharing personal anecdotes", icon: "fa-solid fa-id-card", value: "dolphin" }
+        ]
+      }
+    ];
+
+    const personalities = {
+      peacock: {
+        title: "The Peacock",
+        icon: "fa-solid fa-feather-pointed",
+        description: "You captivate audiences with vibrant storytelling and natural flair. Your speeches are an art form, designed to leave a lasting impression through creative metaphors and charisma.",
+        traits: ["Expressive", "Charismatic", "Creative", "Inspiring", "Storyteller"]
+      },
+      fox: {
+        title: "The Fox",
+        icon: "fa-solid fa-paw",
+        description: "You excel in impromptu situations with quick wit and adaptability. Your dynamic energy keeps audiences engaged, turning challenges into opportunities to shine.",
+        traits: ["Witty", "Adaptable", "Energetic", "Quick-Thinking", "Engaging"]
+      },
+      owl: {
+        title: "The Owl",
+        icon: "fa-solid fa-owl",
+        description: "You deliver data-driven presentations with remarkable precision and clarity. Your thorough research and logical structure establish you as a trusted authority.",
+        traits: ["Precise", "Analytical", "Logical", "Credible", "Methodical"]
+      },
+      dolphin: {
+        title: "The Dolphin",
+        icon: "fa-solid fa-water",
+        description: "You connect emotionally with audiences, fostering empathy and trust. Your authentic and collaborative approach makes every speech a meaningful conversation.",
+        traits: ["Empathetic", "Authentic", "Relatable", "Supportive", "Intuitive"]
+      }
+    };
+
+    let currentQuestion = 0;
+    const userAnswers = { peacock: 0, fox: 0, owl: 0, dolphin: 0 };
+
+    function startQuiz() {
+      showLoading();
+      document.getElementById('quizModal').style.display = 'block';
+      currentQuestion = 0;
+      for (let key in userAnswers) userAnswers[key] = 0;
+      renderQuestion(currentQuestion);
+      hideLoading();
+    }
+
+    function closeQuizModal() {
+      document.getElementById('quizModal').style.display = 'none';
+    }
+
+    function renderQuestion(index) {
+      const quizContainer = document.getElementById('quiz');
+      quizContainer.innerHTML = '';
+
+      const questionDiv = document.createElement('div');
+      questionDiv.className = 'question';
+
+      const questionPara = document.createElement('p');
+      questionPara.textContent = questions[index].question;
+      questionDiv.appendChild(questionPara);
+
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = 'options';
+
+      questions[index].options.forEach(option => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'option';
+        optionDiv.setAttribute('data-value', option.value);
+        optionDiv.onclick = function () { selectOption(this); };
+
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'option-icon';
+        const icon = document.createElement('i');
+        icon.className = option.icon;
+        iconSpan.appendChild(icon);
+
+        const textSpan = document.createElement('span');
+        textSpan.className = 'option-text';
+        textSpan.textContent = option.text;
+
+        optionDiv.appendChild(iconSpan);
+        optionDiv.appendChild(textSpan);
+        optionsDiv.appendChild(optionDiv);
+      });
+
+      questionDiv.appendChild(optionsDiv);
+      quizContainer.appendChild(questionDiv);
+      updateProgress();
+    }
+
+    function selectOption(selectedOption) {
+      const options = document.querySelectorAll('.option');
+      options.forEach(option => option.classList.remove('selected'));
+      selectedOption.classList.add('selected');
+      document.getElementById('nextBtn').disabled = false;
+
+      const value = selectedOption.getAttribute('data-value');
+      userAnswers[value]++;
+    }
+
+    function updateProgress() {
+      const progressElement = document.querySelector('.progress');
+      const progressTextElement = document.querySelector('.progress-text');
+      const progressPercentage = ((currentQuestion + 1) / questions.length) * 100;
+      progressElement.style.width = progressPercentage + '%';
+      progressTextElement.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        renderQuestion(currentQuestion);
+        document.getElementById('nextBtn').disabled = true;
+      } else {
+        showQuizResult();
+      }
+    }
+
+    function showQuizResult() {
+      showLoading();
+      let maxScore = 0;
+      let personalityResult = '';
+      for (const personality in userAnswers) {
+        if (userAnswers[personality] > maxScore) {
+          maxScore = userAnswers[personality];
+          personalityResult = personality;
         }
+      }
 
-        function renderQuestion(index) {
-            const quizContainer = document.getElementById('quiz');
-            quizContainer.innerHTML = '';
-
-            const questionDiv = document.createElement('div');
-            questionDiv.className = 'question';
-
-            const questionPara = document.createElement('p');
-            questionPara.textContent = questions[index].question;
-            questionDiv.appendChild(questionPara);
-
-            const optionsDiv = document.createElement('div');
-            optionsDiv.className = 'options';
-
-            questions[index].options.forEach(option => {
-                const optionDiv = document.createElement('div');
-                optionDiv.className = 'option';
-                optionDiv.setAttribute('data-value', option.value);
-                optionDiv.onclick = function () { selectOption(this); };
-
-                const iconSpan = document.createElement('span');
-                iconSpan.className = 'option-icon';
-                const icon = document.createElement('i');
-                icon.className = option.icon;
-                iconSpan.appendChild(icon);
-
-                const textSpan = document.createElement('span');
-                textSpan.className = 'option-text';
-                textSpan.textContent = option.text;
-
-                optionDiv.appendChild(iconSpan);
-                optionDiv.appendChild(textSpan);
-                optionsDiv.appendChild(optionDiv);
-            });
-
-            questionDiv.appendChild(optionsDiv);
-            quizContainer.appendChild(questionDiv);
-            updateProgress();
+      const tiedPersonalities = [];
+      for (const personality in userAnswers) {
+        if (userAnswers[personality] === maxScore) {
+          tiedPersonalities.push(personality);
         }
+      }
 
-        function selectOption(selectedOption) {
-            const options = document.querySelectorAll('.option');
-            options.forEach(option => option.classList.remove('selected'));
-            selectedOption.classList.add('selected');
-            document.getElementById('nextBtn').disabled = false;
+      if (tiedPersonalities.length > 1) {
+        const randomIndex = Math.floor(Math.random() * tiedPersonalities.length);
+        personalityResult = tiedPersonalities[randomIndex];
+      }
 
-            const value = selectedOption.getAttribute('data-value');
-            userAnswers[value]++;
+      const state = loadState();
+      const username = state.session;
+      let profile = getUserProfile(username);
+      profile.personality = personalityResult;
+      saveUserProfile(username, profile);
+      updatePersonality(personalityResult);
+
+      document.getElementById('quizModal').style.display = 'none';
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      hideLoading();
+    }
+
+    function goToHome() {
+      window.location.href = 'index.html';
+    }
+
+    window.addEventListener('load', () => {
+      document.body.style.touchAction = 'manipulation';
+      window.addEventListener('contextmenu', (e) => e.preventDefault());
+
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const installBtn = document.createElement('button');
+        installBtn.className = 'btn btn-primary';
+        installBtn.textContent = 'Install App';
+        installBtn.style.position = 'fixed';
+        installBtn.style.bottom = '20px';
+        installBtn.style.right = '20px';
+        installBtn.style.zIndex = '2000';
+        document.body.appendChild(installBtn);
+
+        installBtn.addEventListener('click', async () => {
+          installBtn.style.display = 'none';
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            console.log('User installed the app');
+          }
+          deferredPrompt = null;
+        });
+      });
+
+      window.addEventListener('appinstalled', () => {
+        console.log('App was installed');
+        localStorage.setItem('appInstalled', 'true');
+      });
+
+      const offlineNotification = document.createElement('div');
+      offlineNotification.style.cssText = `
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--warning);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: none;
+        z-index: 2000;
+      `;
+      offlineNotification.textContent = 'Offline Mode';
+      document.body.appendChild(offlineNotification);
+
+      window.addEventListener('online', () => {
+        document.body.classList.remove('offline');
+        offlineNotification.style.display = 'none';
+      });
+
+      window.addEventListener('offline', () => {
+        document.body.classList.add('offline');
+        offlineNotification.style.display = 'block';
+        setTimeout(() => offlineNotification.style.display = 'none', 3000);
+      });
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          .then(reg => {
+            console.log('Service Worker registered', reg);
+            reg.update();
+          })
+          .catch(err => console.log('Service Worker registration failed', err));
+      }
+
+      let lastTouchEnd = 0;
+      document.addEventListener('touchend', (event) => {
+        const now = new Date().getTime();
+        if (now - lastTouchEnd <= 300) {
+          event.preventDefault();
         }
+        lastTouchEnd = now;
+      }, false);
 
-        function updateProgress() {
-            const progressElement = document.querySelector('.progress');
-            const progressTextElement = document.querySelector('.progress-text');
-            const progressPercentage = ((currentQuestion + 1) / questions.length) * 100;
-            progressElement.style.width = progressPercentage + '%';
-            progressTextElement.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
-        }
+      window.history.pushState(null, null, window.location.href);
+      window.addEventListener('popstate', () => {
+        window.history.pushState(null, null, window.location.href);
+      });
 
-        function nextQuestion() {
-            if (currentQuestion < questions.length - 1) {
-                currentQuestion++;
-                renderQuestion(currentQuestion);
-                document.getElementById('nextBtn').disabled = true;
-            } else {
-                showQuizResult();
-            }
-        }
-
-        function showQuizResult() {
-            let maxScore = 0;
-            let personalityResult = '';
-            for (const personality in userAnswers) {
-                if (userAnswers[personality] > maxScore) {
-                    maxScore = userAnswers[personality];
-                    personalityResult = personality;
-                }
-            }
-
-            const tiedPersonalities = [];
-            for (const personality in userAnswers) {
-                if (userAnswers[personality] === maxScore) {
-                    tiedPersonalities.push(personality);
-                }
-            }
-
-            if (tiedPersonalities.length > 1) {
-                const randomIndex = Math.floor(Math.random() * tiedPersonalities.length);
-                personalityResult = tiedPersonalities[randomIndex];
-            }
-
-            const state = loadState();
-            const username = state.session;
-            let profile = getUserProfile(username);
-            profile.personality = personalityResult;
-            saveUserProfile(username, profile);
-            updatePersonality(personalityResult);
-
-            document.getElementById('quizModal').style.display = 'none';
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        }
-
-        function goToHome() {
-            window.location.href = 'index.html';
-        }
-    </script>
+      const preloadLink = document.createElement('link');
+      preloadLink.rel = 'preload';
+      preloadLink.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap';
+      preloadLink.as = 'style';
+      document.head.appendChild(preloadLink);
+    });
+  </script>
 </body>
-
 </html>
