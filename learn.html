@@ -568,6 +568,82 @@
     .option.correct { background: rgba(16, 185, 129, 0.1); color: var(--success); border-color: var(--success); }
     .option.incorrect { background: rgba(239, 68, 68, 0.1); color: var(--danger); border-color: var(--danger); }
 
+    .anagram-container {
+      max-width: 900px;
+      margin: 40px auto;
+      text-align: center;
+    }
+
+    .anagram-letters {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .anagram-letter {
+      width: 60px;
+      height: 60px;
+      background: var(--bg-card);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--box-shadow);
+    }
+
+    .anagram-letter:hover {
+      transform: scale(1.1);
+      background: var(--gradient);
+      color: white;
+    }
+
+    .anagram-letter.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .anagram-input {
+      width: 100%;
+      min-height: 60px;
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--text);
+      text-align: center;
+      border: 2px solid var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .anagram-submit-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .anagram-result {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--success);
+      display: none;
+      margin-top: 20px;
+    }
+
+    .anagram-result.incorrect {
+      color: var(--danger);
+    }
+
+    .anagram-result i {
+      margin-right: 10px;
+    }
+
     .modal {
       display: none;
       position: fixed;
@@ -830,7 +906,7 @@
       background: rgba(0, 0, 0, 0.5);
       display: flex;
       align-items: center;
-ivano      justify-content: center;
+      justify-content: center;
       z-index: 3000;
       display: none;
     }
@@ -876,6 +952,8 @@ ivano      justify-content: center;
       .card-front { font-size: 1.8rem; }
       .card-back { font-size: 1.3rem; }
       .puzzle { padding: 20px; }
+      .anagram-letter { width: 40px; height: 40px; font-size: 1.5rem; }
+      .anagram-input { font-size: 1.2rem; }
       .modal-content { width: 95%; height: 90vh; }
       .modal-header { padding: 15px 20px; }
       .modal-body { padding: 20px; }
@@ -951,6 +1029,7 @@ ivano      justify-content: center;
       <div class="nav-item active" data-section="drills"><i class="fas fa-dumbbell"></i> Drills</div>
       <div class="nav-item" data-section="flashcards"><i class="fas fa-lightbulb"></i> Flashcards</div>
       <div class="nav-item" data-section="puzzles"><i class="fas fa-puzzle-piece"></i> Puzzles</div>
+      <div class="nav-item" data-section="activities"><i class="fas fa-gamepad"></i> Activities</div>
     </div>
 
     <div class="main-content">
@@ -995,13 +1074,13 @@ ivano      justify-content: center;
         <div class="flashcards-container">
           <div class="flashcard">
             <div class="card">
-              <div class="card-front">Accurate <small>Tap to flip</small></div>
-              <div class="card-back">/ˈæk.jə.rət/</div>
+              <div class="card-front">Articulation <small>Tap to flip</small></div>
+              <div class="card-back">The clear and precise pronunciation of words</div>
             </div>
           </div>
           <div class="flashcard-nav">
-            <div class="nav-btn" id="next-card"><i class="fas fa-chevron-right"></i></div>
             <div class="nav-btn" id="prev-card"><i class="fas fa-chevron-left"></i></div>
+            <div class="nav-btn" id="next-card"><i class="fas fa-chevron-right"></i></div>
           </div>
         </div>
       </section>
@@ -1012,6 +1091,14 @@ ivano      justify-content: center;
           <p>Test your linguistic knowledge</p>
         </div>
         <div class="puzzles" id="puzzles-container"></div>
+      </section>
+
+      <section id="activities" class="section">
+        <div class="section-header">
+          <h2>Anagram Activities</h2>
+          <p>Unscramble letters to form speech-related words</p>
+        </div>
+        <div class="anagram-container" id="anagram-container"></div>
       </section>
 
       <section id="home" class="section">
@@ -1075,7 +1162,6 @@ ivano      justify-content: center;
       recognition.lang = 'en-US';
     }
 
-    // State Management aligned with profile.html
     function loadState() {
       const state = localStorage.getItem('authState');
       return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
@@ -1098,8 +1184,11 @@ ivano      justify-content: center;
           profile: {
             name: username,
             personality: null,
-            puzzlesCompleted: 0,
-            drillsCompleted: 0,
+            activitiesCompleted: 0,
+            drillsCompletedHigh: 0,
+            drillsCompletedLow: 0,
+            puzzlesCompletedCorrect: 0,
+            puzzlesCompletedIncorrect: 0,
             speechesGiven: 0,
             speechesWithFivePlusStrengths: 0
           }
@@ -1109,8 +1198,11 @@ ivano      justify-content: center;
         state.users[username].profile = {
           name: username,
           personality: null,
-          puzzlesCompleted: 0,
-          drillsCompleted: 0,
+          activitiesCompleted: 0,
+          drillsCompletedHigh: 0,
+          drillsCompletedLow: 0,
+          puzzlesCompletedCorrect: 0,
+          puzzlesCompletedIncorrect: 0,
           speechesGiven: 0,
           speechesWithFivePlusStrengths: 0
         };
@@ -1176,12 +1268,25 @@ ivano      justify-content: center;
       { front: 'Modulation', back: 'Controlling the tone or volume of your voice' },
       { front: 'Nonverbal', back: 'Communication without words through gestures or expressions' },
       { front: 'Oratory', back: 'The art of formal public speaking' },
-      { front: 'Pitch', back: 'The highness or lowness of your voice' },
-      { front: 'Rhetoric', back: 'The art of effective or persuasive speaking' },
-      { front: 'Speech', back: 'The expression of thoughts through spoken words' },
-      { front: 'Tempo', back: 'The speed at which someone talks' },
-      { front: 'Utterance', back: 'A spoken word, statement, or vocal sound' },
-      { front: 'Vernacular', back: 'The language or dialect spoken by ordinary people' }
+      { front: 'Pitch', back: 'The highness or lowness of your voice' }
+    ];
+
+    const anagramData = [
+      { word: 'Articulation', scrambled: 'articulation' },
+      { word: 'Cadence', scrambled: 'cadence' },
+      { word: 'Diction', scrambled: 'diction' },
+      { word: 'Enunciation', scrambled: 'enunciation' },
+      { word: 'Filler', scrambled: 'filler' },
+      { word: 'Gesture', scrambled: 'gesture' },
+      { word: 'Hesitation', scrambled: 'hesitation' },
+      { word: 'Inflection', scrambled: 'inflection' },
+      { word: 'Jargon', scrambled: 'jargon' },
+      { word: 'Kinaesthetics', scrambled: 'kinaesthetics' },
+      { word: 'Lilt', scrambled: 'lilt' },
+      { word: 'Modulation', scrambled: 'modulation' },
+      { word: 'Nonverbal', scrambled: 'nonverbal' },
+      { word: 'Oratory', scrambled: 'oratory' },
+      { word: 'Pitch', scrambled: 'pitch' }
     ];
 
     const puzzleData = [
@@ -1230,6 +1335,14 @@ ivano      justify-content: center;
 
     function hideLoading() {
       document.getElementById('loading').classList.remove('active');
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -1302,6 +1415,7 @@ ivano      justify-content: center;
       function loadNextPuzzle() {
         puzzlesContainer.innerHTML = '';
         const puzzle = getRandomPuzzleByDifficulty(currentDifficulty);
+        const shuffledOptions = shuffleArray([...puzzle.options]);
         const puzzleElement = document.createElement('div');
         puzzleElement.className = 'puzzle active';
         puzzleElement.innerHTML = `
@@ -1312,7 +1426,7 @@ ivano      justify-content: center;
           <div class="puzzle-content">
             <p class="puzzle-question">${puzzle.question}</p>
             <div class="options">
-              ${puzzle.options.map(opt => `<div class="option" data-answer="${opt === puzzle.correct ? 'correct' : 'incorrect'}">${opt}</div>`).join('')}
+              ${shuffledOptions.map(opt => `<div class="option" data-answer="${opt === puzzle.correct ? 'correct' : 'incorrect'}">${opt}</div>`).join('')}
             </div>
           </div>
           <div class="puzzle-footer">
@@ -1330,25 +1444,25 @@ ivano      justify-content: center;
             answered = true;
             const isCorrect = option.getAttribute('data-answer') === 'correct';
             option.classList.add(isCorrect ? 'correct' : 'incorrect');
-            
+
             const username = state.session;
             let profile = getUserProfile(username);
-            profile.puzzlesCompleted += 1;
-            saveUserProfile(username, profile);
-
             if (isCorrect) {
+              profile.puzzlesCompletedCorrect += 1;
               streak++;
               if (streak >= 3 && currentDifficulty < 5) {
                 currentDifficulty++;
                 streak = 0;
               }
             } else {
+              profile.puzzlesCompletedIncorrect += 1;
               streak--;
               if (streak <= -2 && currentDifficulty > 1) {
                 currentDifficulty--;
                 streak = 0;
               }
             }
+            saveUserProfile(username, profile);
 
             setTimeout(loadNextPuzzle, 1000);
           });
@@ -1356,6 +1470,64 @@ ivano      justify-content: center;
       }
 
       loadNextPuzzle();
+
+      const anagramContainer = document.getElementById('anagram-container');
+      let shuffledAnagrams = shuffleArray([...anagramData]);
+      let currentAnagramIndex = 0;
+
+      function loadAnagram() {
+        const anagram = shuffledAnagrams[currentAnagramIndex];
+        const shuffledLetters = shuffleArray(anagram.scrambled.split(''));
+        anagramContainer.innerHTML = `
+          <div class="anagram-letters" id="anagram-letters">
+            ${shuffledLetters.map(letter => `<div class="anagram-letter">${letter}</div>`).join('')}
+          </div>
+          <div class="anagram-input" id="anagram-input"></div>
+          <div class="anagram-submit-container">
+            <button class="btn btn-primary" id="anagram-submit">Submit</button>
+          </div>
+          <div class="anagram-result" id="anagram-result"></div>
+        `;
+
+        const letters = document.querySelectorAll('.anagram-letter');
+        const input = document.getElementById('anagram-input');
+        const submitBtn = document.getElementById('anagram-submit');
+        const result = document.getElementById('anagram-result');
+        let selectedLetters = [];
+
+        letters.forEach((letter, index) => {
+          letter.addEventListener('click', () => {
+            if (!letter.classList.contains('disabled')) {
+              selectedLetters.push(letter.textContent);
+              letter.classList.add('disabled');
+              input.textContent = selectedLetters.join('');
+            }
+          });
+        });
+
+        submitBtn.addEventListener('click', () => {
+          const userAnswer = selectedLetters.join('');
+          const correctAnswer = anagram.word.toLowerCase();
+          result.style.display = 'block';
+          if (userAnswer.toLowerCase() === correctAnswer) {
+            result.innerHTML = `<i class="fas fa-check-circle" style="color: var(--success);"></i> Correct! The word is "${anagram.word}".`;
+            result.classList.remove('incorrect');
+            const username = state.session;
+            let profile = getUserProfile(username);
+            profile.activitiesCompleted += 1;
+            saveUserProfile(username, profile);
+          } else {
+            result.innerHTML = `<i class="fas fa-times-circle" style="color: var(--danger);"></i> Incorrect. The word is "${anagram.word}".`;
+            result.classList.add('incorrect');
+          }
+          setTimeout(() => {
+            currentAnagramIndex = (currentAnagramIndex + 1) % shuffledAnagrams.length;
+            loadAnagram();
+          }, 2000);
+        });
+      }
+
+      loadAnagram();
 
       const drills = document.querySelectorAll('.drill');
       const modal = document.getElementById('exerciseModal');
@@ -1426,17 +1598,42 @@ ivano      justify-content: center;
         const expectedTextClean = expected.toLowerCase().replace(/[.,!?]/g, '').trim();
         const endTime = Date.now();
         const duration = Math.max(0, (endTime - startTime) / 1000);
-        const expectedWords = expectedTextClean.split(/\s+/);
-        const spokenWords = spokenText.split(/\s+/);
-        const wordAccuracy = spokenWords.filter((word, i) => i < expectedWords.length && word === expectedWords[i]).length / expectedWords.length * 100;
-        const roundedAccuracy = Math.round(wordAccuracy / 20) * 20;
-        const starRating = roundedAccuracy / 20;
+        
+        const spokenWords = spokenText.split(/\s+/).filter(word => word.length > 0);
+        const expectedWords = expectedTextClean.split(/\s+/).filter(word => word.length > 0);
+        
+        let correctWords = 0;
+        const minLength = Math.min(spokenWords.length, expectedWords.length);
+        for (let i = 0; i < minLength; i++) {
+          if (spokenWords[i] === expectedWords[i]) {
+            correctWords++;
+          }
+        }
+        
+        const totalWords = Math.max(expectedWords.length, 1);
+        const wordAccuracy = (correctWords / totalWords) * 100;
+        
+        let starRating;
+        if (wordAccuracy >= 95) {
+          starRating = 5;
+        } else if (wordAccuracy >= 80) {
+          starRating = 4;
+        } else if (wordAccuracy >= 60) {
+          starRating = 3;
+        } else if (wordAccuracy >= 40) {
+          starRating = 2;
+        } else if (wordAccuracy >= 10) {
+          starRating = 1;
+        } else {
+          starRating = 1;
+        }
+        
         const wps = duration > 0 ? spokenWords.length / duration : 0;
 
         return { 
           starRating,
           spokenText, 
-          wordAccuracy: wordAccuracy.toFixed(1), 
+          accuracy: wordAccuracy.toFixed(1), 
           wps: wps.toFixed(2) 
         };
       }
@@ -1494,8 +1691,8 @@ ivano      justify-content: center;
           feedbackMeterFill.style.width = `${(analysis.starRating / 5) * 100}%`;
           feedbackStats.innerHTML = `
             <div class="stat-item">
-              <div class="stat-value">${analysis.wordAccuracy}%</div>
-              <div class="stat-label">Word Accuracy</div>
+              <div class="stat-value">${analysis.accuracy}%</div>
+              <div class="stat-label">Accuracy</div>
             </div>
             <div class="stat-item">
               <div class="stat-value">${analysis.wps}</div>
@@ -1510,7 +1707,11 @@ ivano      justify-content: center;
 
           const username = state.session;
           let profile = getUserProfile(username);
-          profile.drillsCompleted += 1;
+          if (analysis.starRating >= 4) {
+            profile.drillsCompletedHigh += 1;
+          } else {
+            profile.drillsCompletedLow += 1;
+          }
           saveUserProfile(username, profile);
         };
 
