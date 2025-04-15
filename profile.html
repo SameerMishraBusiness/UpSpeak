@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#4361ee">
-    <title>UpSpeak Profile - Your Speaking Journey</title>
-    <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/icon-192x192.png">
-    <link rel="icon" href="/favicon.ico">
+    <title>UpSpeak Profile</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
@@ -48,14 +43,12 @@
 
         header {
             background-color: rgba(255, 255, 255, 0.95);
-            padding: 15px 0;
+            padding: 25px 0;
             box-shadow: var(--box-shadow);
             position: sticky;
             top: 0;
             z-index: 1000;
             backdrop-filter: blur(10px);
-            min-height: 80px; /* Ensure enough height for logo */
-            overflow: visible; /* Prevent clipping */
         }
 
         .navbar {
@@ -64,8 +57,7 @@
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 10px 20px; /* Adjusted padding for better spacing */
-            flex-wrap: wrap; /* Allow wrapping on small screens */
+            padding: 0 20px;
         }
 
         .logo {
@@ -202,15 +194,13 @@
             .profile-tab { text-align: left; padding: 15px; }
             .tab-slider { display: none; }
             .personality-traits { flex-direction: column; align-items: center; }
-            .navbar { flex-direction: column; gap: 10px; }
-            .nav-menu { flex-wrap: wrap; justify-content: center; }
-            .nav-menu li { margin: 10px 15px; }
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .animated { animation: fadeIn 0.8s ease forwards; }
     </style>
 </head>
+
 <body>
     <header>
         <nav class="navbar">
@@ -218,7 +208,7 @@
                 <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <defs>
                         <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
+                            <stop offset="0%" style="stop-color:#007bff;stop-opacity:1" />
                             <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
                         </linearGradient>
                     </defs>
@@ -254,7 +244,7 @@
                 </li>
                 <li><a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
                     <div class="dropdown-content">
-                        <a href="about.html">UpSpeak Credentials</amaterials
+                        <a href="about.html">UpSpeak Credentials</a>
                     </div>
                 </li>
             </ul>
@@ -273,20 +263,16 @@
                     <p class="profile-tagline">Free UpSpeak Member</p>
                     <div class="profile-stats">
                         <div class="stat">
-                            <span id="speechesGiven" class="stat-number">0</span>
-                            <span class="stat-label">Speeches</span>
+                            <span id="puzzlesCompleted" class="stat-number">0</span>
+                            <span class="stat-label">Puzzles</span>
                         </div>
                         <div class="stat">
                             <span id="drillsCompleted" class="stat-number">0</span>
                             <span class="stat-label">Drills</span>
                         </div>
                         <div class="stat">
-                            <span id="puzzlesCompleted" class="stat-number">0</span>
-                            <span class="stat-label">Puzzles</span>
-                        </div>
-                        <div class="stat">
-                            <span id="activitiesCompleted" class="stat-number">0</span>
-                            <span class="stat-label">Activities</span>
+                            <span id="speechesGiven" class="stat-number">0</span>
+                            <span class="stat-label">Speeches</span>
                         </div>
                     </div>
                 </div>
@@ -307,40 +293,31 @@
         <div id="badges" class="tab-content">
             <div class="badges-grid">
                 <div class="badge-card animated">
-                    <div class="badge-icon"><i class="fas fa-puzzle-piece"></i></div>
-                    <h3 class="badge-name">Puzzle Master</h3>
-                    <p class="badge-description">Correctly solve 20 puzzles</p>
+                    <div class="badge-icon"><i class="fas fa-award"></i></div>
+                    <h3 class="badge-name">Puzzle Decipher</h3>
+                    <p class="badge-description">Answer 20 Puzzles</p>
                     <div class="badge-progress">
-                        <div id="puzzleMasterProgress" class="badge-progress-bar"></div>
+                        <div id="puzzleDecipherProgress" class="badge-progress-bar"></div>
                     </div>
-                    <span id="puzzleMasterStatus" class="badge-status">0/20 Puzzles Solved</span>
+                    <span id="puzzleDecipherStatus" class="badge-status">0/20 Puzzles Completed</span>
                 </div>
                 <div class="badge-card animated">
                     <div class="badge-icon"><i class="fas fa-microphone-alt"></i></div>
-                    <h3 class="badge-name">Speech Savant</h3>
-                    <p class="badge-description">Deliver 10 speeches</p>
+                    <h3 class="badge-name">Savvy Speaker</h3>
+                    <p class="badge-description">Complete 10 Structured Speeches</p>
                     <div class="badge-progress">
-                        <div id="speechSavantProgress" class="badge-progress-bar"></div>
+                        <div id="savvySpeakerProgress" class="badge-progress-bar"></div>
                     </div>
-                    <span id="speechSavantStatus" class="badge-status">0/10 Speeches Delivered</span>
+                    <span id="savvySpeakerStatus" class="badge-status">0/10 Speeches Given</span>
                 </div>
                 <div class="badge-card animated">
                     <div class="badge-icon"><i class="fas fa-dumbbell"></i></div>
-                    <h3 class="badge-name">Drill Expert</h3>
-                    <p class="badge-description">Complete 15 high-quality drills</p>
+                    <h3 class="badge-name">Driller</h3>
+                    <p class="badge-description">Complete 25 Drills</p>
                     <div class="badge-progress">
-                        <div id="drillExpertProgress" class="badge-progress-bar"></div>
+                        <div id="drillerProgress" class="badge-progress-bar"></div>
                     </div>
-                    <span id="drillExpertStatus" class="badge-status">0/15 Drills Completed</span>
-                </div>
-                <div class="badge-card animated">
-                    <div class="badge-icon"><i class="fas fa-gamepad"></i></div>
-                    <h3 class="badge-name">Activity Ace</h3>
-                    <p class="badge-description">Complete 25 anagram activities</p>
-                    <div class="badge-progress">
-                        <div id="activityAceProgress" class="badge-progress-bar"></div>
-                    </div>
-                    <span id="activityAceStatus" class="badge-status">0/25 Activities Completed</span>
+                    <span id="drillerStatus" class="badge-status">0/25 Drills Completed</span>
                 </div>
             </div>
         </div>
@@ -351,34 +328,34 @@
                     <div class="quest-header">
                         <div class="quest-title">
                             <div class="quest-icon"><i class="fas fa-book"></i></div>
-                            Learning Legend
+                            Avid Learner
                         </div>
                         <div class="quest-badge active">Active</div>
                     </div>
-                    <p class="quest-description">Complete 50 drills or puzzles</p>
+                    <p class="quest-description">Complete 50 Learning Exercises</p>
                     <div class="quest-progress">
-                        <div id="learningLegendProgress" class="quest-progress-bar"></div>
+                        <div id="avidLearnerProgress" class="quest-progress-bar"></div>
                     </div>
                     <div class="quest-status">
-                        <span id="learningLegendCounter" class="quest-counter">0/50 Exercises Completed</span>
+                        <span id="avidLearnerCounter" class="quest-counter">0/50 Exercises Completed</span>
                         <span class="quest-reward"><i class="fas fa-trophy"></i> 500 XP</span>
                     </div>
                 </div>
                 <div class="quest-card animated">
                     <div class="quest-header">
                         <div class="quest-title">
-                            <div class="quest-icon"><i class="fas fa-gamepad"></i></div>
-                            Activity Adventurer
+                            <div class="quest-icon"><i class="fas fa-microphone"></i></div>
+                            Quality Speeches
                         </div>
                         <div class="quest-badge active">Active</div>
                     </div>
-                    <p class="quest-description">Complete 30 anagram activities</p>
+                    <p class="quest-description">Provide 25 speeches with 5+ strengths</p>
                     <div class="quest-progress">
-                        <div id="activityAdventurerProgress" class="quest-progress-bar"></div>
+                        <div id="qualitySpeechesProgress" class="quest-progress-bar"></div>
                     </div>
                     <div class="quest-status">
-                        <span id="activityAdventurerCounter" class="quest-counter">0/30 Activities Completed</span>
-                        <span class="quest-reward"><i class="fas fa-trophy"></i> 600 XP</span>
+                        <span id="qualitySpeechesCounter" class="quest-counter">0/25 Quality Speeches Given</span>
+                        <span class="quest-reward"><i class="fas fa-trophy"></i> 750 XP</span>
                     </div>
                 </div>
             </div>
@@ -423,13 +400,10 @@
                     profile: {
                         name: username,
                         personality: null,
+                        puzzlesCompleted: 0,
+                        drillsCompleted: 0,
                         speechesGiven: 0,
-                        speechesWithFivePlusStrengths: 0,
-                        drillsCompletedHigh: 0,
-                        drillsCompletedLow: 0,
-                        puzzlesCompletedCorrect: 0,
-                        puzzlesCompletedIncorrect: 0,
-                        activitiesCompleted: 0
+                        speechesWithFivePlusStrengths: 0
                     }
                 };
                 saveState(state);
@@ -437,13 +411,10 @@
                 state.users[username].profile = {
                     name: username,
                     personality: null,
+                    puzzlesCompleted: 0,
+                    drillsCompleted: 0,
                     speechesGiven: 0,
-                    speechesWithFivePlusStrengths: 0,
-                    drillsCompletedHigh: 0,
-                    drillsCompletedLow: 0,
-                    puzzlesCompletedCorrect: 0,
-                    puzzlesCompletedIncorrect: 0,
-                    activitiesCompleted: 0
+                    speechesWithFivePlusStrengths: 0
                 };
                 saveState(state);
             }
@@ -456,8 +427,8 @@
             saveState(state);
         }
 
-        // Navigation and Initialization
-        document.addEventListener('DOMContentLoaded', () => {
+        // Tab Navigation and Initialization
+        document.addEventListener('DOMContentLoaded', function () {
             const state = loadState();
             const currentSession = state.session;
 
@@ -467,14 +438,6 @@
                 return;
             }
 
-            setupTabs();
-            setupAnimations();
-            setupTouchPrevention();
-            initializeProfile(currentSession);
-            setupServiceWorker();
-        });
-
-        function setupTabs() {
             const tabs = document.querySelectorAll('.profile-tab');
             const tabContents = document.querySelectorAll('.tab-content');
             const tabSlider = document.querySelector('.tab-slider');
@@ -493,11 +456,10 @@
                     });
                 });
             });
-        }
 
-        function setupAnimations() {
+            // Animation on scroll
             const animatedElements = document.querySelectorAll('.animated');
-            const observer = new IntersectionObserver(entries => {
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.style.opacity = '1';
@@ -511,20 +473,10 @@
                 el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
                 observer.observe(el);
             });
-        }
 
-        function setupTouchPrevention() {
-            document.body.style.touchAction = 'manipulation';
-            document.addEventListener('contextmenu', e => e.preventDefault());
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', event => {
-                const now = new Date().getTime();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, false);
-        }
+            // Initialize Profile
+            initializeProfile(currentSession);
+        });
 
         function initializeProfile(username) {
             let profile = getUserProfile(username);
@@ -533,45 +485,16 @@
                 profile.name = name;
                 saveUserProfile(username, profile);
             }
-
             document.getElementById('profileName').textContent = profile.name;
+
+            document.getElementById('puzzlesCompleted').textContent = profile.puzzlesCompleted;
+            document.getElementById('drillsCompleted').textContent = profile.drillsCompleted;
             document.getElementById('speechesGiven').textContent = profile.speechesGiven;
-            document.getElementById('drillsCompleted').textContent = profile.drillsCompletedHigh + profile.drillsCompletedLow;
-            document.getElementById('puzzlesCompleted').textContent = profile.puzzlesCompletedCorrect + profile.puzzlesCompletedIncorrect;
-            document.getElementById('activitiesCompleted').textContent = profile.activitiesCompleted;
 
             updatePersonality(profile.personality);
-            updateBadges(profile);
-            updateQuests(profile);
+            updateBadges(profile.puzzlesCompleted, profile.speechesGiven, profile.drillsCompleted);
+            updateQuests(profile.puzzlesCompleted + profile.drillsCompleted, profile.speechesWithFivePlusStrengths);
         }
-
-        // Personality Management
-        const personalities = {
-            peacock: {
-                title: "The Peacock",
-                icon: "fa-solid fa-feather-pointed",
-                description: "You captivate audiences with vibrant storytelling and natural flair. Your speeches are an art form, designed to leave a lasting impression through creative metaphors and charisma.",
-                traits: ["Expressive", "Charismatic", "Creative", "Inspiring", "Storyteller"]
-            },
-            fox: {
-                title: "The Fox",
-                icon: "fa-solid fa-paw",
-                description: "You excel in impromptu situations with quick wit and adaptability. Your dynamic energy keeps audiences engaged, turning challenges into opportunities to shine.",
-                traits: ["Witty", "Adaptable", "Energetic", "Quick-Thinking", "Engaging"]
-            },
-            owl: {
-                title: "The Owl",
-                icon: "fa-solid fa-owl",
-                description: "You deliver data-driven presentations with remarkable precision and clarity. Your thorough research and logical structure establish you as a trusted authority.",
-                traits: ["Precise", "Analytical", "Logical", "Credible", "Methodical"]
-            },
-            dolphin: {
-                title: "The Dolphin",
-                icon: "fa-solid fa-water",
-                description: "You connect emotionally with audiences, fostering empathy and trust. Your authentic and collaborative approach makes every speech a meaningful conversation.",
-                traits: ["Empathetic", "Authentic", "Relatable", "Supportive", "Intuitive"]
-            }
-        };
 
         function updatePersonality(personalityKey) {
             const personalityCard = document.getElementById('personalityCard');
@@ -613,36 +536,31 @@
             });
         }
 
-        // Badge and Quest Updates
-        function updateBadges(profile) {
-            const puzzleProgress = Math.min((profile.puzzlesCompletedCorrect / 20) * 100, 100);
-            document.getElementById('puzzleMasterProgress').style.width = `${puzzleProgress}%`;
-            document.getElementById('puzzleMasterStatus').textContent = `${profile.puzzlesCompletedCorrect}/20 Puzzles Solved`;
+        function updateBadges(puzzlesCompleted, speechesGiven, drillsCompleted) {
+            const puzzleProgress = Math.min((puzzlesCompleted / 20) * 100, 100);
+            document.getElementById('puzzleDecipherProgress').style.width = `${puzzleProgress}%`;
+            document.getElementById('puzzleDecipherStatus').textContent = `${puzzlesCompleted}/20 Puzzles Completed`;
 
-            const speechProgress = Math.min((profile.speechesGiven / 10) * 100, 100);
-            document.getElementById('speechSavantProgress').style.width = `${speechProgress}%`;
-            document.getElementById('speechSavantStatus').textContent = `${profile.speechesGiven}/10 Speeches Delivered`;
+            const speechProgress = Math.min((speechesGiven / 10) * 100, 100);
+            document.getElementById('savvySpeakerProgress').style.width = `${speechProgress}%`;
+            document.getElementById('savvySpeakerStatus').textContent = `${speechesGiven}/10 Speeches Given`;
 
-            const drillProgress = Math.min((profile.drillsCompletedHigh / 15) * 100, 100);
-            document.getElementById('drillExpertProgress').style.width = `${drillProgress}%`;
-            document.getElementById('drillExpertStatus').textContent = `${profile.drillsCompletedHigh}/15 Drills Completed`;
-
-            const activityProgress = Math.min((profile.activitiesCompleted / 25) * 100, 100);
-            document.getElementById('activityAceProgress').style.width = `${activityProgress}%`;
-            document.getElementById('activityAceStatus').textContent = `${profile.activitiesCompleted}/25 Activities Completed`;
+            const drillProgress = Math.min((drillsCompleted / 25) * 100, 100);
+            document.getElementById('drillerProgress').style.width = `${drillProgress}%`;
+            document.getElementById('drillerStatus').textContent = `${drillsCompleted}/25 Drills Completed`;
         }
 
-        function updateQuests(profile) {
-            const learnerProgress = Math.min(((profile.drillsCompletedHigh + profile.puzzlesCompletedCorrect) / 50) * 100, 100);
-            document.getElementById('learningLegendProgress').style.width = `${learnerProgress}%`;
-            document.getElementById('learningLegendCounter').textContent = `${profile.drillsCompletedHigh + profile.puzzlesCompletedCorrect}/50 Exercises Completed`;
+        function updateQuests(learningExercisesCompleted, speechesWithFivePlusStrengths) {
+            const learnerProgress = Math.min((learningExercisesCompleted / 50) * 100, 100);
+            document.getElementById('avidLearnerProgress').style.width = `${learnerProgress}%`;
+            document.getElementById('avidLearnerCounter').textContent = `${learningExercisesCompleted}/50 Exercises Completed`;
 
-            const activityProgress = Math.min((profile.activitiesCompleted / 30) * 100, 100);
-            document.getElementById('activityAdventurerProgress').style.width = `${activityProgress}%`;
-            document.getElementById('activityAdventurerCounter').textContent = `${profile.activitiesCompleted}/30 Activities Completed`;
+            const qualityProgress = Math.min((speechesWithFivePlusStrengths / 25) * 100, 100);
+            document.getElementById('qualitySpeechesProgress').style.width = `${qualityProgress}%`;
+            document.getElementById('qualitySpeechesCounter').textContent = `${speechesWithFivePlusStrengths}/25 Quality Speeches Given`;
         }
 
-        // Quiz Logic
+        // Quiz Data
         const questions = [
             {
                 question: "Which speech-related title intrigues you the most?",
@@ -691,6 +609,33 @@
             }
         ];
 
+        const personalities = {
+            peacock: {
+                title: "The Peacock",
+                icon: "fa-solid fa-feather-pointed",
+                description: "You captivate audiences with vibrant storytelling and natural flair. Your speeches are an art form, designed to leave a lasting impression through creative metaphors and charisma.",
+                traits: ["Expressive", "Charismatic", "Creative", "Inspiring", "Storyteller"]
+            },
+            fox: {
+                title: "The Fox",
+                icon: "fa-solid fa-paw",
+                description: "You excel in impromptu situations with quick wit and adaptability. Your dynamic energy keeps audiences engaged, turning challenges into opportunities to shine.",
+                traits: ["Witty", "Adaptable", "Energetic", "Quick-Thinking", "Engaging"]
+            },
+            owl: {
+                title: "The Owl",
+                icon: "fa-solid fa-owl",
+                description: "You deliver data-driven presentations with remarkable precision and clarity. Your thorough research and logical structure establish you as a trusted authority.",
+                traits: ["Precise", "Analytical", "Logical", "Credible", "Methodical"]
+            },
+            dolphin: {
+                title: "The Dolphin",
+                icon: "fa-solid fa-water",
+                description: "You connect emotionally with audiences, fostering empathy and trust. Your authentic and collaborative approach makes every speech a meaningful conversation.",
+                traits: ["Empathetic", "Authentic", "Relatable", "Supportive", "Intuitive"]
+            }
+        };
+
         let currentQuestion = 0;
         const userAnswers = { peacock: 0, fox: 0, owl: 0, dolphin: 0 };
 
@@ -719,7 +664,7 @@
                 const optionDiv = document.createElement('div');
                 optionDiv.className = 'option';
                 optionDiv.setAttribute('data-value', option.value);
-                optionDiv.onclick = () => selectOption(optionDiv);
+                optionDiv.onclick = function () { selectOption(this); };
 
                 const iconSpan = document.createElement('span');
                 iconSpan.className = 'option-icon';
@@ -779,7 +724,13 @@
                 }
             }
 
-            const tiedPersonalities = Object.keys(userAnswers).filter(p => userAnswers[p] === maxScore);
+            const tiedPersonalities = [];
+            for (const personality in userAnswers) {
+                if (userAnswers[personality] === maxScore) {
+                    tiedPersonalities.push(personality);
+                }
+            }
+
             if (tiedPersonalities.length > 1) {
                 const randomIndex = Math.floor(Math.random() * tiedPersonalities.length);
                 personalityResult = tiedPersonalities[randomIndex];
@@ -799,71 +750,7 @@
         function goToHome() {
             window.location.href = 'index.html';
         }
-
-        // Service Worker
-        function setupServiceWorker() {
-            window.addEventListener('load', () => {
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('/sw.js', { scope: '/' })
-                        .then(reg => console.log('Service Worker registered', reg))
-                        .catch(err => console.log('Service Worker registration failed', err));
-                }
-
-                let deferredPrompt;
-                window.addEventListener('beforeinstallprompt', e => {
-                    e.preventDefault();
-                    deferredPrompt = e;
-                    const installBtn = document.createElement('button');
-                    installBtn.className = 'btn btn-primary';
-                    installBtn.textContent = 'Install App';
-                    installBtn.style.position = 'fixed';
-                    installBtn.style.bottom = '20px';
-                    installBtn.style.right = '20px';
-                    installBtn.style.zIndex = '2000';
-                    document.body.appendChild(installBtn);
-
-                    installBtn.addEventListener('click', async () => {
-                        installBtn.style.display = 'none';
-                        deferredPrompt.prompt();
-                        const { outcome } = await deferredPrompt.userChoice;
-                        if (outcome === 'accepted') {
-                            console.log('User installed the app');
-                        }
-                        deferredPrompt = null;
-                    });
-                });
-
-                window.addEventListener('appinstalled', () => {
-                    console.log('App was installed');
-                    localStorage.setItem('appInstalled', 'true');
-                });
-
-                const offlineNotification = document.createElement('div');
-                offlineNotification.style.cssText = `
-                    position: fixed;
-                    top: 80px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: var(--warning-color);
-                    color: white;
-                    padding: 10px 20px;
-                    border-radius: 8px;
-                    display: none;
-                    z-index: 2000;
-                `;
-                offlineNotification.textContent = 'Offline Mode';
-                document.body.appendChild(offlineNotification);
-
-                window.addEventListener('online', () => {
-                    offlineNotification.style.display = 'none';
-                });
-
-                window.addEventListener('offline', () => {
-                    offlineNotification.style.display = 'block';
-                    setTimeout(() => offlineNotification.style.display = 'none', 3000);
-                });
-            });
-        }
     </script>
 </body>
+
 </html>
