@@ -41,11 +41,6 @@
       --text-color: #2c3e50;
       --background-gradient: linear-gradient(135deg, #e6f0f1, #d5dbdb);
       --transition-speed: 0.3s;
-      --accent-color: #ff8c00;
-      --light-bg: rgba(255, 255, 255, 0.8);
-      --card-bg: rgba(255, 255, 255, 0.95);
-      --neutral-gray: #F5F5F5;
-      --dark-gray: #424242;
     }
 
     * {
@@ -398,57 +393,6 @@
       color: var(--text-light);
     }
 
-    .profile-tabs {
-      display: flex;
-      background: var(--bg-card);
-      border-radius: 50px;
-      padding: 5px;
-      margin-bottom: 30px;
-      box-shadow: var(--box-shadow);
-      position: relative;
-      z-index: 1;
-    }
-
-    .profile-tab {
-      flex: 1;
-      text-align: center;
-      padding: 15px 20px;
-      font-weight: 600;
-      cursor: pointer;
-      border-radius: 50px;
-      transition: var(--transition);
-      color: var(--text-light);
-      position: relative;
-      z-index: 2;
-    }
-
-    .profile-tab.active {
-      color: white;
-    }
-
-    .tab-slider {
-      position: absolute;
-      height: 85%;
-      top: 7.5%;
-      left: 0.5%;
-      width: 33.33%;
-      background: var(--gradient);
-      border-radius: 50px;
-      transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-      z-index: 1;
-    }
-
-    .tab-content {
-      display: none;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    .tab-content.active {
-      display: block;
-      opacity: 1;
-    }
-
     .personality-card {
       background: var(--bg-card);
       border-radius: 20px;
@@ -655,9 +599,7 @@
     .quest-badge {
       padding: 5px 15px;
       border-radius: 50px;
-      font-size:
-
- 0.85rem;
+      font-size: 0.85rem;
       font-weight: 600;
       background: var(--bg);
       color: var(--primary);
@@ -884,8 +826,8 @@
     }
 
     .quiz-btn:disabled {
-      background: var(--neutral-gray);
-      color: var(--dark-gray);
+      background: #F5F5F5;
+      color: #424242;
       cursor: not-allowed;
       box-shadow: none;
     }
@@ -957,9 +899,6 @@
       .main-content { margin-left: 0; padding: 20px; }
       .section-header h2 { font-size: 2rem; }
       .profile-info { flex-direction: column; align-items: flex-start; }
-      .profile-tabs { flex-direction: column; border-radius: 20px; }
-      .profile-tab { text-align: left; padding: 15px; }
-      .tab-slider { display: none; }
       .personality-traits { flex-direction: column; align-items: center; }
       .modal-content { width: 95%; height: 90vh; }
       .modal-header { padding: 15px 20px; }
@@ -1057,12 +996,12 @@
                   <span class="stat-label">Activities</span>
                 </div>
                 <div class="stat">
-                  <span id="puzzlesCompleted" class="stat-number">0</span>
-                  <span class="stat-label">Puzzles</span>
+                  <span id="puzzlesCompletedCorrect" class="stat-number">0</span>
+                  <span class="stat-label">Puzzles Correct</span>
                 </div>
                 <div class="stat">
-                  <span id="drillsCompleted" class="stat-number">0</span>
-                  <span class="stat-label">Drills</span>
+                  <span id="drillsCompletedHigh" class="stat-number">0</span>
+                  <span class="stat-label">High-Quality Drills</span>
                 </div>
                 <div class="stat">
                   <span id="speechesGiven" class="stat-number">0</span>
@@ -1082,31 +1021,31 @@
         </div>
         <div class="badges-grid">
           <div class="badge-card">
-            <div class="badge-icon"><i class="fas fa-award"></i></div>
-            <h3 class="badge-name">Puzzle Decipher</h3>
-            <p class="badge-description">Answer 20 Puzzles</p>
+            <div class="badge-icon"><i class="fas fa-puzzle-piece"></i></div>
+            <h3 class="badge-name">Puzzle Master</h3>
+            <p class="badge-description">Correctly solve 20 puzzles</p>
             <div class="badge-progress">
-              <div id="puzzleDecipherProgress" class="badge-progress-bar"></div>
+              <div id="puzzleMasterProgress" class="badge-progress-bar"></div>
             </div>
-            <span id="puzzleDecipherStatus" class="badge-status">0/20 Puzzles Completed</span>
+            <span id="puzzleMasterStatus" class="badge-status">0/20 Puzzles Correct</span>
           </div>
           <div class="badge-card">
             <div class="badge-icon"><i class="fas fa-microphone-alt"></i></div>
             <h3 class="badge-name">Savvy Speaker</h3>
-            <p class="badge-description">Complete 10 Structured Speeches</p>
+            <p class="badge-description">Deliver 10 speeches</p>
             <div class="badge-progress">
               <div id="savvySpeakerProgress" class="badge-progress-bar"></div>
             </div>
-            <span id="savvySpeakerStatus" class="badge-status">0/10 Speeches Given</span>
+            <span id="savvySpeakerStatus" class="badge-status">0/10 Speeches Delivered</span>
           </div>
           <div class="badge-card">
             <div class="badge-icon"><i class="fas fa-dumbbell"></i></div>
-            <h3 class="badge-name">Driller</h3>
-            <p class="badge-description">Complete 25 Drills</p>
+            <h3 class="badge-name">Drill Expert</h3>
+            <p class="badge-description">Complete 25 high-quality drills</p>
             <div class="badge-progress">
-              <div id="drillerProgress" class="badge-progress-bar"></div>
+              <div id="drillExpertProgress" class="badge-progress-bar"></div>
             </div>
-            <span id="drillerStatus" class="badge-status">0/25 Drills Completed</span>
+            <span id="drillExpertStatus" class="badge-status">0/25 High-Quality Drills</span>
           </div>
         </div>
       </section>
@@ -1123,14 +1062,14 @@
                 <div class="quest-icon"><i class="fas fa-book"></i></div>
                 Avid Learner
               </div>
-              <div class="quest-badge active">Active</div>
+              <div class="quest-badge">Active</div>
             </div>
-            <p class="quest-description">Complete 50 Learning Exercises</p>
+            <p class="quest-description">Complete 50 activities (anagrams, flashcards, etc.)</p>
             <div class="quest-progress">
               <div id="avidLearnerProgress" class="quest-progress-bar"></div>
             </div>
             <div class="quest-status">
-              <span id="avidLearnerCounter" class="quest-counter">0/50 Exercises Completed</span>
+              <span id="avidLearnerCounter" class="quest-counter">0/50 Activities Completed</span>
               <span class="quest-reward"><i class="fas fa-trophy"></i> 500 XP</span>
             </div>
           </div>
@@ -1140,14 +1079,14 @@
                 <div class="quest-icon"><i class="fas fa-microphone"></i></div>
                 Quality Speeches
               </div>
-              <div class="quest-badge active">Active</div>
+              <div class="quest-badge">Active</div>
             </div>
-            <p class="quest-description">Provide 25 speeches with 5+ strengths</p>
+            <p class="quest-description">Deliver 25 speeches with high quality</p>
             <div class="quest-progress">
               <div id="qualitySpeechesProgress" class="quest-progress-bar"></div>
             </div>
             <div class="quest-status">
-              <span id="qualitySpeechesCounter" class="quest-counter">0/25 Quality Speeches Given</span>
+              <span id="qualitySpeechesCounter" class="quest-counter">0/25 Quality Speeches</span>
               <span class="quest-reward"><i class="fas fa-trophy"></i> 750 XP</span>
             </div>
           </div>
@@ -1205,8 +1144,10 @@
             name: username,
             personality: null,
             activitiesCompleted: 0,
-            puzzlesCompleted: 0,
-            drillsCompleted: 0,
+            drillsCompletedHigh: 0,
+            drillsCompletedLow: 0,
+            puzzlesCompletedCorrect: 0,
+            puzzlesCompletedIncorrect: 0,
             speechesGiven: 0,
             speechesWithFivePlusStrengths: 0
           }
@@ -1217,8 +1158,10 @@
           name: username,
           personality: null,
           activitiesCompleted: 0,
-          puzzlesCompleted: 0,
-          drillsCompleted: 0,
+          drillsCompletedHigh: 0,
+          drillsCompletedLow: 0,
+          puzzlesCompletedCorrect: 0,
+          puzzlesCompletedIncorrect: 0,
           speechesGiven: 0,
           speechesWithFivePlusStrengths: 0
         };
@@ -1287,13 +1230,13 @@
       document.getElementById('profileName').textContent = profile.name;
 
       document.getElementById('activitiesCompleted').textContent = profile.activitiesCompleted;
-      document.getElementById('puzzlesCompleted').textContent = profile.puzzlesCompleted;
-      document.getElementById('drillsCompleted').textContent = profile.drillsCompleted;
+      document.getElementById('puzzlesCompletedCorrect').textContent = profile.puzzlesCompletedCorrect;
+      document.getElementById('drillsCompletedHigh').textContent = profile.drillsCompletedHigh;
       document.getElementById('speechesGiven').textContent = profile.speechesGiven;
 
       updatePersonality(profile.personality);
-      updateBadges(profile.puzzlesCompleted, profile.speechesGiven, profile.drillsCompleted);
-      updateQuests(profile.activitiesCompleted + profile.puzzlesCompleted + profile.drillsCompleted, profile.speechesWithFivePlusStrengths);
+      updateBadges(profile.puzzlesCompletedCorrect, profile.speechesGiven, profile.drillsCompletedHigh);
+      updateQuests(profile.activitiesCompleted, profile.speechesWithFivePlusStrengths);
       hideLoading();
     }
 
@@ -1337,28 +1280,28 @@
       });
     }
 
-    function updateBadges(puzzlesCompleted, speechesGiven, drillsCompleted) {
-      const puzzleProgress = Math.min((puzzlesCompleted / 20) * 100, 100);
-      document.getElementById('puzzleDecipherProgress').style.width = `${puzzleProgress}%`;
-      document.getElementById('puzzleDecipherStatus').textContent = `${puzzlesCompleted}/20 Puzzles Completed`;
+    function updateBadges(puzzlesCompletedCorrect, speechesGiven, drillsCompletedHigh) {
+      const puzzleProgress = Math.min((puzzlesCompletedCorrect / 20) * 100, 100);
+      document.getElementById('puzzleMasterProgress').style.width = `${puzzleProgress}%`;
+      document.getElementById('puzzleMasterStatus').textContent = `${puzzlesCompletedCorrect}/20 Puzzles Correct`;
 
       const speechProgress = Math.min((speechesGiven / 10) * 100, 100);
       document.getElementById('savvySpeakerProgress').style.width = `${speechProgress}%`;
-      document.getElementById('savvySpeakerStatus').textContent = `${speechesGiven}/10 Speeches Given`;
+      document.getElementById('savvySpeakerStatus').textContent = `${speechesGiven}/10 Speeches Delivered`;
 
-      const drillProgress = Math.min((drillsCompleted / 25) * 100, 100);
-      document.getElementById('drillerProgress').style.width = `${drillProgress}%`;
-      document.getElementById('drillerStatus').textContent = `${drillsCompleted}/25 Drills Completed`;
+      const drillProgress = Math.min((drillsCompletedHigh / 25) * 100, 100);
+      document.getElementById('drillExpertProgress').style.width = `${drillProgress}%`;
+      document.getElementById('drillExpertStatus').textContent = `${drillsCompletedHigh}/25 High-Quality Drills`;
     }
 
-    function updateQuests(learningExercisesCompleted, speechesWithFivePlusStrengths) {
-      const learnerProgress = Math.min((learningExercisesCompleted / 50) * 100, 100);
+    function updateQuests(activitiesCompleted, speechesWithFivePlusStrengths) {
+      const learnerProgress = Math.min((activitiesCompleted / 50) * 100, 100);
       document.getElementById('avidLearnerProgress').style.width = `${learnerProgress}%`;
-      document.getElementById('avidLearnerCounter').textContent = `${learningExercisesCompleted}/50 Exercises Completed`;
+      document.getElementById('avidLearnerCounter').textContent = `${activitiesCompleted}/50 Activities Completed`;
 
       const qualityProgress = Math.min((speechesWithFivePlusStrengths / 25) * 100, 100);
       document.getElementById('qualitySpeechesProgress').style.width = `${qualityProgress}%`;
-      document.getElementById('qualitySpeechesCounter').textContent = `${speechesWithFivePlusStrengths}/25 Quality Speeches Given`;
+      document.getElementById('qualitySpeechesCounter').textContent = `${speechesWithFivePlusStrengths}/25 Quality Speeches`;
     }
 
     const questions = [
@@ -1568,7 +1511,7 @@
         e.preventDefault();
         deferredPrompt = e;
         const installBtn = document.createElement('button');
-        installBtn.className = 'btn btn-primary';
+        installBtn.className = 'take-quiz-btn';
         installBtn.textContent = 'Install App';
         installBtn.style.position = 'fixed';
         installBtn.style.bottom = '20px';
