@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UpSpeak Recording</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -13,6 +15,8 @@
             --text-color: #2c3e50;
             --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             --transition-speed: 0.3s;
+            --button-glow: 0 0 20px rgba(255, 153, 51, 0.6);
+            --popup-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         body {
@@ -60,17 +64,63 @@
             transition: transform var(--transition-speed) ease;
         }
 
-        .logo:hover { transform: scale(1.08); }
-        .logo .microphone-icon { width: 55px; height: 55px; margin-right: 15px; filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1)); }
-        .logo .upspeak-up { color: var(--secondary-color); }
-        .logo .upspeak-speak { color: var(--primary-color); }
+        .logo:hover {
+            transform: scale(1.08);
+        }
 
-        .nav-menu { list-style: none; display: flex; justify-content: center; align-items: center; padding: 0; margin: 0; }
-        .nav-menu li { margin: 0 30px; position: relative; }
-        .nav-menu > li > a { color: #555; font-weight: 500; transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease; display: flex; align-items: center; text-decoration: none; padding-bottom: 4px; }
-        .nav-menu > li > a:hover { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); }
-        .nav-menu .carrot { margin-left: 7px; font-size: 0.9em; transition: transform var(--transition-speed) ease; }
-        .nav-menu li:hover .carrot { transform: rotate(180deg); }
+        .logo .microphone-icon {
+            width: 55px;
+            height: 55px;
+            margin-right: 15px;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+        }
+
+        .logo .upspeak-up {
+            color: var(--secondary-color);
+        }
+
+        .logo .upspeak-speak {
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu li {
+            margin: 0 30px;
+            position: relative;
+        }
+
+        .nav-menu>li>a {
+            color: #555;
+            font-weight: 500;
+            transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            padding-bottom: 4px;
+        }
+
+        .nav-menu>li>a:hover {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .nav-menu .carrot {
+            margin-left: 7px;
+            font-size: 0.9em;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .nav-menu li:hover .carrot {
+            transform: rotate(180deg);
+        }
 
         .dropdown-content {
             display: none;
@@ -90,12 +140,36 @@
             backdrop-filter: blur(10px);
         }
 
-        .nav-menu li:hover .dropdown-content { display: block; opacity: 1; transform: translateX(-50%) translateY(10px); }
-        .dropdown-content a { color: var(--text-color); padding: 12px 0; text-decoration: none; display: block; transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease; border-radius: 8px; }
-        .dropdown-content a:hover { background-color: rgba(0, 123, 255, 0.1); color: var(--primary-color); }
+        .nav-menu li:hover .dropdown-content {
+            display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(10px);
+        }
 
-        .profile-icon { font-size: 3rem; color: #777; transition: color var(--transition-speed) ease, transform var(--transition-speed) ease; }
-        .profile-icon:hover { color: var(--primary-color); transform: scale(1.15); }
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 12px 0;
+            text-decoration: none;
+            display: block;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+            border-radius: 8px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            color: var(--primary-color);
+        }
+
+        .profile-icon {
+            font-size: 3rem;
+            color: #777;
+            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+        }
+
+        .profile-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.15);
+        }
 
         .container {
             display: flex;
@@ -103,7 +177,7 @@
             background-color: rgba(255, 255, 255, 0.95);
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--box-shadow);
             width: 900px;
             max-width: 95%;
             margin: 20px auto;
@@ -112,9 +186,17 @@
             flex-direction: row;
         }
 
-        .container:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3); }
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
 
-        .left-section { flex: 2; display: flex; flex-direction: column; gap: 20px; }
+        .left-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
         .video-container {
             background-color: #000;
@@ -126,8 +208,18 @@
             position: relative;
         }
 
-        .video-container.recording { transform: scale(1.05); border: 4px solid #ff8c00; box-shadow: 0 8px 20px rgba(255, 140, 0, 0.5); }
-        video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .video-container.recording {
+            transform: scale(1.05);
+            border: 4px solid #ff8c00;
+            box-shadow: 0 8px 20px rgba(255, 140, 0, 0.5);
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
 
         .transcription-box {
             padding: 15px;
@@ -145,32 +237,127 @@
             line-height: 1.4;
         }
 
-        .right-section { flex: 1; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        .right-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
 
-        .buttons-container { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
 
         button {
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s, background-color 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .record-btn {
             width: 120px;
             height: 120px;
             border-radius: 50%;
             font-size: 14px;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.3s, background-color 0.3s;
             text-align: center;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background-color: #ff8c00;
             color: #fff;
         }
 
-        button:hover:not(:disabled) { transform: scale(1.1); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); }
-        .primary-btn { background-color: #ff8c00; box-shadow: 0 4px 10px rgba(255, 140, 0, 0.4); }
-        .primary-btn:hover:not(:disabled) { background-color: #ff9f33; }
-        .secondary-btn { background-color: #0073e6; box-shadow: 0 4px 10px rgba(0, 115, 230, 0.4); }
-        .secondary-btn:hover:not(:disabled) { background-color: #1a8cff; }
-        button:disabled { background-color: #ccc; color: #666; cursor: not-allowed; opacity: 0.7; }
+        .action-btn {
+            display: none;
+            width: 200px;
+            height: 60px;
+            border-radius: 30px;
+            font-size: 16px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, #ff8c00, #ff9933);
+            box-shadow: var(--button-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ff9f33, #ffa94d);
+        }
+
+        .action-btn.download-btn {
+            background: linear-gradient(45deg, #0073e6, #1a8cff);
+        }
+
+        .action-btn.download-btn:hover:not(:disabled) {
+            background: linear-gradient(45deg, #1a8cff, #4da8ff);
+        }
+
+        .action-btn.save-btn {
+            background: linear-gradient(45deg, #28a745, #34c759);
+        }
+
+        .action-btn.save-btn:hover:not(:disabled) {
+            background: linear-gradient(45deg, #34c759, #4cd964);
+        }
+
+        .action-btn i {
+            font-size: 20px;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.4),
+                    transparent);
+            transition: 0.5s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .primary-btn {
+            background-color: #ff8c00;
+            box-shadow: 0 4px 10px rgba(255, 140, 0, 0.4);
+        }
+
+        .primary-btn:hover:not(:disabled) {
+            background-color: #ff9f33;
+        }
+
+        .secondary-btn {
+            background-color: #0073e6;
+            box-shadow: 0 4px 10px rgba(0, 115, 230, 0.4);
+        }
+
+        .secondary-btn:hover:not(:disabled) {
+            background-color: #1a8cff;
+        }
+
+        button:disabled {
+            background: #ccc !important;
+            color: #666;
+            cursor: not-allowed;
+            opacity: 0.7;
+            box-shadow: none;
+        }
 
         .feedback-box {
             padding: 20px;
@@ -183,17 +370,49 @@
             box-sizing: border-box;
         }
 
-        .strengths-box { border: 3px solid #28a745; background-color: rgba(40, 167, 69, 0.1); color: #155724; }
-        .improvement-box { border: 3px solid #dc3545; background-color: rgba(220, 53, 69, 0.1); color: #721c24; }
-        .summary-box { border: 3px solid #ffc107; background-color: rgba(255, 193, 7, 0.1); color: #856404; }
-        .rating-box { border: 3px solid #007bff; background-color: rgba(0, 123, 255, 0.1); color: #004085; }
+        .strengths-box {
+            border: 3px solid #28a745;
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #155724;
+        }
 
-        .feedback-item { margin-bottom: 12px; }
+        .improvement-box {
+            border: 3px solid #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #721c24;
+        }
+
+        .summary-box {
+            border: 3px solid #ffc107;
+            background-color: rgba(255, 193, 7, 0.1);
+            color: #856404;
+        }
+
+        .rating-box {
+            border: 3px solid #007bff;
+            background-color: rgba(0, 123, 255, 0.1);
+            color: #004085;
+        }
+
+        .feedback-item {
+            margin-bottom: 12px;
+        }
 
         @keyframes fireworks {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 0; }
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
         }
 
         .fireworks {
@@ -206,23 +425,220 @@
             animation: fireworks 1s ease-out;
         }
 
-        .feedback-score { font-size: 1.5em; font-weight: bold; text-align: center; margin-bottom: 10px; }
-        .feedback-progress { width: 100%; height: 8px; background-color: #eee; border-radius: 4px; margin-bottom: 15px; overflow: hidden; }
-        .progress-bar { height: 100%; border-radius: 4px; transition: width 1s ease-in-out; }
-        .progress-bar.strength { background-color: #28a745; }
-        .progress-bar.improvement { background-color: #dc3545; }
-        .slider-container { width: 100%; margin: 10px 0; }
-        .feedback-badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 0.8em; margin-right: 5px; font-weight: bold; }
-        .badge-positive { background-color: rgba(40, 167, 69, 0.2); color: #155724; }
-        .badge-negative { background-color: rgba(220, 53, 69, 0.2); color: #721c24; }
+        .feedback-score {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .feedback-progress {
+            width: 100%;
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+        }
+
+        .progress-bar.strength {
+            background-color: #28a745;
+        }
+
+        .progress-bar.improvement {
+            background-color: #dc3545;
+        }
+
+        .slider-container {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .feedback-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-right: 5px;
+            font-weight: bold;
+        }
+
+        .badge-positive {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #155724;
+        }
+
+        .badge-negative {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #721c24;
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .popup {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--popup-shadow);
+            width: 400px;
+            max-width: 90%;
+            text-align: center;
+            animation: popupFadeIn 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes popupFadeIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .popup h2 {
+            color: var(--text-color);
+            font-size: 1.8em;
+            margin: 0 0 20px 0;
+        }
+
+        .popup p {
+            color: #555;
+            font-size: 1em;
+            margin: 0 0 20px 0;
+        }
+
+        .popup input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .popup input:focus {
+            border-color: #ff8c00;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .popup-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .popup-btn.confirm {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .popup-btn.cancel {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .popup-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .popup-btn.confirm:hover {
+            background: #34c759;
+        }
+
+        .popup-btn.cancel:hover {
+            background: #e4606d;
+        }
 
         @media (max-width: 768px) {
-            .container { flex-direction: column; padding: 20px; }
-            .left-section, .right-section { width: 100%; }
-            button { width: 100px; height: 100px; font-size: 12px; }
+            .container {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .left-section,
+            .right-section {
+                width: 100%;
+            }
+
+            .transcription-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .record-btn {
+                width: 100px;
+                height: 100px;
+                font-size: 12px;
+            }
+
+            .action-btn {
+                width: 160px;
+                height: 50px;
+                font-size: 14px;
+            }
+
+            .action-btn i {
+                font-size: 18px;
+            }
+
+            .popup {
+                width: 80%;
+                padding: 20px;
+            }
+
+            .popup-btn {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+
+        .transcription-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 15px;
         }
     </style>
 </head>
+
 <body>
     <header id="mainHeader">
         <nav class="navbar">
@@ -285,16 +701,32 @@
                 <video id="video" autoplay muted></video>
             </div>
             <div id="transcription" class="transcription-box">Transcription will appear here...</div>
+            <div class="transcription-buttons">
+                <button id="downloadBtn" class="action-btn download-btn" disabled style="display: none;"><i
+                        class="fas fa-download"></i> Download</button>
+                <button id="saveBtn" class="action-btn save-btn" disabled style="display: none;"><i
+                        class="fas fa-save"></i> Save</button>
+            </div>
         </div>
         <div class="right-section">
             <div class="buttons-container" id="buttonsContainer">
-                <button id="startBtn" class="primary-btn">Start Recording</button>
-                <button id="stopBtn" class="primary-btn" disabled>Stop Recording</button>
-                <button id="restartBtn" class="secondary-btn" disabled>Restart</button>
+                <button id="startBtn" class="record-btn primary-btn">Start Recording</button>
+                <button id="stopBtn" class="record-btn primary-btn" disabled>Stop Recording</button>
+                <button id="restartBtn" class="record-btn secondary-btn" disabled>Restart</button>
                 <div class="feedback-box rating-box" id="ratingFeedback" style="display: none;"></div>
                 <div class="feedback-box summary-box" id="summaryFeedback" style="display: none;"></div>
                 <div class="feedback-box strengths-box" id="strengthsFeedback" style="display: none;"></div>
                 <div class="feedback-box improvement-box" id="improvementFeedback" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup">
+            <h2>Save Your Speech</h2>
+            <input type="text" id="speechName" placeholder="Enter speech name" required>
+            <div class="popup-buttons">
+                <button class="popup-btn confirm" id="confirmSave">Save</button>
+                <button class="popup-btn cancel" id="cancelSave">Cancel</button>
             </div>
         </div>
     </div>
@@ -312,7 +744,7 @@
 
         function loadState() {
             const state = localStorage.getItem('authState');
-            return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
+            return state ? JSON.parse(state) : {users: {}, session: null, sessionExpiry: null};
         }
 
         function saveState(state) {
@@ -335,7 +767,8 @@
                         puzzlesCompleted: 0,
                         drillsCompleted: 0,
                         speechesGiven: 0,
-                        speechesWithFivePlusStrengths: 0
+                        speechesWithFivePlusStrengths: 0,
+                        savedSpeeches: []
                     }
                 };
                 saveState(state);
@@ -346,7 +779,8 @@
                     puzzlesCompleted: 0,
                     drillsCompleted: 0,
                     speechesGiven: 0,
-                    speechesWithFivePlusStrengths: 0
+                    speechesWithFivePlusStrengths: 0,
+                    savedSpeeches: []
                 };
                 saveState(state);
             }
@@ -372,12 +806,12 @@
                 subject: "Congratulations on Your First Speech!",
                 message: `Dear ${firstName},\n\nCongratulations on completing your first speech with UpSpeak! We're thrilled to have you on this journey to improve your public speaking skills. Keep practicing, and watch your confidence soar!\n\nBest,\nThe UpSpeak Team`
             })
-            .then(() => {
-                console.log("First speech email sent successfully to", email);
-            })
-            .catch((error) => {
-                console.error("Failed to send first speech email:", error);
-            });
+                .then(() => {
+                    console.log("First speech email sent successfully to", email);
+                })
+                .catch((error) => {
+                    console.error("Failed to send first speech email:", error);
+                });
         }
 
         let mediaRecorder;
@@ -386,12 +820,18 @@
         const startBtn = document.getElementById("startBtn");
         const stopBtn = document.getElementById("stopBtn");
         const restartBtn = document.getElementById("restartBtn");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const saveBtn = document.getElementById("saveBtn");
         const transcriptionBox = document.getElementById("transcription");
         const summaryFeedback = document.getElementById("summaryFeedback");
         const ratingFeedback = document.getElementById("ratingFeedback");
         const strengthsFeedback = document.getElementById("strengthsFeedback");
         const improvementFeedback = document.getElementById("improvementFeedback");
         const buttonsContainer = document.getElementById("buttonsContainer");
+        const popupOverlay = document.getElementById("popupOverlay");
+        const speechNameInput = document.getElementById("speechName");
+        const confirmSaveBtn = document.getElementById("confirmSave");
+        const cancelSaveBtn = document.getElementById("cancelSave");
 
         let stream;
         let isRecording = false;
@@ -399,14 +839,15 @@
         let silenceTimeout;
         let previousFrame = null;
         let startTime;
+        let currentBlob = null;
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
-        function goToHome() { window.location.href = 'index.html'; }
+        function goToHome() {window.location.href = 'index.html';}
 
         async function startVideoStream() {
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
                 videoElement.srcObject = stream;
                 videoElement.play();
             } catch (error) {
@@ -422,7 +863,7 @@
                 return;
             }
 
-            recognition.onresult = function(event) {
+            recognition.onresult = function (event) {
                 let interimTranscript = "";
                 for (let i = event.resultIndex; i < event.results.length; i++) {
                     const transcript = event.results[i][0].transcript;
@@ -443,12 +884,12 @@
                 }, 1000);
             };
 
-            recognition.onerror = function(event) {
+            recognition.onerror = function (event) {
                 console.error("Speech Recognition Error:", event.error);
                 transcriptionBox.textContent = `Error: ${event.error}`;
             };
 
-            recognition.onend = function() {
+            recognition.onend = function () {
                 if (isRecording) recognition.start();
                 else evaluateSpeech();
             };
@@ -461,13 +902,17 @@
                 if (event.data.size > 0) recordedChunks.push(event.data);
             };
             mediaRecorder.onstop = () => {
-                const blob = new Blob(recordedChunks, { type: "video/webm" });
-                const videoUrl = URL.createObjectURL(blob);
+                currentBlob = new Blob(recordedChunks, {type: "video/webm"});
+                const videoUrl = URL.createObjectURL(currentBlob);
                 videoElement.srcObject = null;
                 videoElement.src = videoUrl;
                 videoElement.controls = true;
                 videoElement.muted = false;
                 videoElement.play();
+                downloadBtn.style.display = "flex";
+                saveBtn.style.display = "flex";
+                downloadBtn.disabled = false;
+                saveBtn.disabled = false;
             };
             mediaRecorder.start();
             recognition.start();
@@ -487,11 +932,15 @@
                 recognition.stop();
                 isRecording = false;
                 stopBtn.disabled = true;
-                restartBtn.disabled = true;
+                restartBtn.disabled = false;
                 document.getElementById("videoContainer").classList.remove("recording");
                 startBtn.style.display = "none";
                 stopBtn.style.display = "none";
                 restartBtn.style.display = "none";
+                downloadBtn.style.display = "flex";
+                saveBtn.style.display = "flex";
+                downloadBtn.disabled = false;
+                saveBtn.disabled = false;
 
                 const state = loadState();
                 const username = state.session;
@@ -552,7 +1001,7 @@
                     if (wordFrequency[word]) score += wordFrequency[word];
                 });
                 if (sentences.indexOf(sentence) === 0) score *= 1.5;
-                return { sentence, score: sentenceWords.length > 0 ? score / Math.sqrt(sentenceWords.length) : 0 };
+                return {sentence, score: sentenceWords.length > 0 ? score / Math.sqrt(sentenceWords.length) : 0};
             });
 
             return sentenceScores.sort((a, b) => b.score - a.score)[0]?.sentence || "No summary available.";
@@ -595,8 +1044,6 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Content</span> Add depth (${sentences.length} sentences, ${wordCount} words)`);
             }
 
-
-            // Add actual complex sentences filter, not based on word length
             const complexSentences = sentences.filter(s => s.split(' ').length > 15);
             if (complexSentences.length > 2) {
                 overallScore += 15;
@@ -605,8 +1052,6 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Vocabulary</span> Try more complex sentences (${complexSentences.length} found)`);
             }
 
-
-            //Add many more example phrases
             const gratitudePhrases = ["thank you", "i appreciate", "grateful", "thanks"];
             if (gratitudePhrases.some(p => finalTranscript.toLowerCase().includes(p))) {
                 overallScore += 10;
@@ -614,7 +1059,7 @@
             } else {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Connection</span> Add a heartfelt phrase`);
             }
-            //Add many more example phrases
+
             const transitionWords = ["however", "therefore", "moreover", "for example", "in addition"];
             const transitionsUsed = transitionWords.filter(word => finalTranscript.toLowerCase().includes(word));
             if (transitionsUsed.length >= 3) {
@@ -623,8 +1068,7 @@
             } else {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Flow</span> Add transitions (${transitionsUsed.length}/3 used)`);
             }
-            //Add many more example phrases 
-            //Make detection of um, and uh
+
             const fillerWords = ["um", "uh", "like", "you know"];
             const fillerTotal = fillerWords.reduce((sum, word) => sum + (finalTranscript.match(new RegExp(`\\b${word}\\b`, "gi")) || []).length, 0);
             if (fillerTotal === 0) {
@@ -636,7 +1080,7 @@
             } else {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Clarity</span> Reduce ${fillerTotal} fillers`);
             }
-            //Fix consistency issue, instead of overall average wpm, add sub feedback points to slow then fast or sudden speed changes
+
             const wordsPerMinute = Math.floor((wordCount / durationSeconds) * 60);
             if (wordsPerMinute > 200) {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Pace</span> Slow down (${wordsPerMinute} wpm)`);
@@ -646,7 +1090,7 @@
                 overallScore += 15;
                 strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Pace</span> Ideal pace (${wordsPerMinute} wpm)`);
             }
-            //Add many more example phrases
+
             const persuasiveWords = ["must", "essential", "crucial", "important"];
             if (persuasiveWords.filter(word => finalTranscript.toLowerCase().includes(word)).length >= 3) {
                 overallScore += 10;
@@ -654,7 +1098,7 @@
             } else {
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Persuasion</span> Add persuasive words`);
             }
-            //Add many more example phrases
+
             const callToAction = ["let's", "join", "start", "consider"];
             if (callToAction.some(word => finalTranscript.toLowerCase().includes(word))) {
                 overallScore += 10;
@@ -667,21 +1111,21 @@
             if (overallScore >= 95) createFireworks();
 
             ratingFeedback.innerHTML = `
-                <div class="feedback-score">Overall Rating: ${overallScore}/100</div>
-            `;
+                                <div class="feedback-score">Overall Rating: ${overallScore}/100</div>
+                            `;
 
             summaryFeedback.innerHTML = `
-                <div class="feedback-item"><strong>Summary:</strong></div>
-                <div class="feedback-item">${oneSentenceSummary}</div>
-            `;
+                                <div class="feedback-item"><strong>Summary:</strong></div>
+                                <div class="feedback-item">${oneSentenceSummary}</div>
+                            `;
 
-            strengthsFeedback.innerHTML = '<div class="feedback-item"><strong>Strengths:</strong></div>' + 
-                (strengths.length > 0 ? strengths.map(s => `<div class="feedback-item">${s}</div>`).join('') : 
-                '<div class="feedback-item">Keep practicing to develop strengths.</div>');
+            strengthsFeedback.innerHTML = '<div class="feedback-item"><strong>Strengths:</strong></div>' +
+                (strengths.length > 0 ? strengths.map(s => `<div class="feedback-item">${s}</div>`).join('') :
+                    '<div class="feedback-item">Keep practicing to develop strengths.</div>');
 
-            improvementFeedback.innerHTML = '<div class="feedback-item"><strong>Areas for Improvement:</strong></div>' + 
-                (improvements.length > 0 ? improvements.slice(0, 3).map(i => `<div class="feedback-item">${i}</div>`).join('') : 
-                '<div class="feedback-item">Outstanding job!</div>');
+            improvementFeedback.innerHTML = '<div class="feedback-item"><strong>Areas for Improvement:</strong></div>' +
+                (improvements.length > 0 ? improvements.slice(0, 3).map(i => `<div class="feedback-item">${i}</div>`).join('') :
+                    '<div class="feedback-item">Outstanding job!</div>');
 
             ratingFeedback.style.display = "block";
             summaryFeedback.style.display = "block";
@@ -697,19 +1141,88 @@
             saveUserProfile(username, profile);
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
+        function downloadSpeech() {
+            if (currentBlob) {
+                const url = URL.createObjectURL(currentBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `speech_${new Date().toISOString()}.webm`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        function saveSpeech(speechName) {
+            if (currentBlob && finalTranscript) {
+                const state = loadState();
+                const username = state.session;
+                let profile = getUserProfile(username);
+
+                const reader = new FileReader();
+                reader.readAsDataURL(currentBlob);
+                reader.onloadend = function () {
+                    const base64data = reader.result;
+                    profile.savedSpeeches = profile.savedSpeeches || [];
+                    profile.savedSpeeches.push({
+                        id: Date.now(),
+                        name: speechName,
+                        timestamp: new Date().toISOString(),
+                        transcription: finalTranscript,
+                        video: base64data,
+                        summary: generateSummary(finalTranscript)
+                    });
+                    saveUserProfile(username, profile);
+                    popupOverlay.style.display = "none";
+                };
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
             const state = loadState();
             const currentSession = state.session;
 
             if (!currentSession || (state.sessionExpiry && Date.now() > state.sessionExpiry)) {
-                alert('Please log in to access the recording studio.');
-                window.location.href = 'index.html';
+                const loginPopup = document.createElement("div");
+                loginPopup.className = "popup-overlay";
+                loginPopup.innerHTML = `
+                                    <div class="popup">
+                                        <h2>Session Expired</h2>
+                                        <p>Please log in to access the recording studio.</p>
+                                        <div class="popup-buttons">
+                                            <button class="popup-btn confirm" onclick="window.location.href='index.html'">OK</button>
+                                        </div>
+                                    </div>
+                                `;
+                document.body.appendChild(loginPopup);
+                loginPopup.style.display = "flex";
                 return;
             }
 
             startBtn.addEventListener("click", startRecording);
             stopBtn.addEventListener("click", stopRecording);
-            restartBtn.addEventListener("click", function() {
+            downloadBtn.addEventListener("click", downloadSpeech);
+            saveBtn.addEventListener("click", () => {
+                speechNameInput.value = "";
+                popupOverlay.style.display = "flex";
+            });
+
+            confirmSaveBtn.addEventListener("click", () => {
+                const speechName = speechNameInput.value.trim();
+                if (speechName) {
+                    saveSpeech(speechName);
+                } else {
+                    speechNameInput.style.borderColor = "#dc3545";
+                    speechNameInput.placeholder = "Please enter a speech name";
+                }
+            });
+
+            cancelSaveBtn.addEventListener("click", () => {
+                popupOverlay.style.display = "none";
+            });
+
+            restartBtn.addEventListener("click", function () {
                 if (!isRecording) {
                     videoElement.src = "";
                     videoElement.srcObject = stream;
@@ -717,12 +1230,17 @@
                     videoElement.play();
                     transcriptionBox.textContent = "Transcription will appear here...";
                     finalTranscript = "";
+                    currentBlob = null;
                     startBtn.style.display = "block";
                     stopBtn.style.display = "block";
                     restartBtn.style.display = "block";
                     startBtn.disabled = false;
                     stopBtn.disabled = true;
                     restartBtn.disabled = true;
+                    downloadBtn.style.display = "none";
+                    saveBtn.style.display = "none";
+                    downloadBtn.disabled = true;
+                    saveBtn.disabled = true;
                     ratingFeedback.style.display = "none";
                     summaryFeedback.style.display = "none";
                     strengthsFeedback.style.display = "none";
@@ -735,4 +1253,5 @@
         });
     </script>
 </body>
+
 </html>
