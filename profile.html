@@ -36,157 +36,325 @@
             --copper-color: #b87333;
             --gold-color: #ffd700;
             --diamond-color: #b9f2ff;
+            --primary-light: #e6f2ff;
+            --primary-dark: #0056b3;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --sidebar-width: 280px;
+            --easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background: var(--background-gradient);
-            color: var(--text-color);
             overflow-x: hidden;
-            min-height: 100vh;
-            line-height: 1.8;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        header {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 15px 0;
-            box-shadow: var(--box-shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .navbar {
+            height: 100vh;
             display: flex;
-            justify-content: space-between;
+            background: var(--background-gradient);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: var(--text-dark);
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform var(--transition-speed) var(--easing);
+            overflow: hidden;
+            border-radius: 0 24px 24px 0;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(calc(-1 * var(--sidebar-width)));
+        }
+
+        .sidebar.expanded {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px 20px;
-            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
         }
 
         .logo {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-color);
             display: flex;
             align-items: center;
-            cursor: pointer;
-            transition: transform var(--transition-speed) ease;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: transform 0.3s ease;
         }
 
         .logo:hover {
-            transform: scale(1.08);
+            transform: scale(1.02);
         }
 
-        .logo .microphone-icon {
-            width: 55px;
-            height: 55px;
-            margin-right: 15px;
-            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+        .microphone-icon {
+            width: 42px;
+            height: 42px;
+            margin-right: 0.75rem;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.15));
         }
 
-        .logo .upspeak-up {
-            color: var(--secondary-color);
+        .upspeak-up {
+            color: var(--accent-color);
         }
 
-        .logo .upspeak-speak {
+        .upspeak-speak {
             color: var(--primary-color);
         }
 
         .nav-menu {
             list-style: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
+            padding: 1.5rem 0;
             margin: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .nav-menu li {
-            margin: 0 30px;
-            position: relative;
+        .nav-menu-item {
+            margin: 0.5rem 0;
+            width: 100%;
+            padding: 0 1.25rem;
         }
 
-        .nav-menu>li>a {
-            color: #555;
-            font-weight: 500;
-            transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease;
+        .nav-menu-link {
             display: flex;
             align-items: center;
+            padding: 0.85rem 1.25rem;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 1rem;
             text-decoration: none;
-            padding-bottom: 4px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .nav-menu>li>a:hover {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .nav-menu .carrot {
-            margin-left: 7px;
-            font-size: 0.9em;
-            transition: transform var(--transition-speed) ease;
-        }
-
-        .nav-menu li:hover .carrot {
-            transform: rotate(180deg);
-        }
-
-        .dropdown-content {
-            display: none;
+        .nav-menu-link::before {
+            content: '';
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.98);
-            min-width: 240px;
-            box-shadow: var(--box-shadow);
-            padding: 20px 30px;
-            z-index: 1;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: left;
-            border-radius: 15px;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: transparent;
+            transition: all 0.3s ease;
+            border-radius: 0 4px 4px 0;
             opacity: 0;
-            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
-            transform-origin: top center;
-            backdrop-filter: blur(10px);
         }
 
-        .nav-menu li:hover .dropdown-content {
-            display: block;
+        .nav-menu-link:hover {
+            color: var(--text-dark);
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .nav-menu-link:hover::before {
             opacity: 1;
-            transform: translateX(-50%) translateY(10px);
         }
 
-        .dropdown-content a {
-            color: var(--text-color);
-            padding: 12px 0;
-            text-decoration: none;
-            display: block;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-            border-radius: 8px;
+        .nav-menu-icon {
+            margin-right: 1rem;
+            font-size: 1.4rem;
+            min-width: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
         }
 
-        .dropdown-content a:hover {
-            background-color: rgba(0, 123, 255, 0.1);
+        .nav-menu-link:hover .nav-menu-icon {
+            transform: translateY(-2px);
+        }
+
+        .nav-menu-link.record:hover::before {
+            background: var(--primary-color);
+        }
+
+        .nav-menu-link.learn:hover::before {
+            background: var(--accent-color);
+        }
+
+        .nav-menu-link.watch:hover::before {
+            background: #059669;
+        }
+
+        .nav-menu-link.profile:hover::before {
+            background: #dc2626;
+        }
+
+        .nav-menu-link.community:hover::before {
+            background: #7c3aed;
+        }
+
+        .nav-menu-link.about:hover::before {
+            background: #d97706;
+        }
+
+        .nav-menu-icon.record {
             color: var(--primary-color);
+        }
+
+        .nav-menu-icon.learn {
+            color: var(--accent-color);
+        }
+
+        .nav-menu-icon.watch {
+            color: #059669;
+        }
+
+        .nav-menu-icon.profile {
+            color: #dc2626;
+        }
+
+        .nav-menu-icon.community {
+            color: #7c3aed;
+        }
+
+        .nav-menu-icon.about {
+            color: #d97706;
+        }
+
+        .nav-menu-link.active {
+            background: var(--primary-light);
+            color: var(--text-dark);
+        }
+
+        .nav-menu-link.profile.active::before {
+            background: #dc2626;
+            opacity: 1;
+        }
+
+        .profile-container-sidebar {
+            padding: 1.25rem;
+            margin: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            border-radius: 12px;
+            background: linear-gradient(to right, var(--primary-light), rgba(255, 255, 255, 0.8));
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.1);
+            width: calc(100% - 2.5rem);
+        }
+
+        .profile-container-sidebar:hover {
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+            transform: translateY(-2px);
         }
 
         .profile-icon {
-            font-size: 3rem;
-            color: #777;
-            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-right: 1rem;
+            transition: transform 0.3s ease;
         }
 
-        .profile-icon:hover {
+        .profile-container-sidebar:hover .profile-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name-sidebar {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: block;
+            line-height: 1.2;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .profile-status {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            overflow-y: auto;
+            height: 100vh;
+            transition: margin-left var(--transition-speed) var(--easing);
+            padding: 2rem;
+        }
+
+        .main-content.collapsed {
+            margin-left: 0;
+        }
+
+        .collapse-toggle {
+            position: fixed;
+            top: 1.5rem;
+            left: var(--sidebar-width);
+            width: 40px;
+            height: 40px;
+            background: var(--primary-light);
             color: var(--primary-color);
-            transform: scale(1.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease, left var(--transition-speed) var(--easing);
+            z-index: 99;
+            font-size: 1.2rem;
+            border-radius: 0 20px 20px 0;
+        }
+
+        .collapse-toggle.collapsed {
+            left: 0;
+        }
+
+        .collapse-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .close-mobile {
+            display: none;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .close-mobile:hover {
+            background: var(--primary-color);
+            color: white;
         }
 
         .profile-container {
@@ -422,7 +590,7 @@
             padding: 10px 20px;
             border-radius: 50px;
             font-weight: 500;
-            color: var(--text-color);
+            color: var(--text-dark);
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
@@ -613,7 +781,7 @@
         .question p {
             font-weight: 600;
             font-size: 1.3em;
-            color: var(--text-color);
+            color: var(--text-dark);
             margin-bottom: 25px;
             text-align: center;
         }
@@ -687,6 +855,12 @@
             box-shadow: none;
         }
 
+        @media (max-width: 1024px) {
+            :root {
+                --sidebar-width: 240px;
+            }
+        }
+
         @media (max-width: 992px) {
             .profile-header {
                 flex-direction: column;
@@ -700,6 +874,23 @@
         }
 
         @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 220px;
+            }
+
+            .sidebar-header {
+                padding: 1.25rem;
+            }
+
+            .microphone-icon {
+                width: 36px;
+                height: 36px;
+            }
+
+            .nav-menu-link {
+                padding: 0.75rem 1rem;
+            }
+
             .profile-info {
                 flex-direction: column;
                 align-items: flex-start;
@@ -723,20 +914,85 @@
                 flex-direction: column;
                 align-items: center;
             }
+        }
 
-            .navbar {
-                flex-direction: column;
-                gap: 10px;
+        @media (max-width: 640px) {
+            :root {
+                --sidebar-width: 100%;
             }
 
-            .nav-menu {
-                flex-wrap: wrap;
-                justify-content: center;
+            .sidebar {
+                width: 100%;
+                border-radius: 0;
+                transform: translateX(-100%);
             }
 
-            .nav-menu li {
-                margin: 10px 15px;
+            .sidebar.collapsed {
+                transform: translateX(-100%);
             }
+
+            .sidebar.expanded {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                padding: 1rem;
+            }
+
+            .collapse-toggle {
+                left: 0;
+            }
+
+            .close-mobile {
+                display: flex;
+            }
+
+            .profile-container {
+                margin: 20px auto;
+                padding: 0 10px;
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .nav-menu-item {
+            animation: fadeInRight 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .nav-menu-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .nav-menu-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .nav-menu-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .nav-menu-item:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .nav-menu-item:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .nav-menu-item:nth-child(6) {
+            animation-delay: 0.6s;
         }
 
         @keyframes fadeIn {
@@ -758,10 +1014,10 @@
 </head>
 
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="logo" onclick="goToHome()">
-                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <nav class="sidebar expanded" role="navigation" aria-label="Main navigation">
+        <div class="sidebar-header">
+            <a href="home.html" class="logo" aria-label="UpSpeak Home">
+                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
                     <defs>
                         <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
@@ -771,151 +1027,168 @@
                     <path fill="url(#microphone-gradient)"
                         d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
                 </svg>
-                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
+                <span class="logo-text"><span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span></span>
+            </a>
+            <div class="close-mobile" aria-label="Close sidebar">
+                <i class="fas fa-times"></i>
             </div>
-            <ul class="nav-menu">
-                <li><a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="evaluation.html">Recording Studio</a>
-                    </div>
-                </li>
-                <li><a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="learn.html">Videos</a>
-                        <a href="learn.html">Puzzles</a>
-                        <a href="learn.html">Drills</a>
-                    </div>
-                </li>
-                <li><a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="profile.html">Personality</a>
-                        <a href="profile.html">Badges</a>
-                    </div>
-                </li>
-                <li><a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="watch.html">Speech Archive</a>
-                        <a href="watch.html">Famous Speeches</a>
-                    </div>
-                </li>
-                <li><a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="about.html">UpSpeak Credentials</a>
-                    </div>
-                </li>
-            </ul>
-            <a href="user.html"><i class="fas fa-user-circle profile-icon"></i></a>
-        </nav>
-    </header>
+        </div>
 
-    <div class="profile-container">
-        <div class="profile-header animated">
+        <ul class="nav-menu">
+            <li class="nav-menu-item">
+                <a href="evaluation.html" class="nav-menu-link record" aria-label="Record">
+                    <i class="fas fa-microphone nav-menu-icon record" aria-hidden="true"></i>
+                    <span class="nav-menu-text">Record</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="learn.html" class="nav-menu-link learn" aria-label="Learn">
+                    <i class="fas fa-book-open nav-menu-icon learn" aria-hidden="true"></i>
+                    <span class="nav-menu-text">Learn</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="watch.html" class="nav-menu-link watch" aria-label="Watch">
+                    <i class="fas fa-video nav-menu-icon watch" aria-hidden="true"></i>
+                    <span class="nav-menu-text">Watch</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="profile.html" class="nav-menu-link profile active" aria-label="Profile">
+                    <i class="fas fa-user nav-menu-icon profile" aria-hidden="true"></i>
+                    <span class="nav-menu-text">Profile</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="about.html" class="nav-menu-link about" aria-label="About">
+                    <i class="fas fa-info-circle nav-menu-icon about" aria-hidden="true"></i>
+                    <span class="nav-menu-text">About</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="profile-container-sidebar">
+            <i class="fas fa-user-circle profile-icon" aria-hidden="true"></i>
             <div class="profile-info">
-                <div class="profile-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="profile-details">
-                    <h1 id="profileName" class="profile-name">User</h1>
-                    <p class="profile-tagline">Free UpSpeak Member</p>
-                    <div class="xp-box">
-                        <i class="fas fa-bolt xp-icon"></i>
-                        <span id="xpPoints" class="xp-text">0 XP</span>
+                <a href="user.html" class="profile-name-sidebar" id="profile-name-sidebar">User</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="collapse-toggle" aria-label="Toggle sidebar">
+        <i class="fas fa-angle-left"></i>
+    </div>
+
+    <div class="main-content">
+        <div class="profile-container">
+            <div class="profile-header animated">
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
                     </div>
-                    <div class="profile-stats">
-                        <div class="stat">
-                            <span id="speechesGiven" class="stat-number">0</span>
-                            <span class="stat-label">Speeches</span>
+                    <div class="profile-details">
+                        <h1 id="profileName" class="profile-name">User</h1>
+                        <p class="profile-tagline">Free UpSpeak Member</p>
+                        <div class="xp-box">
+                            <i class="fas fa-bolt xp-icon"></i>
+                            <span id="xpPoints" class="xp-text">0 XP</span>
                         </div>
-                        <div class="stat">
-                            <span id="drillsCompleted" class="stat-number">0</span>
-                            <span class="stat-label">Drills</span>
-                        </div>
-                        <div class="stat">
-                            <span id="puzzlesCompleted" class="stat-number">0</span>
-                            <span class="stat-label">Puzzles</span>
-                        </div>
-                        <div class="stat">
-                            <span id="activitiesCompleted" class="stat-number">0</span>
-                            <span class="stat-label">Activities</span>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span id="speechesGiven" class="stat-number">0</span>
+                                <span class="stat-label">Speeches</span>
+                            </div>
+                            <div class="stat">
+                                <span id="drillsCompleted" class="stat-number">0</span>
+                                <span class="stat-label">Drills</span>
+                            </div>
+                            <div class="stat">
+                                <span id="puzzlesCompleted" class="stat-number">0</span>
+                                <span class="stat-label">Puzzles</span>
+                            </div>
+                            <div class="stat">
+                                <span id="activitiesCompleted" class="stat-number">0</span>
+                                <span class="stat-label">Activities</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="profile-tabs">
-            <div class="profile-tab active" data-tab="personality">Personality</div>
-            <div class="profile-tab" data-tab="badges">Badges</div>
-            <div class="tab-slider"></div>
-        </div>
-
-        <div id="personality" class="tab-content active">
-            <div class="personality-card animated" id="personalityCard">
-                <i class="fas fa-question-circle personality-icon"></i>
-                <h2 class="personality-title">Mystery Persona</h2>
-                <p class="personality-description">Your speech persona is yet to be revealed. Take the quiz to discover
-                    your unique speaking style!</p>
-                <div class="personality-traits">
-                    <div class="trait">Unknown</div>
-                </div>
-                <button class="action-btn" onclick="startQuiz()">
-                    <i class="fas fa-redo"></i> Take Personality Quiz
-                </button>
+            <div class="profile-tabs">
+                <div class="profile-tab active" data-tab="personality">Personality</div>
+                <div class="profile-tab" data-tab="badges">Badges</div>
+                <div class="tab-slider"></div>
             </div>
-        </div>
 
-        <div id="badges" class="tab-content">
-            <div class="badges-grid">
-                <div class="badge-card animated">
-                    <div id="puzzleMasterTier" class="badge-tier stone">Stone</div>
-                    <div id="puzzleMasterIcon" class="badge-icon stone">
-                        <i class="fas fa-puzzle-piece"></i>
+            <div id="personality" class="tab-content active">
+                <div class="personality-card animated" id="personalityCard">
+                    <i class="fas fa-question-circle personality-icon"></i>
+                    <h2 class="personality-title">Mystery Persona</h2>
+                    <p class="personality-description">Your speech persona is yet to be revealed. Take the quiz to discover
+                        your unique speaking style!</p>
+                    <div class="personality-traits">
+                        <div class="trait">Unknown</div>
                     </div>
-                    <h3 class="badge-name">Puzzle Master</h3>
-                    <p class="badge-description">Solve puzzles to earn tiers: Stone (0), Copper (5), Gold (15), Diamond (30)</p>
-                    <span id="puzzleMasterStatus" class="badge-status">0/30 Puzzles Solved</span>
-                </div>
-                <div class="badge-card animated">
-                    <div id="speechSavantTier" class="badge-tier stone">Stone</div>
-                    <div id="speechSavantIcon" class="badge-icon stone">
-                        <i class="fas fa-microphone-alt"></i>
-                    </div>
-                    <h3 class="badge-name">Speech Savant</h3>
-                    <p class="badge-description">Deliver speeches to earn tiers: Stone (0), Copper (3), Gold (10), Diamond (25)</p>
-                    <span id="speechSavantStatus" class="badge-status">0/25 Speeches Delivered</span>
-                </div>
-                <div class="badge-card animated">
-                    <div id="drillExpertTier" class="badge-tier stone">Stone</div>
-                    <div id="drillExpertIcon" class="badge-icon stone">
-                        <i class="fas fa-dumbbell"></i>
-                    </div>
-                    <h3 class="badge-name">Drill Expert</h3>
-                    <p class="badge-description">Complete high-quality drills to earn tiers: Stone (0), Copper (3), Gold (10), Diamond (25)</p>
-                    <span id="drillExpertStatus" class="badge-status">0/25 Drills Completed</span>
-                </div>
-                <div class="badge-card animated">
-                    <div id="activityAceTier" class="badge-tier stone">Stone</div>
-                    <div id="activityAceIcon" class="badge-icon stone">
-                        <i class="fas fa-gamepad"></i>
-                    </div>
-                    <h3 class="badge-name">Activity Ace</h3>
-                    <p class="badge-description">Complete anagram activities to earn tiers: Stone (0), Copper (5), Gold (15), Diamond (30)</p>
-                    <span id="activityAceStatus" class="badge-status">0/30 Activities Completed</span>
+                    <button class="action-btn" onclick="startQuiz()">
+                        <i class="fas fa-redo"></i> Take Personality Quiz
+                    </button>
                 </div>
             </div>
-        </div>
 
-        <div id="quizModal" class="quiz-modal">
-            <div class="quiz-container">
-                <h1>Discover Your Speech Persona</h1>
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress"></div>
+            <div id="badges" class="tab-content">
+                <div class="badges-grid">
+                    <div class="badge-card animated">
+                        <div id="puzzleMasterTier" class="badge-tier stone">Stone</div>
+                        <div id="puzzleMasterIcon" class="badge-icon stone">
+                            <i class="fas fa-puzzle-piece"></i>
+                        </div>
+                        <h3 class="badge-name">Puzzle Master</h3>
+                        <p class="badge-description">Solve puzzles to earn tiers: Stone (0), Copper (5), Gold (15), Diamond (30)</p>
+                        <span id="puzzleMasterStatus" class="badge-status">0/30 Puzzles Solved</span>
                     </div>
-                    <div class="progress-text"></div>
+                    <div class="badge-card animated">
+                        <div id="speechSavantTier" class="badge-tier stone">Stone</div>
+                        <div id="speechSavantIcon" class="badge-icon stone">
+                            <i class="fas fa-microphone-alt"></i>
+                        </div>
+                        <h3 class="badge-name">Speech Savant</h3>
+                        <p class="badge-description">Deliver speeches to earn tiers: Stone (0), Copper (3), Gold (10), Diamond (25)</p>
+                        <span id="speechSavantStatus" class="badge-status">0/25 Speeches Delivered</span>
+                    </div>
+                    <div class="badge-card animated">
+                        <div id="drillExpertTier" class="badge-tier stone">Stone</div>
+                        <div id="drillExpertIcon" class="badge-icon stone">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                        <h3 class="badge-name">Drill Expert</h3>
+                        <p class="badge-description">Complete high-quality drills to earn tiers: Stone (0), Copper (3), Gold (10), Diamond (25)</p>
+                        <span id="drillExpertStatus" class="badge-status">0/25 Drills Completed</span>
+                    </div>
+                    <div class="badge-card animated">
+                        <div id="activityAceTier" class="badge-tier stone">Stone</div>
+                        <div id="activityAceIcon" class="badge-icon stone">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3 class="badge-name">Activity Ace</h3>
+                        <p class="badge-description">Complete anagram activities to earn tiers: Stone (0), Copper (5), Gold (15), Diamond (30)</p>
+                        <span id="activityAceStatus" class="badge-status">0/30 Activities Completed</span>
+                    </div>
                 </div>
-                <div id="quiz"></div>
-                <button onclick="nextQuestion()" id="nextBtn" class="quiz-btn" disabled>Next Question</button>
+            </div>
+
+            <div id="quizModal" class="quiz-modal">
+                <div class="quiz-container">
+                    <h1>Discover Your Speech Persona</h1>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                        <div class="progress-text"></div>
+                    </div>
+                    <div id="quiz"></div>
+                    <button onclick="nextQuestion()" id="nextBtn" class="quiz-btn" disabled>Next Question</button>
+                </div>
             </div>
         </div>
     </div>
@@ -993,6 +1266,32 @@
             saveState(state);
         }
 
+        // Sidebar Toggle Functionality
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        const collapseToggle = document.querySelector('.collapse-toggle');
+        const closeMobile = document.querySelector('.close-mobile');
+
+        function toggleSidebar() {
+            const isCollapsed = sidebar.classList.contains('collapsed');
+            sidebar.classList.toggle('collapsed', !isCollapsed);
+            sidebar.classList.toggle('expanded', isCollapsed);
+            mainContent.classList.toggle('collapsed', !isCollapsed);
+            collapseToggle.classList.toggle('collapsed', !isCollapsed);
+
+            const icon = collapseToggle.querySelector('i');
+            icon.classList.toggle('fa-angle-right', !isCollapsed);
+            icon.classList.toggle('fa-angle-left', isCollapsed);
+        }
+
+        collapseToggle.addEventListener('click', toggleSidebar);
+
+        closeMobile.addEventListener('click', function () {
+            if (!sidebar.classList.contains('collapsed')) {
+                toggleSidebar();
+            }
+        });
+
         // Navigation and Initialization
         document.addEventListener('DOMContentLoaded', () => {
             const state = loadState();
@@ -1000,16 +1299,26 @@
 
             if (!currentSession || (state.sessionExpiry && Date.now() > state.sessionExpiry)) {
                 alert('Please log in to access your profile.');
-                window.location.href = 'index.html';
+                window.location.href = 'home.html';
                 return;
             }
 
+            setUserName();
             setupTabs();
             setupAnimations();
             setupTouchPrevention();
             initializeProfile(currentSession);
             setupServiceWorker();
         });
+
+        function setUserName() {
+            const state = loadState();
+            const username = state.session;
+            if (username) {
+                const profile = getUserProfile(username);
+                document.getElementById('profile-name-sidebar').textContent = profile.name;
+            }
+        }
 
         function setupTabs() {
             const tabs = document.querySelectorAll('.profile-tab');
@@ -1384,11 +1693,6 @@
             updatePersonality(personalityResult);
             document.getElementById('quizModal').style.display = 'none';
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        }
-
-        // Navigation
-        function goToHome() {
-            window.location.href = 'index.html';
         }
 
         // Service Worker
