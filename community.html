@@ -1,0 +1,2182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UpSpeak Community - Connect with fellow speakers and join discussion circles.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#4361ee">
+    <title>UpSpeak Community - Connect with Fellow Speakers</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --primary-light: #e6f2ff;
+            --primary-dark: #0056b3;
+            --accent-color: #ff6b00;
+            --accent-light: #fff0e6;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --sidebar-width: 280px;
+            --sidebar-collapsed-width: 70px;
+            --easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+            --secondary-color: #ff9933;
+            --background-gradient: linear-gradient(135deg, #ecf0f1, #d5dbdb);
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            --transition-speed: 0.3s;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #e17055;
+            --light-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --section-spacing: 2.5rem;
+            --community-accent: #7c3aed;
+            --community-light: #f3f0ff;
+            --message-hover: #f5f7fa;
+            --liked-color: #e53e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            background: var(--background-gradient);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: var(--text-dark);
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s var(--easing);
+            overflow: hidden;
+            border-radius: 0 24px 24px 0;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        .sidebar.expanded {
+            width: var(--sidebar-width);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s var(--easing);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed .logo {
+            transform: scale(0.8);
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .sidebar.collapsed .logo-text {
+            opacity: 0;
+            width: 0;
+            transition: opacity 0.2s ease, width 0.2s ease;
+        }
+
+        .sidebar.expanded .logo-text {
+            opacity: 1;
+            width: auto;
+            transition: opacity 0.4s ease 0.2s, width 0.4s ease 0.2s;
+        }
+
+        .microphone-icon {
+            width: 42px;
+            height: 42px;
+            margin-right: 0.75rem;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.15));
+            transition: margin 0.3s ease;
+        }
+
+        .sidebar.collapsed .microphone-icon {
+            margin-right: 0;
+        }
+
+        .upspeak-up {
+            color: var(--accent-color);
+        }
+
+        .upspeak-speak {
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 1.5rem 0;
+            margin: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-menu-item {
+            margin: 0.5rem 0;
+            width: 100%;
+            padding: 0 1.25rem;
+            transition: padding 0.3s ease;
+        }
+
+        .sidebar.collapsed .nav-menu-item {
+            padding: 0 0.5rem;
+        }
+
+        .nav-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 0.85rem 1.25rem;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .nav-menu-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: transparent;
+            transition: all 0.3s ease;
+            border-radius: 0 4px 4px 0;
+            opacity: 0;
+        }
+
+        .nav-menu-link:hover {
+            color: var(--text-dark);
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .nav-menu-link:hover::before {
+            opacity: 1;
+        }
+
+        .nav-menu-icon {
+            margin-right: 1rem;
+            font-size: 1.4rem;
+            min-width: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, margin 0.3s ease;
+        }
+
+        .sidebar.collapsed .nav-menu-icon {
+            margin-right: 0;
+        }
+
+        .nav-menu-link:hover .nav-menu-icon {
+            transform: translateY(-2px);
+        }
+
+        .nav-menu-text {
+            transition: opacity 0.3s ease, width 0.3s ease;
+        }
+
+        .sidebar.collapsed .nav-menu-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar.expanded .nav-menu-text {
+            opacity: 1;
+            width: auto;
+        }
+
+        .nav-menu-link.record:hover::before {
+            background: var(--primary-color);
+        }
+
+        .nav-menu-link.learn:hover::before {
+            background: var(--accent-color);
+        }
+
+        .nav-menu-link.watch:hover::before {
+            background: #059669;
+        }
+
+        .nav-menu-link.profile:hover::before {
+            background: #dc2626;
+        }
+
+        .nav-menu-link.community:hover::before {
+            background: #7c3aed;
+        }
+
+        .nav-menu-link.about:hover::before {
+            background: #d97706;
+        }
+
+        .nav-menu-icon.record {
+            color: var(--primary-color);
+        }
+
+        .nav-menu-icon.learn {
+            color: var(--accent-color);
+        }
+
+        .nav-menu-icon.watch {
+            color: #059669;
+        }
+
+        .nav-menu-icon.profile {
+            color: #dc2626;
+        }
+
+        .nav-menu-icon.community {
+            color: #7c3aed;
+        }
+
+        .nav-menu-icon.about {
+            color: #d97706;
+        }
+
+        .nav-menu-link.active {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .nav-menu-link.community.active {
+            background: var(--community-light);
+            color: var(--community-accent);
+        }
+
+        .nav-menu-link.active::before {
+            background: var(--primary-color);
+            opacity: 1;
+        }
+
+        .nav-menu-link.community.active::before {
+            background: var(--community-accent);
+            opacity: 1;
+        }
+
+        .profile-container {
+            padding: 1.25rem;
+            margin: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            border-radius: 12px;
+            background: linear-gradient(to right, var(--primary-light), rgba(255, 255, 255, 0.8));
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.1);
+            width: calc(100% - 2.5rem);
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .profile-container {
+            padding: 0.75rem;
+            justify-content: center;
+            width: calc(100% - 1rem);
+            margin: 1rem 0.5rem;
+        }
+
+        .profile-container:hover {
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .profile-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-right: 1rem;
+            transition: transform 0.3s ease, margin 0.3s ease;
+        }
+
+        .sidebar.collapsed .profile-icon {
+            margin-right: 0;
+        }
+
+        .profile-container:hover .profile-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .profile-info {
+            flex: 1;
+            white-space: nowrap;
+            transition: opacity 0.3s ease, width 0.3s ease;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .profile-info {
+            opacity: 0;
+            width: 0;
+        }
+
+        .sidebar.expanded .profile-info {
+            opacity: 1;
+            width: auto;
+        }
+
+        .profile-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: block;
+            line-height: 1.2;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .profile-status {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            overflow-y: auto;
+            height: 100vh;
+            transition: margin-left 0.4s var(--easing);
+            padding: 2rem;
+        }
+
+        .main-content.collapsed {
+            margin-left: var(--sidebar-collapsed-width);
+        }
+
+        .community-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary-color), var(--community-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-right: auto;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            background: transparent;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            color: var(--text-dark);
+        }
+
+        .tab.active {
+            color: var(--community-accent);
+        }
+
+        .tab.active::after {
+            background: var(--community-accent);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Direct Messages Tab Styles */
+        .dm-container {
+            display: flex;
+            gap: 1.5rem;
+            height: calc(100vh - 250px);
+        }
+
+        .dm-sidebar {
+            width: 300px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .dm-search {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            font-family: 'Poppins', sans-serif;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--community-accent);
+            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+        }
+
+        .dm-contacts {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+        }
+
+        .dm-contact {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .dm-contact:hover {
+            background: var(--message-hover);
+        }
+
+        .dm-contact.active {
+            background: var(--community-light);
+            border-left-color: var(--community-accent);
+        }
+
+        .contact-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .contact-status {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .contact-unread {
+            width: 18px;
+            height: 18px;
+            background: var(--community-accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .dm-chat {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-contact-info {
+            flex: 1;
+        }
+
+        .chat-contact-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .chat-contact-status {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chat-action:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chat-message {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            position: relative;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        .chat-message.received {
+            align-self: flex-start;
+            background: #f0f2f5;
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-message.sent {
+            align-self: flex-end;
+            background: var(--community-accent);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message-time {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+            text-align: right;
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 24px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            font-family: 'Poppins', sans-serif;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--community-accent);
+            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+        }
+
+        .chat-send {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--community-accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .chat-send:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+        }
+
+        /* Circles Tab Styles */
+        .circles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .circle {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .circle:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .circle-image {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        .circle-content {
+            padding: 1.25rem;
+        }
+
+        .circle-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .circle-description {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .circle-stats {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .circle-stat {
+            display: flex;
+            align-items: center;
+        }
+
+        .circle-stat i {
+            margin-right: 0.25rem;
+            color: var(--community-accent);
+        }
+
+        .join-button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--community-accent);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .join-button:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+        }
+
+        .join-button i {
+            margin-right: 0.5rem;
+        }
+
+        .share-thoughts {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .share-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .share-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            resize: none;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .share-input:focus {
+            outline: none;
+            border-color: var(--community-accent);
+            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.1);
+        }
+
+        .share-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .attachment-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .attachment-button {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .attachment-button:hover {
+            color: var(--community-accent);
+            transform: translateY(-2px);
+        }
+
+        .share-button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--community-accent);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .share-button:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+        }
+
+        .collapse-toggle {
+            position: fixed;
+            top: 1.5rem;
+            left: var(--sidebar-width);
+            width: 40px;
+            height: 40px;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 99;
+            font-size: 1.2rem;
+            border-radius: 0 20px 20px 0;
+        }
+
+        .collapse-toggle.collapsed {
+            left: var(--sidebar-collapsed-width);
+        }
+
+        .collapse-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .close-mobile {
+            display: none;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .close-mobile:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Reply system */
+        .reply-container {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            border-left: 3px solid var(--community-accent);
+        }
+
+        .reply-input-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            align-items: center;
+        }
+
+        .reply-input {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+        }
+
+        .reply-input:focus {
+            outline: none;
+            border-color: var(--community-accent);
+        }
+
+        .send-reply {
+            background: var(--community-accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-reply:hover {
+            background: #6d28d9;
+        }
+
+        .cancel-reply {
+            background: #f1f1f1;
+            color: var(--text-light);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-reply:hover {
+            background: #e1e1e1;
+        }
+
+        .message-replies {
+            margin-top: 0.75rem;
+            padding-left: 1rem;
+            border-left: 2px solid #e5e7eb;
+        }
+
+        .message-reply {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 0.75rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        /* Feed Tab Styles */
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .post {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .post:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .post-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-user-info {
+            flex: 1;
+        }
+
+        .post-username {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 1rem;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .post-username:hover {
+            color: var(--community-accent);
+        }
+
+        .post-meta {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .post-meta i {
+            font-size: 0.7rem;
+        }
+
+        .post-options {
+            color: var(--text-light);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .post-options:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-dark);
+        }
+
+        .post-content {
+            padding: 1rem;
+        }
+
+        .post-text {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .post-action i {
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .post-action:hover {
+            color: var(--community-accent);
+        }
+
+        .post-action.liked {
+            color: var(--liked-color);
+        }
+
+        /* Events Tab Styles */
+        .events {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .event {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .event-banner {
+            position: relative;
+            height: 150px;
+            overflow: hidden;
+        }
+
+        .event-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .event:hover .event-image {
+            transform: scale(1.05);
+        }
+
+        .event-date {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(124, 58, 237, 0.9);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 50px;
+        }
+
+        .event-day {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .event-month {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .event-content {
+            padding: 1.25rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .event-details {
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+
+        .event-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .event-info i {
+            margin-right: 0.5rem;
+            color: var(--community-accent);
+            min-width: 16px;
+        }
+
+        .event-description {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .event-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .event-attendees {
+            display: flex;
+            align-items: center;
+        }
+
+        .attendee-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid white;
+            margin-right: -10px;
+            object-fit: cover;
+        }
+
+        .more-attendees {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--community-light);
+            color: var(--community-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .attend-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--community-accent);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .attend-button:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+        }
+
+        .attend-button i {
+            margin-right: 0.5rem;
+        }
+
+        /* Notifications Tab Styles */
+        .notifications {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .notification {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .notification.unread {
+            background: var(--community-light);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.12);
+        }
+
+        .notification.unread::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--community-accent);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .notification:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.message {
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--community-accent);
+        }
+
+        .notification-icon.like {
+            background: rgba(229, 62, 62, 0.1);
+            color: var(--liked-color);
+        }
+
+        .notification-icon.comment {
+            background: rgba(0, 123, 255, 0.1);
+            color: var(--primary-color);
+        }
+
+        .notification-icon.event {
+            background: rgba(255, 107, 0, 0.1);
+            color: var(--accent-color);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-text {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            line-height: 1.4;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-text b {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .notification-action {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 0.5rem;
+        }
+
+        .notification-action:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-dark);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: var(--sidebar-collapsed-width);
+            }
+
+            .main-content {
+                margin-left: var(--sidebar-collapsed-width);
+            }
+
+            .collapse-toggle {
+                left: var(--sidebar-collapsed-width);
+            }
+
+            .sidebar.expanded {
+                transform: translateX(0);
+            }
+
+            .sidebar.collapsed {
+                transform: translateX(-100%);
+            }
+
+            .dm-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .dm-sidebar {
+                width: 100%;
+                height: 250px;
+            }
+
+            .events,
+            .circles {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                transform: translateX(-100%);
+                width: 240px;
+                z-index: 1000;
+            }
+
+            .sidebar.expanded {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .collapse-toggle {
+                left: 0;
+                border-radius: 0 20px 20px 0;
+            }
+
+            .close-mobile {
+                display: flex;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                flex-wrap: nowrap;
+            }
+
+            .tab {
+                flex: 0 0 auto;
+                min-width: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .events,
+            .circles {
+                grid-template-columns: 1fr;
+            }
+
+            .post-actions {
+                gap: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="logo">
+                <img src="/api/placeholder/42/42" alt="UpSpeak Logo" class="microphone-icon">
+                <span class="logo-text"><span class="upspeak-up">Up</span><span
+                        class="upspeak-speak">Speak</span></span>
+            </a>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-menu-item">
+                <a href="#" class="nav-menu-link">
+                    <i class="fas fa-microphone nav-menu-icon record"></i>
+                    <span class="nav-menu-text">Record Speech</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="#" class="nav-menu-link">
+                    <i class="fas fa-book-open nav-menu-icon learn"></i>
+                    <span class="nav-menu-text">Learn</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="#" class="nav-menu-link">
+                    <i class="fas fa-video nav-menu-icon watch"></i>
+                    <span class="nav-menu-text">Watch</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="#" class="nav-menu-link community active">
+                    <i class="fas fa-users nav-menu-icon community"></i>
+                    <span class="nav-menu-text">Community</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="#" class="nav-menu-link">
+                    <i class="fas fa-user nav-menu-icon profile"></i>
+                    <span class="nav-menu-text">Profile</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="#" class="nav-menu-link">
+                    <i class="fas fa-info-circle nav-menu-icon about"></i>
+                    <span class="nav-menu-text">About</span>
+                </a>
+            </li>
+        </ul>
+        <div class="profile-container">
+            <i class="fas fa-user-circle profile-icon"></i>
+            <div class="profile-info">
+                <a href="#" class="profile-name">Alex Johnson</a>
+                <span class="profile-status">Premium Member</span>
+            </div>
+        </div>
+        <div class="close-mobile">
+            <i class="fas fa-times"></i>
+        </div>
+    </div>
+
+    <div class="collapse-toggle">
+        <i class="fas fa-chevron-left"></i>
+    </div>
+
+    <div class="main-content">
+        <div class="community-container">
+            <div class="page-header">
+                <h1 class="page-title">Community</h1>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" data-tab="feed">
+                    <i class="fas fa-stream"></i> Feed
+                </button>
+                <button class="tab" data-tab="circles">
+                    <i class="fas fa-users"></i> Circles
+                </button>
+                <button class="tab" data-tab="direct-messages">
+                    <i class="fas fa-envelope"></i> Messages
+                </button>
+                <button class="tab" data-tab="events">
+                    <i class="fas fa-calendar-alt"></i> Events
+                </button>
+                <button class="tab" data-tab="notifications">
+                    <i class="fas fa-bell"></i> Notifications
+                </button>
+            </div>
+
+            <!-- Feed Tab Content -->
+            <div class="tab-content active" id="feed">
+                <div class="share-thoughts">
+                    <h3 class="share-title">Share your thoughts...</h3>
+                    <textarea class="share-input" placeholder="What's on your mind about public speaking?"></textarea>
+                    <div class="share-controls">
+                        <div class="attachment-buttons">
+                            <button class="attachment-button"><i class="fas fa-image"></i></button>
+                            <button class="attachment-button"><i class="fas fa-video"></i></button>
+                            <button class="attachment-button"><i class="fas fa-microphone"></i></button>
+                            <button class="attachment-button"><i class="fas fa-link"></i></button>
+                        </div>
+                        <button class="share-button">Share Post</button>
+                    </div>
+                </div>
+
+                <div class="feed">
+                    <!-- Post 1 -->
+                    <div class="post">
+                        <div class="post-header">
+                            <img src="/api/placeholder/48/48" alt="User Avatar" class="post-avatar">
+                            <div class="post-user-info">
+                                <a href="#" class="post-username">Emma Wilson</a>
+                                <div class="post-meta">
+                                    <span>Public Speaking Coach</span>
+                                    <i class="fas fa-circle"></i>
+                                    <span>2 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="post-options">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p class="post-text">Just finished my TED talk on overcoming speech anxiety! It was an
+                                incredible experience sharing my journey with the audience. Remember: the key is not to
+                                eliminate nervousness completely, but to channel it into positive energy! ✨🎤</p>
+                            <img src="/api/placeholder/800/400" alt="TED Talk" class="post-image">
+                        </div>
+                        <div class="post-footer">
+                            <div class="post-actions">
+                                <div class="post-action">
+                                    <i class="far fa-heart"></i>
+                                    <span>142</span>
+                                </div>
+                                <div class="post-action">
+                                    <i class="far fa-comment"></i>
+                                    <span>38</span>
+                                </div>
+                                <div class="post-action">
+                                    <i class="far fa-share-square"></i>
+                                    <span>Share</span>
+                                </div>
+                            </div>
+                            <div class="post-action">
+                                <i class="far fa-bookmark"></i>
+                                <span>Save</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post 2 -->
+                    <div class="post">
+                        <div class="post-header">
+                            <img src="/api/placeholder/48/48" alt="User Avatar" class="post-avatar">
+                            <div class="post-user-info">
+                                <a href="#" class="post-username">Marcus Chen</a>
+                                <div class="post-meta">
+                                    <span>Toastmasters Member</span>
+                                    <i class="fas fa-circle"></i>
+                                    <span>Yesterday</span>
+                                </div>
+                            </div>
+                            <div class="post-options">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p class="post-text">Voice projection tip: Stand tall with your feet shoulder-width apart,
+                                take deep breaths from your diaphragm, and imagine your voice reaching the back of the
+                                room. Practice by reading a paragraph aloud, focusing on clarity and power rather than
+                                volume. Anyone else have techniques they'd like to share?</p>
+                        </div>
+                        <div class="post-footer">
+                            <div class="post-actions">
+                                <div class="post-action liked">
+                                    <i class="fas fa-heart"></i>
+                                    <span>87</span>
+                                </div>
+                                <div class="post-action">
+                                    <i class="far fa-comment"></i>
+                                    <span>24</span>
+                                </div>
+                                <div class="post-action">
+                                    <i class="far fa-share-square"></i>
+                                    <span>Share</span>
+                                </div>
+                            </div>
+                            <div class="post-action">
+                                <i class="far fa-bookmark"></i>
+                                <span>Save</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Circles Tab Content -->
+            <div class="tab-content" id="circles">
+                <div class="circles">
+                    <!-- Circle 1 -->
+                    <div class="circle">
+                        <img src="/api/placeholder/400/140" alt="Toastmasters Club" class="circle-image">
+                        <div class="circle-content">
+                            <h3 class="circle-title">Toastmasters Club</h3>
+                            <p class="circle-description">A community dedicated to improving public speaking and
+                                leadership skills through practice and feedback.</p>
+                            <div class="circle-stats">
+                                <div class="circle-stat">
+                                    <i class="fas fa-user"></i>
+                                    <span>1,254 members</span>
+                                </div>
+                                <div class="circle-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>Active</span>
+                                </div>
+                            </div>
+                            <button class="join-button">
+                                <i class="fas fa-plus"></i> Join Circle
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Circle 2 -->
+                    <div class="circle">
+                        <img src="/api/placeholder/400/140" alt="Debate Masters" class="circle-image">
+                        <div class="circle-content">
+                            <h3 class="circle-title">Debate Masters</h3>
+                            <p class="circle-description">For those who love structured arguments and persuasive
+                                speaking. Practice debate techniques and critical thinking.</p>
+                            <div class="circle-stats">
+                                <div class="circle-stat">
+                                    <i class="fas fa-user"></i>
+                                    <span>871 members</span>
+                                </div>
+                                <div class="circle-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>Very Active</span>
+                                </div>
+                            </div>
+                            <button class="join-button">
+                                <i class="fas fa-plus"></i> Join Circle
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Circle 3 -->
+                    <div class="circle">
+                        <img src="/api/placeholder/400/140" alt="Storytellers" class="circle-image">
+                        <div class="circle-content">
+                            <h3 class="circle-title">Storytellers</h3>
+                            <p class="circle-description">Master the art of captivating narratives. Share and receive
+                                feedback on your storytelling techniques.</p>
+                            <div class="circle-stats">
+                                <div class="circle-stat">
+                                    <i class="fas fa-user"></i>
+                                    <span>629 members</span>
+                                </div>
+                                <div class="circle-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>Active</span>
+                                </div>
+                            </div>
+                            <button class="join-button">
+                                <i class="fas fa-plus"></i> Join Circle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Direct Messages Tab Content -->
+            <div class="tab-content" id="direct-messages">
+                <div class="dm-container">
+                    <div class="dm-sidebar">
+                        <div class="dm-search">
+                            <input type="text" class="search-input" placeholder="Search contacts...">
+                        </div>
+                        <div class="dm-contacts">
+                            <!-- Contact 1 -->
+                            <div class="dm-contact active">
+                                <img src="/api/placeholder/40/40" alt="Contact" class="contact-avatar">
+                                <div class="contact-info">
+                                    <div class="contact-name">Sarah Davis</div>
+                                    <div class="contact-status">Online • Speech Coach</div>
+                                </div>
+                            </div>
+
+                            <!-- Contact 2 -->
+                            <div class="dm-contact">
+                                <img src="/api/placeholder/40/40" alt="Contact" class="contact-avatar">
+                                <div class="contact-info">
+                                    <div class="contact-name">John Smith</div>
+                                    <div class="contact-status">Last seen 5m ago</div>
+                                </div>
+                                <div class="contact-unread">3</div>
+                            </div>
+
+                            <!-- Contact 3 -->
+                            <div class="dm-contact">
+                                <img src="/api/placeholder/40/40" alt="Contact" class="contact-avatar">
+                                <div class="contact-info">
+                                    <div class="contact-name">Lisa Wong</div>
+                                    <div class="contact-status">Last seen 1h ago</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dm-chat">
+                        <div class="chat-header">
+                            <img src="/api/placeholder/40/40" alt="Contact" class="chat-avatar">
+                            <div class="chat-contact-info">
+                                <div class="chat-contact-name">Sarah Davis</div>
+                                <div class="chat-contact-status">Online • Speech Coach</div>
+                            </div>
+                            <div class="chat-actions">
+                                <div class="chat-action">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="chat-action">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <div class="chat-action">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-messages">
+                            <!-- Message 1 -->
+                            <div class="chat-message received">
+                                <div class="message-content">Hi there! I saw your speech recording. You have great
+                                    presence, but I noticed you could work on eliminating filler words.</div>
+                                <div class="chat-message-time">10:30 AM</div>
+                            </div>
+
+                            <!-- Message 2 -->
+                            <div class="chat-message sent">
+                                <div class="message-content">Thanks for the feedback! Do you have any exercises to help
+                                    with that?</div>
+                                <div class="chat-message-time">10:32 AM</div>
+                            </div>
+
+                            <!-- Message 3 -->
+                            <div class="chat-message received">
+                                <div class="message-content">Absolutely! Try recording yourself speaking for 1 minute
+                                    without using any filler words. It's harder than it sounds! Then gradually increase
+                                    the time. It's a great way to become more aware of your speech patterns.</div>
+                                <div class="chat-message-time">10:35 AM</div>
+                            </div>
+
+                            <!-- Message 4 -->
+                            <div class="chat-message sent">
+                                <div class="message-content">That sounds like a practical exercise. I'll definitely try
+                                    it out and let you know how it goes!</div>
+                                <div class="chat-message-time">10:37 AM</div>
+                            </div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" class="chat-input" placeholder="Type a message...">
+                            <button class="chat-send">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Events Tab Content -->
+            <div class="tab-content" id="events">
+                <div class="events">
+                    <!-- Event 1 -->
+                    <div class="event">
+                        <div class="event-banner">
+                            <img src="/api/placeholder/400/150" alt="Event Banner" class="event-image">
+                            <div class="event-date">
+                                <div class="event-day">15</div>
+                                <div class="event-month">May</div>
+                            </div>
+                        </div>
+                        <div class="event-content">
+                            <h3 class="event-title">Public Speaking Workshop</h3>
+                            <div class="event-details">
+                                <div class="event-details">
+                                    <div class="event-info">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>Virtual Event - Zoom</span>
+                                    </div>
+                                    <div class="event-info">
+                                        <i class="fas fa-clock"></i>
+                                        <span>7:00 PM - 9:00 PM EST</span>
+                                    </div>
+                                    <div class="event-description">
+                                        Learn essential techniques to overcome stage fright and deliver compelling
+                                        speeches from expert coaches.
+                                    </div>
+                                </div>
+                                <div class="event-footer">
+                                    <div class="event-attendees">
+                                        <img src="/api/placeholder/30/30" alt="Attendee" class="attendee-avatar">
+                                        <img src="/api/placeholder/30/30" alt="Attendee" class="attendee-avatar">
+                                        <img src="/api/placeholder/30/30" alt="Attendee" class="attendee-avatar">
+                                        <div class="more-attendees">+12</div>
+                                    </div>
+                                    <button class="attend-button">
+                                        <i class="fas fa-calendar-check"></i> Attend
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event 2 -->
+                        <div class="event">
+                            <div class="event-banner">
+                                <img src="/api/placeholder/400/150" alt="Event Banner" class="event-image">
+                                <div class="event-date">
+                                    <div class="event-day">22</div>
+                                    <div class="event-month">May</div>
+                                </div>
+                            </div>
+                            <div class="event-content">
+                                <h3 class="event-title">Debate Tournament</h3>
+                                <div class="event-details">
+                                    <div class="event-info">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>Community Center, Downtown</span>
+                                    </div>
+                                    <div class="event-info">
+                                        <i class="fas fa-clock"></i>
+                                        <span>1:00 PM - 5:00 PM EST</span>
+                                    </div>
+                                    <div class="event-description">
+                                        Join our quarterly debate tournament and showcase your persuasive speaking
+                                        skills in a friendly competition.
+                                    </div>
+                                </div>
+                                <div class="event-footer">
+                                    <div class="event-attendees">
+                                        <img src="/api/placeholder/30/30" alt="Attendee" class="attendee-avatar">
+                                        <img src="/api/placeholder/30/30" alt="Attendee" class="attendee-avatar">
+                                        <img src="/api/placeholder/30/30" alt="Attendee" class="attendee-avatar">
+                                        <div class="more-attendees">+24</div>
+                                    </div>
+                                    <button class="attend-button">
+                                        <i class="fas fa-calendar-check"></i> Attend
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event 3 -->
+                        <div class="event">
+                            <div class="event-banner">
+                                <img src="/api/placeholder/400/150" alt="Event Banner" class="event-image">
+                                <div class="event-date">
+                                    <div class="event-day">5</div>
+                                    <div class="event-month">Jun</div>
+                                </div>
+                            </div>
+                            <div class="event-content">
+                                <h3 class="event-title">Storytelling Night</h3>
+                                <div class="event-details">
+                                    <div class="event-info">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>City Library, Main Hall</span>
+                                    </div>
+                                    <div class="event-info">
+                                        <i class="fas fa-clock"></i>
+                                        <span>6:30 PM - 8:30 PM EST</span>
+                                    </div>
+                                    <div class="event-description">
+                                        Share your personal stories in a supportive environment and learn the art of
+                                        narrative speech.
+                                    </div>
+                                </div>
+                                <div class="event-footer">
+                                    <div class="event-attendees">
+                                        <img src="/api/placeholder/30/30" alt="Attendee" class="attendee-avatar">
+                                        <img src="/api/placeholder/30/30" alt="Attendee" class="attendee-avatar">
+                                        <img src="/api/placeholder/30/30" alt="Attendee" class="attendee-avatar">
+                                        <div class="more-attendees">+18</div>
+                                    </div>
+                                    <button class="attend-button">
+                                        <i class="fas fa-calendar-check"></i> Attend
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Tab Content -->
+                <div class="tab-content" id="notifications">
+                    <div class="notifications">
+                        <!-- Notification 1 -->
+                        <div class="notification unread">
+                            <div class="notification-icon message">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-text">
+                                    <b>Sarah Davis</b> sent you a message about your recent speech recording.
+                                </div>
+                                <div class="notification-time">5 minutes ago</div>
+                            </div>
+                            <button class="notification-action">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+
+                        <!-- Notification 2 -->
+                        <div class="notification unread">
+                            <div class="notification-icon like">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-text">
+                                    <b>John Smith</b> and <b>8 others</b> liked your post about voice projection
+                                    techniques.
+                                </div>
+                                <div class="notification-time">1 hour ago</div>
+                            </div>
+                            <button class="notification-action">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+
+                        <!-- Notification 3 -->
+                        <div class="notification">
+                            <div class="notification-icon comment">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-text">
+                                    <b>Lisa Wong</b> commented on your post: "Great tips! I've been working on this
+                                    too."
+                                </div>
+                                <div class="notification-time">3 hours ago</div>
+                            </div>
+                            <button class="notification-action">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+
+                        <!-- Notification 4 -->
+                        <div class="notification">
+                            <div class="notification-icon event">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-text">
+                                    Reminder: <b>Public Speaking Workshop</b> is starting in 2 days. You're registered
+                                    to attend.
+                                </div>
+                                <div class="notification-time">Yesterday</div>
+                            </div>
+                            <button class="notification-action">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript would be added here -->
+        <script>
+            // Tab switching functionality
+            document.addEventListener('DOMContentLoaded', function () {
+                const tabs = document.querySelectorAll('.tab');
+                const tabContents = document.querySelectorAll('.tab-content');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function () {
+                        // Remove active class from all tabs
+                        tabs.forEach(t => t.classList.remove('active'));
+                        // Add active class to clicked tab
+                        this.classList.add('active');
+
+                        // Hide all tab contents
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        // Show selected tab content
+                        const tabId = this.getAttribute('data-tab');
+                        document.getElementById(tabId).classList.add('active');
+                    });
+                });
+
+                // Sidebar collapse/expand functionality
+                const collapseToggle = document.querySelector('.collapse-toggle');
+                const sidebar = document.querySelector('.sidebar');
+                const mainContent = document.querySelector('.main-content');
+
+                collapseToggle.addEventListener('click', function () {
+                    sidebar.classList.toggle('expanded');
+                    sidebar.classList.toggle('collapsed');
+                    this.classList.toggle('collapsed');
+                    if (window.innerWidth > 768) {
+                        mainContent.style.marginLeft = sidebar.classList.contains('collapsed') ?
+                            'var(--sidebar-collapsed-width)' : 'var(--sidebar-width)';
+                    }
+                });
+
+                // Mobile sidebar close button
+                const closeMobile = document.querySelector('.close-mobile');
+                closeMobile.addEventListener('click', function () {
+                    sidebar.classList.remove('expanded');
+                    sidebar.classList.add('collapsed');
+                });
+
+                // Handle post like functionality
+                const likeButtons = document.querySelectorAll('.post-action:first-child');
+                likeButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        this.classList.toggle('liked');
+                        const icon = this.querySelector('i');
+                        const count = this.querySelector('span');
+
+                        if (this.classList.contains('liked')) {
+                            icon.classList.remove('far');
+                            icon.classList.add('fas');
+                            count.textContent = parseInt(count.textContent) + 1;
+                        } else {
+                            icon.classList.remove('fas');
+                            icon.classList.add('far');
+                            count.textContent = parseInt(count.textContent) - 1;
+                        }
+                    });
+                });
+
+                // Initialize active tab content
+                const activeTab = document.querySelector('.tab.active');
+                if (activeTab) {
+                    const tabId = activeTab.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                }
+            });
+        </script>
+</body>
+
+</html>
