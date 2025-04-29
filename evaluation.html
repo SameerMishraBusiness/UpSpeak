@@ -1063,17 +1063,7 @@
                 <input type="text" id="speechName" placeholder="Enter speech name" required>
                 <div class="popup-buttons">
                     <button class="popup-btn confirm" id="confirmSave">Save</button>
-                    <button class="popup-btn cancel" id="closeErrorBtn">Cancel</button>
-                </div>
-            </div>
-        </div>
-        <div class="popup-overlay" id="errorPopupOverlay">
-            <div class="popup">
-                <h2>An Error Occured!</h2>
-                <p1>An Error Occured During Recording.</p1>
-                <p1 id="errorNameText">Error: Unknown</p1>
-                <div class="popup-buttons">
-                    <button class="popup-btn cancel" id="closeError">Close</button>
+                    <button class="popup-btn cancel" id="cancelSave">Cancel</button>
                 </div>
             </div>
         </div>
@@ -1210,9 +1200,6 @@
         const speechNameInput = document.getElementById("speechName");
         const confirmSaveBtn = document.getElementById("confirmSave");
         const cancelSaveBtn = document.getElementById("cancelSave");
-        const errorPopupOverlay = document.getElementById("errorPopupOverlay");
-        const errorNameText = document.getElementById("errorNameText");
-        const closeErrorBtn = document.getElementById("closeErrorBtn");
 
         let stream;
         let isRecording = false;
@@ -1237,16 +1224,12 @@
                 videoElement.play();
             } catch (error) {
                 console.error("Error accessing webcam:", error);
-                errorNameText.textContent = "Error: Could not access webcam/microphone.";
-                errorPopupOverlay.style.display = "flex";
                 transcriptionBox.textContent = "Error: Could not access webcam/microphone.";
             }
         }
 
         function setupSpeechRecognition() {
             if (!recognition) {
-                errorNameText.textContent = "Speech recognition not supported in this browser.";
-                errorPopupOverlay.style.display = "flex";
                 transcriptionBox.textContent = "Speech recognition not supported in this browser.";
                 startBtn.disabled = true;
                 return;
@@ -1275,8 +1258,6 @@
 
             recognition.onerror = function (event) {
                 console.error("Speech Recognition Error:", event.error);
-                errorNameText.textContent = `Error: ${event.error}`;
-                errorPopupOverlay.style.display = "flex";
                 transcriptionBox.textContent = `Error: ${event.error}`;
             };
 
@@ -1841,10 +1822,6 @@
 
             cancelSaveBtn.addEventListener("click", () => {
                 popupOverlay.style.display = "none";
-            });
-
-            closeErrorBtn.addEventListener("click", () => {
-                errorPopupOverlay.style.display = "none";
             });
 
             restartBtn.addEventListener("click", function () {
