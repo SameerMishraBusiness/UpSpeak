@@ -1470,28 +1470,25 @@
         }
 
         function generateSummary(text) {
-            const sentences = text.split(/[.!?]/).filter(s => s.trim().length > 0);
-            const wordFrequency = {};
-            const allText = sentences.join(' ').toLowerCase();
-            const words = allText.match(/\b[a-z\d]+\b/g) || [];
-            const stopWords = new Set(['a', 'an', 'the', 'and', 'or', 'but', 'is', 'are', 'was', 'were', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'about', 'as', 'of', 'that', 'this', 'these', 'those', 'it', 'its', 'they', 'them', 'their', 'he', 'she', 'his', 'her', 'we', 'you', 'i', 'me', 'my', 'our']);
-            words.forEach(word => {
-                if (!stopWords.has(word) && word.length > 1) {
-                    wordFrequency[word] = (wordFrequency[word] || 0) + 1;
-                }
-            });
-
-            const sentenceScores = sentences.map(sentence => {
-                const sentenceWords = sentence.toLowerCase().match(/\b[a-z\d]+\b/g) || [];
-                let score = 0;
-                sentenceWords.forEach(word => {
-                    if (wordFrequency[word]) score += wordFrequency[word];
-                });
-                if (sentences.indexOf(sentence) === 0) score *= 1.5;
-                return { sentence, score: sentenceWords.length > 0 ? score / Math.sqrt(sentenceWords.length) : 0 };
-            });
-
-            return sentenceScores.sort((a, b) => b.score - a.score)[0]?.sentence || "No summary available.";
+            fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer <OPENROUTER_API_KEY>',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    model: 'deepseek/deepseek-chat-v3-0324:free',
+                    instructions: 'Paraphrase the following speech into a short and concise summary. Do not include anything else in the response.',
+                    input: text
+                }),
+            })
+            .then(result => response.json())
+            
+            if (result.status == "completed") {
+                return result.output_text;
+            } else {
+                return "Error: Unable to generate summary.";
+            }
         }
 
         function generateThumbnail(videoBlob) {
