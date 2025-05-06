@@ -1050,7 +1050,7 @@
                     <button id="startBtn" class="record-btn primary-btn">Start Recording</button>
                     <button id="stopBtn" class="record-btn primary-btn" disabled>Stop Recording</button>
                     <button id="restartBtn" class="record-btn secondary-btn" disabled>Restart</button>
-                    <button id="analyzeBtn" class="action-btn" style="display: none; background: linear-gradient(45deg, #28a745, #34c759);"><i class="fas fa-chart-bar"></i> Analyze Speech</button>
+                    <div class="feedback-box rating-box" id="ratingFeedback" style="display: none;"></div>
                     <div class="feedback-box summary-box" id="summaryFeedback" style="display: none;"></div>
                     <div class="feedback-box strengths-box" id="strengthsFeedback" style="display: none;"></div>
                     <div class="feedback-box improvement-box" id="improvementFeedback" style="display: none;"></div>
@@ -1099,7 +1099,7 @@
             }
         });
 
-        // Recording and Speech Recognition
+        // Original Recording Functionality
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = SpeechRecognition ? new SpeechRecognition() : null;
         if (recognition) {
@@ -1107,33 +1107,6 @@
             recognition.interimResults = true;
             recognition.lang = 'en-US';
         }
-
-        let mediaRecorder;
-        let recordedChunks = [];
-        let stream;
-        let isRecording = false;
-        let finalTranscript = "";
-        let silenceTimeout;
-        let currentBlob = null;
-        let startTime;
-
-        const videoElement = document.getElementById("video");
-        const startBtn = document.getElementById("startBtn");
-        const stopBtn = document.getElementById("stopBtn");
-        const restartBtn = document.getElementById("restartBtn");
-        const downloadBtn = document.getElementById("downloadBtn");
-        const saveBtn = document.getElementById("saveBtn");
-        const analyzeBtn = document.getElementById("analyzeBtn");
-        const transcriptionBox = document.getElementById("transcription");
-        const summaryFeedback = document.getElementById("summaryFeedback");
-        const strengthsFeedback = document.getElementById("strengthsFeedback");
-        const improvementFeedback = document.getElementById("improvementFeedback");
-        const buttonsContainer = document.getElementById("buttonsContainer");
-        const popupOverlay = document.getElementById("popupOverlay");
-        const speechNameInput = document.getElementById("speechName");
-        const confirmSaveBtn = document.getElementById("confirmSave");
-        const cancelSaveBtn = document.getElementById("cancelSave");
-        const videoContainer = document.getElementById("videoContainer");
 
         function loadState() {
             const state = localStorage.getItem('authState');
@@ -1185,7 +1158,9 @@
             return state.users[username]?.email || "";
         }
 
-        function saveUserProfile(username, profile) {
+        function saveUserProfile(username,
+
+ profile) {
             const state = loadState();
             state.users[username].profile = profile;
             saveState(state);
@@ -1206,6 +1181,41 @@
                     console.error("Failed to send first speech email:", error);
                 });
         }
+
+        let mediaRecorder;
+        let recordedChunks = [];
+        const videoElement = document.getElementById("video");
+        const startBtn = document.getElementById("startBtn");
+        const stopBtn = document.getElementById("stopBtn");
+        const restartBtn = document.getElementById("restartBtn");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const saveBtn = document.getElementById("saveBtn");
+        const transcriptionBox = document.getElementById("transcription");
+        const summaryFeedback = document.getElementById("summaryFeedback");
+        const ratingFeedback = document.getElementById("ratingFeedback");
+        const strengthsFeedback = document.getElementById("strengthsFeedback");
+        const improvementFeedback = document.getElementById("improvementFeedback");
+        const buttonsContainer = document.getElementById("buttonsContainer");
+        const popupOverlay = document.getElementById("popupOverlay");
+        const speechNameInput = document.getElementById("speechName");
+        const confirmSaveBtn = document.getElementById("confirmSave");
+        const cancelSaveBtn = document.getElementById("cancelSave");
+
+        let stream;
+        let isRecording = false;
+        let finalTranscript = "";
+        let silenceTimeout;
+        let previousFrame = null;
+        let startTime;
+        let currentBlob = null;
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        let gestureMetrics = { leftHand: 0, rightHand: 0, totalGestures: 0, lastGestureTime: 0 };
+        let smileMetrics = { smileCount: 0, neutralCount: 0, totalFrames: 0 };
+        let movementScore = 0;
+        let frameCount = 0;
+
+        function goToHome() { window.location.href = 'home.html'; }
 
         async function startVideoStream() {
             try {
@@ -1253,6 +1263,7 @@
 
             recognition.onend = function () {
                 if (isRecording) recognition.start();
+                else evaluateSpeech();
             };
         }
 
@@ -1272,10 +1283,8 @@
                 videoElement.play();
                 downloadBtn.style.display = "flex";
                 saveBtn.style.display = "flex";
-                analyzeBtn.style.display = "flex";
                 downloadBtn.disabled = false;
                 saveBtn.disabled = false;
-                analyzeBtn.disabled = false;
             };
             mediaRecorder.start();
             recognition.start();
@@ -1284,10 +1293,13 @@
             startBtn.disabled = true;
             stopBtn.disabled = false;
             restartBtn.disabled = false;
-            videoContainer.classList.add("recording");
-            summaryFeedback.style.display = "none";
-            strengthsFeedback.style.display = "none";
-            improvementFeedback.style.display = "none";
+            previousFrame = null;
+            gestureMetrics = { leftHand: 0, rightHand: 0, totalGestures: 0, lastGestureTime: 0 };
+            smileMetrics = { smileCount: 0, neutralCount: 0, totalFrames: 0 };
+            movementScore = 0;
+            frameCount = 0;
+            detectVisualCues();
+            document.getElementById("videoContainer").classList.add("recording");
         }
 
         function stopRecording() {
@@ -1297,16 +1309,14 @@
                 isRecording = false;
                 stopBtn.disabled = true;
                 restartBtn.disabled = false;
-                videoContainer.classList.remove("recording");
+                document.getElementById("videoContainer").classList.remove("recording");
                 startBtn.style.display = "none";
                 stopBtn.style.display = "none";
                 restartBtn.style.display = "none";
                 downloadBtn.style.display = "flex";
                 saveBtn.style.display = "flex";
-                analyzeBtn.style.display = "flex";
                 downloadBtn.disabled = false;
                 saveBtn.disabled = false;
-                analyzeBtn.disabled = false;
 
                 const state = loadState();
                 const username = state.session;
@@ -1325,128 +1335,167 @@
             }
         }
 
-        function countWords(text) {
-            return text.trim().split(/\s+/).filter(word => word.length > 0).length;
-        }
-
-        async function analyzeSpeech() {
-            const transcriptionText = transcriptionBox.textContent.trim();
-            summaryFeedback.style.display = "none";
-            strengthsFeedback.style.display = "none";
-            improvementFeedback.style.display = "none";
-            summaryFeedback.innerHTML = "";
-            strengthsFeedback.innerHTML = "";
-            improvementFeedback.innerHTML = "";
-
-            if (!transcriptionText || transcriptionText === "Transcription will appear here...") {
-                transcriptionBox.textContent = "Error: No transcription available to analyze.";
+        function detectVisualCues() {
+            if (!isRecording) return;
+            if (!videoElement.videoWidth || !videoElement.videoHeight) {
+                requestAnimationFrame(detectVisualCues);
                 return;
             }
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+            const currentFrame = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-            const wordCount = countWords(transcriptionText);
-            const targetSummaryWords = Math.max(10, Math.round(wordCount * 0.1));
+            // Hand Gesture Detection
+            const currentTime = Date.now();
+            const gestureCooldown = 500;
+            let leftHandDetected = false;
+            let rightHandDetected = false;
+            const skinToneRange = { rMin: 120, rMax: 255, gMin: 60, gMax: 200, bMin: 30, bMax: 150 };
+            let leftHandPixels = 0;
+            let rightHandPixels = 0;
+            const minHandPixels = 100;
 
-            const apiKey = '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';
-
-            const summaryPrompt = `
-                Provide a concise summary of the following transcribed speech in approximately ${targetSummaryWords} words, capturing the main ideas and key points:
-
-                ${transcriptionText}
-            `;
-
-            const feedbackPrompt = `
-                Analyze the clarity and sentiment of the following transcribed speech. Provide brief feedback (2-3 sentences) on these aspects, noting any specific strengths or areas for improvement:
-
-                ${transcriptionText}
-            `;
-
-            try {
-                // Fetch Summary
-                const summaryResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`,
-                        'HTTP-Referer': window.location.href,
-                        'X-Title': 'UpSpeak Recording'
-                    },
-                    body: JSON.stringify({
-                        model: 'deepseek/deepseek-chat-v3-0324:free',
-                        messages: [
-                            { role: 'system', content: 'You are a helpful assistant skilled at summarizing transcribed speech accurately and concisely.' },
-                            { role: 'user', content: summaryPrompt }
-                        ],
-                        temperature: 0.3,
-                        max_tokens: Math.round(targetSummaryWords * 1.5)
-                    })
-                });
-
-                if (!summaryResponse.ok) {
-                    throw new Error(`Summary API request failed: ${summaryResponse.statusText}`);
+            for (let x = canvas.width * 0.1; x < canvas.width * 0.4; x += 5) {
+                for (let y = canvas.height * 0.5; y < canvas.height * 0.9; y += 5) {
+                    const i = (y * canvas.width + x) * 4;
+                    const r = currentFrame.data[i];
+                    const g = currentFrame.data[i + 1];
+                    const b = currentFrame.data[i + 2];
+                    if (r > skinToneRange.rMin && r < skinToneRange.rMax &&
+                        g > skinToneRange.gMin && g < skinToneRange.gMax &&
+                        b > skinToneRange.bMin && b < skinToneRange.bMax &&
+                        r > g && g > b) {
+                        leftHandPixels++;
+                    }
                 }
-
-                const summaryData = await summaryResponse.json();
-                const summary = summaryData.choices[0].message.content.trim();
-                summaryFeedback.innerHTML = `
-                    <div class="feedback-item"><strong>Summary:</strong></div>
-                    <div class="feedback-item">${summary}</div>
-                `;
-                summaryFeedback.style.display = "block";
-
-                // Fetch Feedback
-                const feedbackResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`,
-                        'HTTP-Referer': window.location.href,
-                        'X-Title': 'UpSpeak Recording'
-                    },
-                    body: JSON.stringify({
-                        model: 'deepseek/deepseek-chat-v3-0324:free',
-                        messages: [
-                            { role: 'system', content: 'You are a helpful assistant skilled at analyzing the clarity and sentiment of transcribed speech.' },
-                            { role: 'user', content: feedbackPrompt }
-                        ],
-                        temperature: 0.3,
-                        max_tokens: 100
-                    })
-                });
-
-                if (!feedbackResponse.ok) {
-                    throw new Error(`Feedback API request failed: ${feedbackResponse.statusText}`);
-                }
-
-                const feedbackData = await feedbackResponse.json();
-                const feedback = feedbackData.choices[0].message.content.trim();
-                const feedbackSentences = feedback.split('.').filter(s => s.trim()).map(s => s.trim() + '.');
-
-                const strengths = feedbackSentences.filter(s => !s.toLowerCase().includes('improve') && !s.toLowerCase().includes('could be'));
-                const improvements = feedbackSentences.filter(s => s.toLowerCase().includes('improve') || s.toLowerCase().includes('could be'));
-
-                strengthsFeedback.innerHTML = '<div class="feedback-item"><strong>Strengths:</strong></div>' +
-                    (strengths.length > 0 ? strengths.map(s => `<div class="feedback-item">${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Clarity/Sentiment</span> ${s}</div>`).join('') :
-                        '<div class="feedback-item">Practice more to showcase strengths!</div>');
-
-                improvementFeedback.innerHTML = '<div class="feedback-item"><strong>Areas for Improvement:</strong></div>' +
-                    (improvements.length > 0 ? improvements.map(i => `<div class="feedback-item">${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Clarity/Sentiment</span> ${i}</div>`).join('') :
-                        '<div class="feedback-item">Excellent work!</div>');
-
-                strengthsFeedback.style.display = "block";
-                improvementFeedback.style.display = "block";
-
-                if (strengths.length >= 5) {
-                    const state = loadState();
-                    const username = state.session;
-                    let profile = getUserProfile(username);
-                    profile.speechesWithFivePlusStrengths += 1;
-                    saveUserProfile(username, profile);
-                    createConfetti();
-                }
-            } catch (error) {
-                console.error("Error analyzing speech:", error);
-                transcriptionBox.textContent = `Error: ${error.message}`;
             }
+
+            for (let x = canvas.width * 0.6; x < canvas.width * 0.9; x += 5) {
+                for (let y = canvas.height * 0.5; y < canvas.height * 0.9; y += 5) {
+                    const i = (y * canvas.width + x) * 4;
+                    const r = currentFrame.data[i];
+                    const g = currentFrame.data[i + 1];
+                    const b = currentFrame.data[i + 2];
+                    if (r > skinToneRange.rMin && r < skinToneRange.rMax &&
+                        g > skinToneRange.gMin && g < skinToneRange.gMax &&
+                        b > skinToneRange.bMin && b < skinToneRange.bMax &&
+                        r > g && g > b) {
+                        rightHandPixels++;
+                    }
+                }
+            }
+
+            if (leftHandPixels >= minHandPixels && currentTime - gestureMetrics.lastGestureTime >= gestureCooldown) {
+                leftHandDetected = true;
+                gestureMetrics.leftHand++;
+                gestureMetrics.lastGestureTime = currentTime;
+            }
+            if (rightHandPixels >= minHandPixels && currentTime - gestureMetrics.lastGestureTime >= gestureCooldown) {
+                rightHandDetected = true;
+                gestureMetrics.rightHand++;
+                gestureMetrics.lastGestureTime = currentTime;
+            }
+            if (leftHandDetected || rightHandDetected) {
+                gestureMetrics.totalGestures++;
+            }
+
+            // Facial Expression Detection
+            let smileDetected = false;
+            const faceRegionY = canvas.height * 0.2;
+            const faceRegionHeight = canvas.height * 0.4;
+            const faceRegionX = canvas.width * 0.3;
+            const faceRegionWidth = canvas.width * 0.4;
+            let mouthPixelCount = 0;
+            let totalFacePixels = 0;
+            for (let x = faceRegionX; x < faceRegionX + faceRegionWidth; x += 5) {
+                for (let y = faceRegionY + faceRegionHeight * 0.7; y < faceRegionY + faceRegionHeight; y += 5) {
+                    const i = (y * canvas.width + x) * 4;
+                    const r = currentFrame.data[i];
+                    const g = currentFrame.data[i + 1];
+                    const b = currentFrame.data[i + 2];
+                    const intensity = (r + g + b) / 3;
+                    if (intensity < 100 && r > g && r > b) {
+                        mouthPixelCount++;
+                    }
+                    totalFacePixels++;
+                }
+            }
+            const mouthRatio = mouthPixelCount / totalFacePixels;
+            if (mouthRatio > 0.03 && mouthRatio < 0.12) {
+                smileDetected = true;
+            }
+            smileMetrics.totalFrames++;
+            if (smileDetected) {
+                smileMetrics.smileCount++;
+            } else {
+                smileMetrics.neutralCount++;
+            }
+
+            // Movement Detection
+            if (previousFrame) {
+                let motionCount = 0;
+                const sampleStep = 20;
+                for (let i = 0; i < currentFrame.data.length; i += sampleStep * 4) {
+                    const diff = Math.abs(currentFrame.data[i] - previousFrame.data[i]) +
+                        Math.abs(currentFrame.data[i + 1] - previousFrame.data[i + 1]) +
+                        Math.abs(currentFrame.data[i + 2] - previousFrame.data[i + 2]);
+                    if (diff > 60) motionCount++;
+                }
+                movementScore += motionCount;
+            }
+            previousFrame = currentFrame;
+            frameCount++;
+
+            requestAnimationFrame(detectVisualCues);
+        }
+
+        function generateSummary(text) {
+            const sentences = text.split(/[.!?]/).filter(s => s.trim().length > 0);
+            const wordFrequency = {};
+            const allText = sentences.join(' ').toLowerCase();
+            const words = allText.match(/\b[a-z\d]+\b/g) || [];
+            const stopWords = new Set(['a', 'an', 'the', 'and', 'or', 'but', 'is', 'are', 'was', 'were', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'about', 'as', 'of', 'that', 'this', 'these', 'those', 'it', 'its', 'they', 'them', 'their', 'he', 'she', 'his', 'her', 'we', 'you', 'i', 'me', 'my', 'our']);
+            words.forEach(word => {
+                if (!stopWords.has(word) && word.length > 1) {
+                    wordFrequency[word] = (wordFrequency[word] || 0) + 1;
+                }
+            });
+
+            const sentenceScores = sentences.map(sentence => {
+                const sentenceWords = sentence.toLowerCase().match(/\b[a-z\d]+\b/g) || [];
+                let score = 0;
+                sentenceWords.forEach(word => {
+                    if (wordFrequency[word]) score += wordFrequency[word];
+                });
+                if (sentences.indexOf(sentence) === 0) score *= 1.5;
+                return { sentence, score: sentenceWords.length > 0 ? score / Math.sqrt(sentenceWords.length) : 0 };
+            });
+
+            return sentenceScores.sort((a, b) => b.score - a.score)[0]?.sentence || "No summary available.";
+        }
+
+        function generateThumbnail(videoBlob) {
+            return new Promise((resolve) => {
+                const video = document.createElement('video');
+                video.src = URL.createObjectURL(videoBlob);
+                video.currentTime = 1;
+                video.onloadeddata = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob(blob => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            resolve(reader.result);
+                        };
+                        reader.readAsDataURL(blob);
+                    }, 'image/jpeg', 0.8);
+                    URL.revokeObjectURL(video.src);
+                };
+            });
         }
 
         function getRandomPositiveEmoji() {
@@ -1473,27 +1522,182 @@
             }
         }
 
-        function generateThumbnail(videoBlob) {
-            return new Promise((resolve) => {
-                const video = document.createElement('video');
-                video.src = URL.createObjectURL(videoBlob);
-                video.currentTime = 1;
-                video.onloadeddata = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    canvas.toBlob(blob => {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                            resolve(reader.result);
-                        };
-                        reader.readAsDataURL(blob);
-                    }, 'image/jpeg', 0.8);
-                    URL.revokeObjectURL(video.src);
-                };
-            });
+        function extractAuthor(citationSentence) {
+            const authorPatterns = [
+                /dr\.?\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i,
+                /professor\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i,
+                /according\s+to\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i,
+                /as\s+stated\s+by\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i
+            ];
+            for (const pattern of authorPatterns) {
+                const match = citationSentence.match(pattern);
+                if (match) return match[1];
+            }
+            return "an expert";
+        }
+
+        function extractEmotion(emotionalSentence) {
+            const emotionalPhrases = ["i feel", "we must", "our shared", "thank you", "grateful"];
+            for (const phrase of emotionalPhrases) {
+                if (emotionalSentence.toLowerCase().includes(phrase)) {
+                    return phrase;
+                }
+            }
+            return "emotion";
+        }
+
+        function evaluateSpeech() {
+            const strengths = [];
+            const improvements = [];
+            const sentences = finalTranscript.split(/[.!?]/).filter(s => s.trim().length > 0);
+            const wordCount = finalTranscript.split(/\s+/).filter(Boolean).length;
+            const oneSentenceSummary = generateSummary(finalTranscript);
+            let overallScore = 50;
+            const durationSeconds = Math.max(10, (Date.now() - startTime) / 1000);
+            const durationMinutes = durationSeconds / 60;
+
+            // Facial Expression Feedback
+            const smilePercentage = (smileMetrics.smileCount / smileMetrics.totalFrames) * 100;
+            const targetSmilePercentageMin = 10 - (durationMinutes * 1.5);
+            const targetSmilePercentageMax = 30 - (durationMinutes * 1.5);
+            if (smilePercentage >= Math.max(5, targetSmilePercentageMin) && smilePercentage <= Math.min(35, targetSmilePercentageMax)) {
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Facial Expression</span> Your smiles (${smilePercentage.toFixed(1)}% of the time) create an engaging presence.`);
+            } else if (smilePercentage < Math.max(5, targetSmilePercentageMin)) {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Facial Expression</span> Minimal smiling (${smilePercentage.toFixed(1)}%). Aim for ${Math.max(5, targetSmilePercentageMin).toFixed(1)}-${Math.min(35, targetSmilePercentageMax).toFixed(1)}% to connect better.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Facial Expression</span> Frequent smiling (${smilePercentage.toFixed(1)}%) may seem forced. Reduce to ${Math.max(5, targetSmilePercentageMin).toFixed(1)}-${Math.min(35, targetSmilePercentageMax).toFixed(1)}%.`);
+            }
+
+            // Movement Feedback
+            const avgMovement = movementScore / frameCount;
+            const targetMovementMin = 600 * durationMinutes;
+            const targetMovementMax = 3000 * durationMinutes;
+            if (avgMovement >= targetMovementMin && avgMovement <= targetMovementMax) {
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Body Movement</span> Your movement (score: ${avgMovement.toFixed(0)}) adds energy to your speech.`);
+            } else if (avgMovement < targetMovementMin) {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Body Movement</span> Limited movement (score: ${avgMovement.toFixed(0)}). Incorporate more dynamic shifts.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Body Movement</span> Excessive movement (score: ${avgMovement.toFixed(0)}) may distract. Keep movements controlled.`);
+            }
+
+            // Content Depth Feedback
+            if (sentences.length >= 6 || wordCount >= 200) {
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Content Depth</span> Your speech (${wordCount} words, ${sentences.length} sentences) has strong depth.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Content Depth</span> Your speech (${wordCount} words) is brief. Aim for at least 200 words.`);
+            }
+
+            // Citation Feedback
+            const citationPhrases = ["according to", "as stated by", "research by", "dr.", "professor"];
+            const hasCitation = sentences.find(s => citationPhrases.some(p => s.toLowerCase().includes(p)));
+            if (hasCitation) {
+                const author = extractAuthor(hasCitation);
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Credibility</span> Citing ${author} enhances your speech's credibility.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Credibility</span> Include a citation like 'According to Dr. Smith' for authority.`);
+            }
+
+            // Emotional Connection Feedback
+            const emotionalPhrases = ["i feel", "we must", "our shared", "thank you", "grateful"];
+            const emotionalSentence = sentences.find(s => emotionalPhrases.some(p => s.toLowerCase().includes(p)));
+            if (emotionalSentence) {
+                const emotion = extractEmotion(emotionalSentence);
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Emotional Connection</span> Phrases like "${emotion}" connect with your audience.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Emotional Connection</span> Use phrases like "I feel" to engage emotionally.`);
+            }
+
+            // Flow Feedback
+            const transitionWords = ["however", "therefore", "moreover", "for example", "in addition"];
+            const transitionSentence = sentences.find(s => transitionWords.some(w => s.toLowerCase().includes(w)));
+            if (transitionSentence) {
+                const transitionWord = transitionWords.find(w => transitionSentence.toLowerCase().includes(w));
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Flow</span> Using "${transitionWord}" improves your speech's flow.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Flow</span> Add transitions like "for example" for better flow.`);
+            }
+
+            // Clarity Feedback
+            const fillerWords = ["um", "uh", "like", "you know"];
+            const fillerMatches = finalTranscript.match(new RegExp(`\\b(${fillerWords.join('|')})\\b`, "gi")) || [];
+            if (fillerMatches.length <= 2) {
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Clarity</span> Minimal fillers (${fillerMatches.length}) ensure clear delivery.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Clarity</span> You used fillers (${fillerMatches.length} times). Use pauses instead.`);
+            }
+
+            // Pace Feedback
+            const wordsPerMinute = Math.floor((wordCount / durationSeconds) * 60);
+            if (wordsPerMinute >= 120 && wordsPerMinute <= 180) {
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Pace</span> Your pace (${wordsPerMinute} wpm) is ideal for engagement.`);
+            } else if (wordsPerMinute > 180) {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Pace</span> Your pace (${wordsPerMinute} wpm) is fast. Slow down for clarity.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Pace</span> Your pace (${wordsPerMinute} wpm) is slow. Increase speed for energy.`);
+            }
+
+            // Persuasion Feedback
+            const persuasiveWords = ["must", "essential", "crucial", "important"];
+            const persuasiveSentence = sentences.find(s => persuasiveWords.some(w => s.toLowerCase().includes(w)));
+            if (persuasiveSentence) {
+                const persuasiveWord = persuasiveWords.find(w => persuasiveSentence.toLowerCase().includes(w));
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Persuasion</span> Words like "${persuasiveWord}" strengthen your argument.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Persuasion</span> Use words like "essential" to boost persuasiveness.`);
+            }
+
+            // Call to Action Feedback
+            const callToActionWords = ["let's", "join", "start", "consider"];
+            const ctaSentence = sentences.find(s => callToActionWords.some(w => s.toLowerCase().includes(w)));
+            if (ctaSentence) {
+                const ctaWord = callToActionWords.find(w => ctaSentence.toLowerCase().includes(w));
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Call to Action</span> Using "${ctaWord}" motivates your audience.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Call to Action</span> Add a call to action like "let's join" to inspire action.`);
+            }
+
+            overallScore = Math.min(100, overallScore);
+            if (overallScore >= 80) createConfetti();
+
+            ratingFeedback.innerHTML = `
+                <div class="feedback-score">Overall Rating: ${overallScore}/100</div>
+            `;
+
+            summaryFeedback.innerHTML = `
+                <div class="feedback-item"><strong>Summary:</strong></div>
+                <div class="feedback-item">${oneSentenceSummary}</div>
+            `;
+
+            strengthsFeedback.innerHTML = '<div class="feedback-item"><strong>Strengths:</strong></div>' +
+                (strengths.length > 0 ? strengths.map(s => `<div class="feedback-item">${s}</div>`).join('') :
+                    '<div class="feedback-item">Practice more to showcase strengths!</div>');
+
+            improvementFeedback.innerHTML = '<div class="feedback-item"><strong>Areas for Improvement:</strong></div>' +
+                (improvements.length > 0 ? improvements.slice(0, 5).map(i => `<div class="feedback-item">${i}</div>`).join('') :
+                    '<div class="feedback-item">Excellent work!</div>');
+
+            ratingFeedback.style.display = "block";
+            summaryFeedback.style.display = "block";
+            strengthsFeedback.style.display = "block";
+            improvementFeedback.style.display = "block";
+
+            const state = loadState();
+            const username = state.session;
+            let profile = getUserProfile(username);
+            if (strengths.length >= 5) {
+                profile.speechesWithFivePlusStrengths += 1;
+            }
+            saveUserProfile(username, profile);
         }
 
         function downloadSpeech() {
@@ -1526,6 +1730,7 @@
             profile.savedSpeeches = profile.savedSpeeches || [];
 
             try {
+                // Convert video blob to base64
                 const reader = new FileReader();
                 reader.readAsDataURL(currentBlob);
                 reader.onloadend = async function () {
@@ -1533,22 +1738,25 @@
                     const thumbnail = await generateThumbnail(currentBlob);
                     const duration = Math.round((Date.now() - startTime) / 1000);
 
+                    // Create speech object compatible with watch.html
                     const speech = {
                         id: Date.now(),
                         name: speechName,
                         timestamp: new Date().toISOString(),
                         transcription: finalTranscript,
                         video: base64data,
-                        summary: summaryFeedback.querySelector('.feedback-item:last-child')?.textContent || "No summary available.",
+                        summary: generateSummary(finalTranscript),
                         thumbnail: thumbnail,
                         category: 'personal',
                         views: '0',
                         duration: duration
                     };
 
+                    // Add speech to savedSpeeches
                     profile.savedSpeeches.push(speech);
                     saveUserProfile(username, profile);
 
+                    // Hide popup and show confirmation
                     popupOverlay.style.display = "none";
                     alert("Speech saved successfully!");
                 };
@@ -1597,7 +1805,6 @@
             startBtn.addEventListener("click", startRecording);
             stopBtn.addEventListener("click", stopRecording);
             downloadBtn.addEventListener("click", downloadSpeech);
-            analyzeBtn.addEventListener("click", analyzeSpeech);
             saveBtn.addEventListener("click", () => {
                 speechNameInput.value = "";
                 popupOverlay.style.display = "flex";
@@ -1634,10 +1841,9 @@
                     restartBtn.disabled = true;
                     downloadBtn.style.display = "none";
                     saveBtn.style.display = "none";
-                    analyzeBtn.style.display = "none";
                     downloadBtn.disabled = true;
                     saveBtn.disabled = true;
-                    analyzeBtn.disabled = true;
+                    ratingFeedback.style.display = "none";
                     summaryFeedback.style.display = "none";
                     strengthsFeedback.style.display = "none";
                     improvementFeedback.style.display = "none";
@@ -1647,6 +1853,7 @@
             startVideoStream();
             setupSpeechRecognition();
 
+            // Add animation classes
             const animatedElements = document.querySelectorAll('.animated');
             animatedElements.forEach((element, index) => {
                 setTimeout(() => {
@@ -1655,6 +1862,7 @@
             });
         });
 
+        // Register service worker for PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js')
