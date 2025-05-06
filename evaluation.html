@@ -380,7 +380,7 @@
 
         .container:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12 Knopfler 30px rgba(0, 0, 0, 0.3);
         }
 
         .left-section {
@@ -977,7 +977,7 @@
                         </linearGradient>
                     </defs>
                     <path fill="url(#microphone-gradient)"
-                        d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                        d="M12 14c1.66 0 3-1.34 3-3V领头衔V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
                 </svg>
                 <span class="logo-text"><span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span></span>
             </a>
@@ -1099,7 +1099,7 @@
             }
         });
 
-        // Original Recording Functionality
+        // Recording Functionality
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = SpeechRecognition ? new SpeechRecognition() : null;
         if (recognition) {
@@ -1158,9 +1158,7 @@
             return state.users[username]?.email || "";
         }
 
-        function saveUserProfile(username,
-
- profile) {
+        function saveUserProfile(username, profile) {
             const state = loadState();
             state.users[username].profile = profile;
             saveState(state);
@@ -1450,29 +1448,144 @@
             requestAnimationFrame(detectVisualCues);
         }
 
-        function generateSummary(text) {
-            const sentences = text.split(/[.!?]/).filter(s => s.trim().length > 0);
-            const wordFrequency = {};
-            const allText = sentences.join(' ').toLowerCase();
-            const words = allText.match(/\b[a-z\d]+\b/g) || [];
-            const stopWords = new Set(['a', 'an', 'the', 'and', 'or', 'but', 'is', 'are', 'was', 'were', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'about', 'as', 'of', 'that', 'this', 'these', 'those', 'it', 'its', 'they', 'them', 'their', 'he', 'she', 'his', 'her', 'we', 'you', 'i', 'me', 'my', 'our']);
-            words.forEach(word => {
-                if (!stopWords.has(word) && word.length > 1) {
-                    wordFrequency[word] = (wordFrequency[word] || 0) + 1;
+        function countWords(text) {
+            return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+        }
+
+        async function evaluateSpeech() {
+            const strengths = [];
+            const improvements = [];
+            const wordCount = countWords(finalTranscript);
+            const targetSummaryWords = Math.max(10, Math.round(wordCount * 0.1));
+            const durationSeconds = Math.max(10, (Date.now() - startTime) / 1000);
+            const durationMinutes = durationSeconds / 60;
+            let overallScore = 50;
+
+            // Facial Expression Feedback
+            const smilePercentage = (smileMetrics.smileCount / smileMetrics.totalFrames) * 100;
+            const targetSmilePercentageMin = 10 - (durationMinutes * 1.5);
+            const targetSmilePercentageMax = 30 - (durationMinutes * 1.5);
+            if (smilePercentage >= Math.max(5, targetSmilePercentageMin) && smilePercentage <= Math.min(35, targetSmilePercentageMax)) {
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Facial Expression</span> Your smiles (${smilePercentage.toFixed(1)}% of the time) create an engaging presence.`);
+            } else if (smilePercentage < Math.max(5, targetSmilePercentageMin)) {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Facial Expression</span> Minimal smiling (${smilePercentage.toFixed(1)}%). Aim for ${Math.max(5, targetSmilePercentageMin).toFixed(1)}-${Math.min(35, targetSmilePercentageMax).toFixed(1)}% to connect better.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Facial Expression</span> Frequent smiling (${smilePercentage.toFixed(1)}%) may seem forced. Reduce to ${Math.max(5, targetSmilePercentageMin).toFixed(1)}-${Math.min(35, targetSmilePercentageMax).toFixed(1)}%.`);
+            }
+
+            // Movement Feedback
+            const avgMovement = movementScore / frameCount;
+            const targetMovementMin = 600 * durationMinutes;
+            const targetMovementMax = 3000 * durationMinutes;
+            if (avgMovement >= targetMovementMin && avgMovement <= targetMovementMax) {
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Body Movement</span> Your movement (score: ${avgMovement.toFixed(0)}) adds energy to your speech.`);
+            } else if (avgMovement < targetMovementMin) {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Body Movement</span> Limited movement (score: ${avgMovement.toFixed(0)}). Incorporate more dynamic shifts.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Body Movement</span> Excessive movement (score: ${avgMovement.toFixed(0)}) may distract. Keep movements controlled.`);
+            }
+
+            // AI-based Transcription Analysis
+            const apiKey = 'YOUR_OPENROUTER_API_KEY'; // Replace with your OpenRouter API key
+            const prompt = `
+                You are a public speaking coach analyzing a speech transcription. Provide the following:
+                1. A one-sentence summary of the speech (approximately ${targetSummaryWords} words).
+                2. An overall rating (0-100) based on clarity, engagement, structure, and persuasiveness.
+                3. A list of up to 5 strengths (e.g., clear delivery, strong arguments).
+                4. A list of up to 5 areas for improvement (e.g., reduce filler words, improve pacing).
+                Format the response as JSON:
+                {
+                    "summary": "string",
+                    "rating": number,
+                    "strengths": ["string", ...],
+                    "improvements": ["string", ...]
                 }
-            });
+                Transcription:
+                ${finalTranscript}
+            `;
 
-            const sentenceScores = sentences.map(sentence => {
-                const sentenceWords = sentence.toLowerCase().match(/\b[a-z\d]+\b/g) || [];
-                let score = 0;
-                sentenceWords.forEach(word => {
-                    if (wordFrequency[word]) score += wordFrequency[word];
+            try {
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`,
+                        'HTTP-Referer': window.location.href,
+                        'X-Title': 'UpSpeak Recording'
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek/deepseek-chat-v3-0324:free',
+                        messages: [
+                            { role: 'system', content: 'You are a public speaking coach skilled at analyzing speech transcriptions.' },
+                            { role: 'user', content: prompt }
+                        ],
+                        temperature: 0.3,
+                        max_tokens: 500
+                    })
                 });
-                if (sentences.indexOf(sentence) === 0) score *= 1.5;
-                return { sentence, score: sentenceWords.length > 0 ? score / Math.sqrt(sentenceWords.length) : 0 };
-            });
 
-            return sentenceScores.sort((a, b) => b.score - a.score)[0]?.sentence || "No summary available.";
+                if (!response.ok) {
+                    throw new Error(`API request failed: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const aiFeedback = JSON.parse(data.choices[0].message.content);
+
+                // Combine AI feedback with visual feedback
+                overallScore = Math.round((overallScore + aiFeedback.rating) / 2); // Average visual and AI scores
+                const aiStrengths = aiFeedback.strengths.map(s => `${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Speech Content</span> ${s}`);
+                const aiImprovements = aiFeedback.improvements.map(i => `${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Speech Content</span> ${i}`);
+
+                // Update feedback boxes
+                ratingFeedback.innerHTML = `
+                    <div class="feedback-score">Overall Rating: ${overallScore}/100</div>
+                `;
+
+                summaryFeedback.innerHTML = `
+                    <div class="feedback-item"><strong>Summary:</strong></div>
+                    <div class="feedback-item">${aiFeedback.summary}</div>
+                `;
+
+                strengthsFeedback.innerHTML = '<div class="feedback-item"><strong>Strengths:</strong></div>' +
+                    (strengths.concat(aiStrengths).length > 0 ? strengths.concat(aiStrengths).map(s => `<div class="feedback-item">${s}</div>`).join('') :
+                        '<div class="feedback-item">Practice more to showcase strengths!</div>');
+
+                improvementFeedback.innerHTML = '<div class="feedback-item"><strong>Areas for Improvement:</strong></div>' +
+                    (improvements.concat(aiImprovements).length > 0 ? improvements.concat(aiImprovements).slice(0, 5).map(i => `<div class="feedback-item">${i}</div>`).join('') :
+                        '<div class="feedback-item">Excellent work!</div>');
+
+                // Display feedback
+                ratingFeedback.style.display = "block";
+                summaryFeedback.style.display = "block";
+                strengthsFeedback.style.display = "block";
+                improvementFeedback.style.display = "block";
+
+                // Trigger confetti for high scores
+                if (overallScore >= 80) createConfetti();
+
+                // Update profile for strengths
+                const state = loadState();
+                const username = state.session;
+                let profile = getUserProfile(username);
+                if (strengths.concat(aiStrengths).length >= 5) {
+                    profile.speechesWithFivePlusStrengths += 1;
+                }
+                saveUserProfile(username, profile);
+
+            } catch (error) {
+                console.error("Error evaluating speech with AI:", error);
+                transcriptionBox.textContent = `Error: Failed to analyze speech. ${error.message}`;
+                ratingFeedback.innerHTML = `<div class="feedback-item">Error: Failed to analyze speech.</div>`;
+                summaryFeedback.innerHTML = `<div class="feedback-item">Error: Unable to generate summary.</div>`;
+                strengthsFeedback.innerHTML = `<div class="feedback-item">Error: Unable to identify strengths.</div>`;
+                improvementFeedback.innerHTML = `<div class="feedback-item">Error: Unable to identify improvements.</div>`;
+                ratingFeedback.style.display = "block";
+                summaryFeedback.style.display = "block";
+                strengthsFeedback.style.display = "block";
+                improvementFeedback.style.display = "block";
+            }
         }
 
         function generateThumbnail(videoBlob) {
@@ -1522,184 +1635,6 @@
             }
         }
 
-        function extractAuthor(citationSentence) {
-            const authorPatterns = [
-                /dr\.?\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i,
-                /professor\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i,
-                /according\s+to\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i,
-                /as\s+stated\s+by\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i
-            ];
-            for (const pattern of authorPatterns) {
-                const match = citationSentence.match(pattern);
-                if (match) return match[1];
-            }
-            return "an expert";
-        }
-
-        function extractEmotion(emotionalSentence) {
-            const emotionalPhrases = ["i feel", "we must", "our shared", "thank you", "grateful"];
-            for (const phrase of emotionalPhrases) {
-                if (emotionalSentence.toLowerCase().includes(phrase)) {
-                    return phrase;
-                }
-            }
-            return "emotion";
-        }
-
-        function evaluateSpeech() {
-            const strengths = [];
-            const improvements = [];
-            const sentences = finalTranscript.split(/[.!?]/).filter(s => s.trim().length > 0);
-            const wordCount = finalTranscript.split(/\s+/).filter(Boolean).length;
-            const oneSentenceSummary = generateSummary(finalTranscript);
-            let overallScore = 50;
-            const durationSeconds = Math.max(10, (Date.now() - startTime) / 1000);
-            const durationMinutes = durationSeconds / 60;
-
-            // Facial Expression Feedback
-            const smilePercentage = (smileMetrics.smileCount / smileMetrics.totalFrames) * 100;
-            const targetSmilePercentageMin = 10 - (durationMinutes * 1.5);
-            const targetSmilePercentageMax = 30 - (durationMinutes * 1.5);
-            if (smilePercentage >= Math.max(5, targetSmilePercentageMin) && smilePercentage <= Math.min(35, targetSmilePercentageMax)) {
-                overallScore += 8;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Facial Expression</span> Your smiles (${smilePercentage.toFixed(1)}% of the time) create an engaging presence.`);
-            } else if (smilePercentage < Math.max(5, targetSmilePercentageMin)) {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Facial Expression</span> Minimal smiling (${smilePercentage.toFixed(1)}%). Aim for ${Math.max(5, targetSmilePercentageMin).toFixed(1)}-${Math.min(35, targetSmilePercentageMax).toFixed(1)}% to connect better.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Facial Expression</span> Frequent smiling (${smilePercentage.toFixed(1)}%) may seem forced. Reduce to ${Math.max(5, targetSmilePercentageMin).toFixed(1)}-${Math.min(35, targetSmilePercentageMax).toFixed(1)}%.`);
-            }
-
-            // Movement Feedback
-            const avgMovement = movementScore / frameCount;
-            const targetMovementMin = 600 * durationMinutes;
-            const targetMovementMax = 3000 * durationMinutes;
-            if (avgMovement >= targetMovementMin && avgMovement <= targetMovementMax) {
-                overallScore += 8;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Body Movement</span> Your movement (score: ${avgMovement.toFixed(0)}) adds energy to your speech.`);
-            } else if (avgMovement < targetMovementMin) {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Body Movement</span> Limited movement (score: ${avgMovement.toFixed(0)}). Incorporate more dynamic shifts.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Body Movement</span> Excessive movement (score: ${avgMovement.toFixed(0)}) may distract. Keep movements controlled.`);
-            }
-
-            // Content Depth Feedback
-            if (sentences.length >= 6 || wordCount >= 200) {
-                overallScore += 8;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Content Depth</span> Your speech (${wordCount} words, ${sentences.length} sentences) has strong depth.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Content Depth</span> Your speech (${wordCount} words) is brief. Aim for at least 200 words.`);
-            }
-
-            // Citation Feedback
-            const citationPhrases = ["according to", "as stated by", "research by", "dr.", "professor"];
-            const hasCitation = sentences.find(s => citationPhrases.some(p => s.toLowerCase().includes(p)));
-            if (hasCitation) {
-                const author = extractAuthor(hasCitation);
-                overallScore += 8;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Credibility</span> Citing ${author} enhances your speech's credibility.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Credibility</span> Include a citation like 'According to Dr. Smith' for authority.`);
-            }
-
-            // Emotional Connection Feedback
-            const emotionalPhrases = ["i feel", "we must", "our shared", "thank you", "grateful"];
-            const emotionalSentence = sentences.find(s => emotionalPhrases.some(p => s.toLowerCase().includes(p)));
-            if (emotionalSentence) {
-                const emotion = extractEmotion(emotionalSentence);
-                overallScore += 8;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Emotional Connection</span> Phrases like "${emotion}" connect with your audience.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Emotional Connection</span> Use phrases like "I feel" to engage emotionally.`);
-            }
-
-            // Flow Feedback
-            const transitionWords = ["however", "therefore", "moreover", "for example", "in addition"];
-            const transitionSentence = sentences.find(s => transitionWords.some(w => s.toLowerCase().includes(w)));
-            if (transitionSentence) {
-                const transitionWord = transitionWords.find(w => transitionSentence.toLowerCase().includes(w));
-                overallScore += 8;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Flow</span> Using "${transitionWord}" improves your speech's flow.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Flow</span> Add transitions like "for example" for better flow.`);
-            }
-
-            // Clarity Feedback
-            const fillerWords = ["um", "uh", "like", "you know"];
-            const fillerMatches = finalTranscript.match(new RegExp(`\\b(${fillerWords.join('|')})\\b`, "gi")) || [];
-            if (fillerMatches.length <= 2) {
-                overallScore += 8;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Clarity</span> Minimal fillers (${fillerMatches.length}) ensure clear delivery.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Clarity</span> You used fillers (${fillerMatches.length} times). Use pauses instead.`);
-            }
-
-            // Pace Feedback
-            const wordsPerMinute = Math.floor((wordCount / durationSeconds) * 60);
-            if (wordsPerMinute >= 120 && wordsPerMinute <= 180) {
-                overallScore += 8;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Pace</span> Your pace (${wordsPerMinute} wpm) is ideal for engagement.`);
-            } else if (wordsPerMinute > 180) {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Pace</span> Your pace (${wordsPerMinute} wpm) is fast. Slow down for clarity.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Pace</span> Your pace (${wordsPerMinute} wpm) is slow. Increase speed for energy.`);
-            }
-
-            // Persuasion Feedback
-            const persuasiveWords = ["must", "essential", "crucial", "important"];
-            const persuasiveSentence = sentences.find(s => persuasiveWords.some(w => s.toLowerCase().includes(w)));
-            if (persuasiveSentence) {
-                const persuasiveWord = persuasiveWords.find(w => persuasiveSentence.toLowerCase().includes(w));
-                overallScore += 8;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Persuasion</span> Words like "${persuasiveWord}" strengthen your argument.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Persuasion</span> Use words like "essential" to boost persuasiveness.`);
-            }
-
-            // Call to Action Feedback
-            const callToActionWords = ["let's", "join", "start", "consider"];
-            const ctaSentence = sentences.find(s => callToActionWords.some(w => s.toLowerCase().includes(w)));
-            if (ctaSentence) {
-                const ctaWord = callToActionWords.find(w => ctaSentence.toLowerCase().includes(w));
-                overallScore += 8;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Call to Action</span> Using "${ctaWord}" motivates your audience.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Call to Action</span> Add a call to action like "let's join" to inspire action.`);
-            }
-
-            overallScore = Math.min(100, overallScore);
-            if (overallScore >= 80) createConfetti();
-
-            ratingFeedback.innerHTML = `
-                <div class="feedback-score">Overall Rating: ${overallScore}/100</div>
-            `;
-
-            summaryFeedback.innerHTML = `
-                <div class="feedback-item"><strong>Summary:</strong></div>
-                <div class="feedback-item">${oneSentenceSummary}</div>
-            `;
-
-            strengthsFeedback.innerHTML = '<div class="feedback-item"><strong>Strengths:</strong></div>' +
-                (strengths.length > 0 ? strengths.map(s => `<div class="feedback-item">${s}</div>`).join('') :
-                    '<div class="feedback-item">Practice more to showcase strengths!</div>');
-
-            improvementFeedback.innerHTML = '<div class="feedback-item"><strong>Areas for Improvement:</strong></div>' +
-                (improvements.length > 0 ? improvements.slice(0, 5).map(i => `<div class="feedback-item">${i}</div>`).join('') :
-                    '<div class="feedback-item">Excellent work!</div>');
-
-            ratingFeedback.style.display = "block";
-            summaryFeedback.style.display = "block";
-            strengthsFeedback.style.display = "block";
-            improvementFeedback.style.display = "block";
-
-            const state = loadState();
-            const username = state.session;
-            let profile = getUserProfile(username);
-            if (strengths.length >= 5) {
-                profile.speechesWithFivePlusStrengths += 1;
-            }
-            saveUserProfile(username, profile);
-        }
-
         function downloadSpeech() {
             if (currentBlob) {
                 const url = URL.createObjectURL(currentBlob);
@@ -1745,7 +1680,7 @@
                         timestamp: new Date().toISOString(),
                         transcription: finalTranscript,
                         video: base64data,
-                        summary: generateSummary(finalTranscript),
+                        summary: summaryFeedback.querySelector('.feedback-item:last-child')?.textContent || "No summary available.",
                         thumbnail: thumbnail,
                         category: 'personal',
                         views: '0',
