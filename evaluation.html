@@ -1312,18 +1312,21 @@
             const wordCount = text.split(/\s+/).filter(Boolean).length;
             const targetSummaryWords = Math.max(10, Math.round(wordCount * 0.1));
             const prompt = `Summarize the following text in approximately ${targetSummaryWords} words, capturing the main ideas and key points concisely:\n\n${text}`;
-
+        
             try {
                 // Note: API key should be handled server-side for security
                 const response = await fetch('/api/summarize', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer keysk-or-v1-2c7a19a07b42d1037b0a561442ade873497b02d3640368c4805c6fbcfc98e48c'
+                    },
                     body: JSON.stringify({
                         text: text,
                         targetWords: targetSummaryWords
                     })
                 });
-
+        
                 if (!response.ok) throw new Error(`API request failed: ${response.statusText}`);
                 const data = await response.json();
                 return data.summary || "Error generating summary.";
