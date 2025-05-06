@@ -1085,17 +1085,21 @@
             sidebar.classList.toggle('expanded', isCollapsed);
             mainContent.classList.toggle('collapsed', !isCollapsed);
             collapseToggle.classList.toggle('collapsed', !isCollapsed);
+
             const icon = collapseToggle.querySelector('i');
             icon.classList.toggle('fa-angle-right', !isCollapsed);
             icon.classList.toggle('fa-angle-left', isCollapsed);
         }
 
         collapseToggle.addEventListener('click', toggleSidebar);
-        closeMobile.addEventListener('click', () => {
-            if (!sidebar.classList.contains('collapsed')) toggleSidebar();
+
+        closeMobile.addEventListener('click', function () {
+            if (!sidebar.classList.contains('collapsed')) {
+                toggleSidebar();
+            }
         });
 
-        // Speech Recognition Setup
+        // Original Recording Functionality
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = SpeechRecognition ? new SpeechRecognition() : null;
         if (recognition) {
@@ -1104,7 +1108,6 @@
             recognition.lang = 'en-US';
         }
 
-        // State Management
         function loadState() {
             const state = localStorage.getItem('authState');
             return state ? JSON.parse(state) : { users: {}, session: null, sessionExpiry: null };
@@ -1155,7 +1158,9 @@
             return state.users[username]?.email || "";
         }
 
-        function saveUserProfile(username, profile) {
+        function saveUserProfile(username,
+
+ profile) {
             const state = loadState();
             state.users[username].profile = profile;
             saveState(state);
@@ -1169,11 +1174,14 @@
                 subject: "Congratulations on Your First Speech!",
                 message: `Dear ${firstName},\n\nCongratulations on completing your first speech with UpSpeak! We're thrilled to have you on this journey to improve your public speaking skills. Keep practicing, and watch your confidence soar!\n\nBest,\nThe UpSpeak Team`
             })
-                .then(() => console.log("First speech email sent successfully to", email))
-                .catch((error) => console.error("Failed to send first speech email:", error));
+                .then(() => {
+                    console.log("First speech email sent successfully to", email);
+                })
+                .catch((error) => {
+                    console.error("Failed to send first speech email:", error);
+                });
         }
 
-        // Recording Setup
         let mediaRecorder;
         let recordedChunks = [];
         const videoElement = document.getElementById("video");
@@ -1197,6 +1205,8 @@
         let isRecording = false;
         let finalTranscript = "";
         let silenceTimeout;
+        let previousFrame = null;
+        let startTime;
         let currentBlob = null;
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
@@ -1205,74 +1215,23 @@
         let movementScore = 0;
         let frameCount = 0;
 
-        // Enhanced Camera Handling
-        async function checkCameraAvailability() {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-                return false;
-            }
-            try {
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                return devices.some(device => device.kind === 'videoinput');
-            } catch (error) {
-                console.error("Error enumerating devices:", error);
-                return false;
-            }
-        }
+        function goToHome() { window.location.href = 'home.html'; }
 
         async function startVideoStream() {
-            // Check if running in a secure context
-            if (!window.isSecureContext) {
-                transcriptionBox.textContent = "Error: This application requires a secure context (HTTPS). Please access via HTTPS.";
-                startBtn.disabled = true;
-                return;
-            }
-
-            // Check camera availability
-            const hasCamera = await checkCameraAvailability();
-            if (!hasCamera) {
-                transcriptionBox.textContent = "Error: No camera detected. Please connect a camera or use a device with a camera.";
-                startBtn.disabled = true;
-                return;
-            }
-
             try {
-                // Request camera and microphone permissions
-                stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } },
-                    audio: true
-                });
+                stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 videoElement.srcObject = stream;
-                await videoElement.play();
-                transcriptionBox.textContent = "Camera and microphone ready. Click 'Start Recording' to begin.";
+                videoElement.play();
             } catch (error) {
                 console.error("Error accessing webcam:", error);
-                let errorMessage = "Error: Could not access camera/microphone. ";
-                if (error.name === "NotAllowedError") {
-                    errorMessage += "Please grant camera and microphone permissions in your browser settings.";
-                } else if (error.name === "NotFoundError") {
-                    errorMessage += "No camera or microphone found. Please connect a device and try again.";
-                } else if (error.name === "NotReadableError") {
-                    errorMessage += "Camera or microphone is in use by another application. Please close other apps and try again.";
-                } else {
-                    errorMessage += "Try refreshing the page or using a different browser.";
-                }
-                transcriptionBox.textContent = errorMessage;
-                startBtn.disabled = true;
-
-                // Attempt audio-only fallback
-                try {
-                    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    transcriptionBox.textContent += "\nAudio-only mode enabled. Video recording is disabled.";
-                    startBtn.disabled = false;
-                } catch (audioError) {
-                    console.error("Audio fallback failed:", audioError);
-                }
+                transcriptionBox.textContent = "Error: Could not access webcam/microphone.";
             }
         }
 
         function setupSpeechRecognition() {
             if (!recognition) {
-                transcriptionBox.textContent = "Speech recognition not supported in this browser. Recording will still work without transcription.";
+                transcriptionBox.textContent = "Speech recognition not supported in this browser.";
+                startBtn.disabled = true;
                 return;
             }
 
@@ -1308,83 +1267,45 @@
             };
         }
 
-        async function summarizeText(text) {
-            const wordCount = text.split(/\s+/).filter(Boolean).length;
-            const targetSummaryWords = Math.max(10, Math.round(wordCount * 0.1));
-            const prompt = `Summarize the following text in approximately ${targetSummaryWords} words, capturing the main ideas and key points concisely:\n\n${text}`;
-        
-            try {
-                // Note: API key should be handled server-side for security
-                const response = await fetch('/api/summarize', {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer keysk-or-v1-2c7a19a07b42d1037b0a561442ade873497b02d3640368c4805c6fbcfc98e48c'
-                    },
-                    body: JSON.stringify({
-                        text: text,
-                        targetWords: targetSummaryWords
-                    })
-                });
-        
-                if (!response.ok) throw new Error(`API request failed: ${response.statusText}`);
-                const data = await response.json();
-                return data.summary || "Error generating summary.";
-            } catch (error) {
-                console.error("Summarization error:", error);
-                return "Error generating summary. Please try again later.";
-            }
-        }
-
         function startRecording() {
-            if (!stream) {
-                transcriptionBox.textContent = "Error: No media stream available. Please ensure camera/microphone access.";
-                return;
-            }
-
             recordedChunks = [];
-            try {
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.ondataavailable = (event) => {
-                    if (event.data.size > 0) recordedChunks.push(event.data);
-                };
-                mediaRecorder.onstop = () => {
-                    currentBlob = new Blob(recordedChunks, { type: "video/webm" });
-                    const videoUrl = URL.createObjectURL(currentBlob);
-                    videoElement.srcObject = null;
-                    videoElement.src = videoUrl;
-                    videoElement.controls = true;
-                    videoElement.muted = false;
-                    videoElement.play();
-                    downloadBtn.style.display = "flex";
-                    saveBtn.style.display = "flex";
-                    downloadBtn.disabled = false;
-                    saveBtn.disabled = false;
-                };
-                mediaRecorder.start();
-                if (recognition) recognition.start();
-                isRecording = true;
-                startTime = Date.now();
-                startBtn.disabled = true;
-                stopBtn.disabled = false;
-                restartBtn.disabled = false;
-                gestureMetrics = { leftHand: 0, rightHand: 0, totalGestures: 0, lastGestureTime: 0 };
-                smileMetrics = { smileCount: 0, neutralCount: 0, totalFrames: 0 };
-                movementScore = 0;
-                frameCount = 0;
-                if (stream.getVideoTracks().length > 0) detectVisualCues();
-                document.getElementById("videoContainer").classList.add("recording");
-            } catch (error) {
-                console.error("Error starting recording:", error);
-                transcriptionBox.textContent = "Error starting recording. Please try again.";
-                startBtn.disabled = false;
-            }
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) recordedChunks.push(event.data);
+            };
+            mediaRecorder.onstop = () => {
+                currentBlob = new Blob(recordedChunks, { type: "video/webm" });
+                const videoUrl = URL.createObjectURL(currentBlob);
+                videoElement.srcObject = null;
+                videoElement.src = videoUrl;
+                videoElement.controls = true;
+                videoElement.muted = false;
+                videoElement.play();
+                downloadBtn.style.display = "flex";
+                saveBtn.style.display = "flex";
+                downloadBtn.disabled = false;
+                saveBtn.disabled = false;
+            };
+            mediaRecorder.start();
+            recognition.start();
+            isRecording = true;
+            startTime = Date.now();
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            restartBtn.disabled = false;
+            previousFrame = null;
+            gestureMetrics = { leftHand: 0, rightHand: 0, totalGestures: 0, lastGestureTime: 0 };
+            smileMetrics = { smileCount: 0, neutralCount: 0, totalFrames: 0 };
+            movementScore = 0;
+            frameCount = 0;
+            detectVisualCues();
+            document.getElementById("videoContainer").classList.add("recording");
         }
 
         function stopRecording() {
             if (isRecording) {
                 mediaRecorder.stop();
-                if (recognition) recognition.stop();
+                recognition.stop();
                 isRecording = false;
                 stopBtn.disabled = true;
                 restartBtn.disabled = false;
@@ -1407,13 +1328,15 @@
                 if (wasFirstSpeech) {
                     const email = getUserEmail(username);
                     const firstName = state.users[username].firstName || username;
-                    if (email) sendFirstSpeechEmail(username, email, firstName);
+                    if (email) {
+                        sendFirstSpeechEmail(username, email, firstName);
+                    }
                 }
             }
         }
 
         function detectVisualCues() {
-            if (!isRecording || !stream.getVideoTracks().length) return;
+            if (!isRecording) return;
             if (!videoElement.videoWidth || !videoElement.videoHeight) {
                 requestAnimationFrame(detectVisualCues);
                 return;
@@ -1423,6 +1346,7 @@
             ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
             const currentFrame = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
+            // Hand Gesture Detection
             const currentTime = Date.now();
             const gestureCooldown = 500;
             let leftHandDetected = false;
@@ -1476,6 +1400,7 @@
                 gestureMetrics.totalGestures++;
             }
 
+            // Facial Expression Detection
             let smileDetected = false;
             const faceRegionY = canvas.height * 0.2;
             const faceRegionHeight = canvas.height * 0.4;
@@ -1507,7 +1432,47 @@
                 smileMetrics.neutralCount++;
             }
 
+            // Movement Detection
+            if (previousFrame) {
+                let motionCount = 0;
+                const sampleStep = 20;
+                for (let i = 0; i < currentFrame.data.length; i += sampleStep * 4) {
+                    const diff = Math.abs(currentFrame.data[i] - previousFrame.data[i]) +
+                        Math.abs(currentFrame.data[i + 1] - previousFrame.data[i + 1]) +
+                        Math.abs(currentFrame.data[i + 2] - previousFrame.data[i + 2]);
+                    if (diff > 60) motionCount++;
+                }
+                movementScore += motionCount;
+            }
+            previousFrame = currentFrame;
+            frameCount++;
+
             requestAnimationFrame(detectVisualCues);
+        }
+
+        function generateSummary(text) {
+            const sentences = text.split(/[.!?]/).filter(s => s.trim().length > 0);
+            const wordFrequency = {};
+            const allText = sentences.join(' ').toLowerCase();
+            const words = allText.match(/\b[a-z\d]+\b/g) || [];
+            const stopWords = new Set(['a', 'an', 'the', 'and', 'or', 'but', 'is', 'are', 'was', 'were', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'about', 'as', 'of', 'that', 'this', 'these', 'those', 'it', 'its', 'they', 'them', 'their', 'he', 'she', 'his', 'her', 'we', 'you', 'i', 'me', 'my', 'our']);
+            words.forEach(word => {
+                if (!stopWords.has(word) && word.length > 1) {
+                    wordFrequency[word] = (wordFrequency[word] || 0) + 1;
+                }
+            });
+
+            const sentenceScores = sentences.map(sentence => {
+                const sentenceWords = sentence.toLowerCase().match(/\b[a-z\d]+\b/g) || [];
+                let score = 0;
+                sentenceWords.forEach(word => {
+                    if (wordFrequency[word]) score += wordFrequency[word];
+                });
+                if (sentences.indexOf(sentence) === 0) score *= 1.5;
+                return { sentence, score: sentenceWords.length > 0 ? score / Math.sqrt(sentenceWords.length) : 0 };
+            });
+
+            return sentenceScores.sort((a, b) => b.score - a.score)[0]?.sentence || "No summary available.";
         }
 
         function generateThumbnail(videoBlob) {
@@ -1581,42 +1546,43 @@
             return "emotion";
         }
 
-        async function evaluateSpeech() {
+        function evaluateSpeech() {
             const strengths = [];
             const improvements = [];
             const sentences = finalTranscript.split(/[.!?]/).filter(s => s.trim().length > 0);
             const wordCount = finalTranscript.split(/\s+/).filter(Boolean).length;
+            const oneSentenceSummary = generateSummary(finalTranscript);
             let overallScore = 50;
             const durationSeconds = Math.max(10, (Date.now() - startTime) / 1000);
             const durationMinutes = durationSeconds / 60;
 
-            // Skip visual feedback if no video track
-            if (stream.getVideoTracks().length > 0) {
-                const smilePercentage = (smileMetrics.smileCount / smileMetrics.totalFrames) * 100;
-                const targetSmilePercentageMin = 10 - (durationMinutes * 1.5);
-                const targetSmilePercentageMax = 30 - (durationMinutes * 1.5);
-                if (smilePercentage >= Math.max(5, targetSmilePercentageMin) && smilePercentage <= Math.min(35, targetSmilePercentageMax)) {
-                    overallScore += 8;
-                    strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Facial Expression</span> Your smiles (${smilePercentage.toFixed(1)}% of the time) create an engaging presence.`);
-                } else if (smilePercentage < Math.max(5, targetSmilePercentageMin)) {
-                    improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Facial Expression</span> Minimal smiling (${smilePercentage.toFixed(1)}%). Aim for ${Math.max(5, targetSmilePercentageMin).toFixed(1)}-${Math.min(35, targetSmilePercentageMax).toFixed(1)}% to connect better.`);
-                } else {
-                    improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Facial Expression</span> Frequent smiling (${smilePercentage.toFixed(1)}%) may seem forced. Reduce to ${Math.max(5, targetSmilePercentageMin).toFixed(1)}-${Math.min(35, targetSmilePercentageMax).toFixed(1)}%.`);
-                }
-
-                const avgMovement = movementScore / frameCount;
-                const targetMovementMin = 600 * durationMinutes;
-                const targetMovementMax = 3000 * durationMinutes;
-                if (avgMovement >= targetMovementMin && avgMovement <= targetMovementMax) {
-                    overallScore += 8;
-                    strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Body Movement</span> Your movement (score: ${avgMovement.toFixed(0)}) adds energy to your speech.`);
-                } else if (avgMovement < targetMovementMin) {
-                    improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Body Movement</span> Limited movement (score: ${avgMovement.toFixed(0)}). Incorporate more dynamic shifts.`);
-                } else {
-                    improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Body Movement</span> Excessive movement (score: ${avgMovement.toFixed(0)}) may distract. Keep movements controlled.`);
-                }
+            // Facial Expression Feedback
+            const smilePercentage = (smileMetrics.smileCount / smileMetrics.totalFrames) * 100;
+            const targetSmilePercentageMin = 10 - (durationMinutes * 1.5);
+            const targetSmilePercentageMax = 30 - (durationMinutes * 1.5);
+            if (smilePercentage >= Math.max(5, targetSmilePercentageMin) && smilePercentage <= Math.min(35, targetSmilePercentageMax)) {
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Facial Expression</span> Your smiles (${smilePercentage.toFixed(1)}% of the time) create an engaging presence.`);
+            } else if (smilePercentage < Math.max(5, targetSmilePercentageMin)) {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Facial Expression</span> Minimal smiling (${smilePercentage.toFixed(1)}%). Aim for ${Math.max(5, targetSmilePercentageMin).toFixed(1)}-${Math.min(35, targetSmilePercentageMax).toFixed(1)}% to connect better.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Facial Expression</span> Frequent smiling (${smilePercentage.toFixed(1)}%) may seem forced. Reduce to ${Math.max(5, targetSmilePercentageMin).toFixed(1)}-${Math.min(35, targetSmilePercentageMax).toFixed(1)}%.`);
             }
 
+            // Movement Feedback
+            const avgMovement = movementScore / frameCount;
+            const targetMovementMin = 600 * durationMinutes;
+            const targetMovementMax = 3000 * durationMinutes;
+            if (avgMovement >= targetMovementMin && avgMovement <= targetMovementMax) {
+                overallScore += 8;
+                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Body Movement</span> Your movement (score: ${avgMovement.toFixed(0)}) adds energy to your speech.`);
+            } else if (avgMovement < targetMovementMin) {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Body Movement</span> Limited movement (score: ${avgMovement.toFixed(0)}). Incorporate more dynamic shifts.`);
+            } else {
+                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Body Movement</span> Excessive movement (score: ${avgMovement.toFixed(0)}) may distract. Keep movements controlled.`);
+            }
+
+            // Content Depth Feedback
             if (sentences.length >= 6 || wordCount >= 200) {
                 overallScore += 8;
                 strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Content Depth</span> Your speech (${wordCount} words, ${sentences.length} sentences) has strong depth.`);
@@ -1624,6 +1590,7 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Content Depth</span> Your speech (${wordCount} words) is brief. Aim for at least 200 words.`);
             }
 
+            // Citation Feedback
             const citationPhrases = ["according to", "as stated by", "research by", "dr.", "professor"];
             const hasCitation = sentences.find(s => citationPhrases.some(p => s.toLowerCase().includes(p)));
             if (hasCitation) {
@@ -1634,6 +1601,7 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Credibility</span> Include a citation like 'According to Dr. Smith' for authority.`);
             }
 
+            // Emotional Connection Feedback
             const emotionalPhrases = ["i feel", "we must", "our shared", "thank you", "grateful"];
             const emotionalSentence = sentences.find(s => emotionalPhrases.some(p => s.toLowerCase().includes(p)));
             if (emotionalSentence) {
@@ -1644,6 +1612,7 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Emotional Connection</span> Use phrases like "I feel" to engage emotionally.`);
             }
 
+            // Flow Feedback
             const transitionWords = ["however", "therefore", "moreover", "for example", "in addition"];
             const transitionSentence = sentences.find(s => transitionWords.some(w => s.toLowerCase().includes(w)));
             if (transitionSentence) {
@@ -1654,6 +1623,7 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Flow</span> Add transitions like "for example" for better flow.`);
             }
 
+            // Clarity Feedback
             const fillerWords = ["um", "uh", "like", "you know"];
             const fillerMatches = finalTranscript.match(new RegExp(`\\b(${fillerWords.join('|')})\\b`, "gi")) || [];
             if (fillerMatches.length <= 2) {
@@ -1663,6 +1633,7 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Clarity</span> You used fillers (${fillerMatches.length} times). Use pauses instead.`);
             }
 
+            // Pace Feedback
             const wordsPerMinute = Math.floor((wordCount / durationSeconds) * 60);
             if (wordsPerMinute >= 120 && wordsPerMinute <= 180) {
                 overallScore += 8;
@@ -1673,6 +1644,7 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Pace</span> Your pace (${wordsPerMinute} wpm) is slow. Increase speed for energy.`);
             }
 
+            // Persuasion Feedback
             const persuasiveWords = ["must", "essential", "crucial", "important"];
             const persuasiveSentence = sentences.find(s => persuasiveWords.some(w => s.toLowerCase().includes(w)));
             if (persuasiveSentence) {
@@ -1683,6 +1655,7 @@
                 improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Persuasion</span> Use words like "essential" to boost persuasiveness.`);
             }
 
+            // Call to Action Feedback
             const callToActionWords = ["let's", "join", "start", "consider"];
             const ctaSentence = sentences.find(s => callToActionWords.some(w => s.toLowerCase().includes(w)));
             if (ctaSentence) {
@@ -1696,18 +1669,19 @@
             overallScore = Math.min(100, overallScore);
             if (overallScore >= 80) createConfetti();
 
-            const oneSentenceSummary = await summarizeText(finalTranscript);
-
             ratingFeedback.innerHTML = `
                 <div class="feedback-score">Overall Rating: ${overallScore}/100</div>
             `;
+
             summaryFeedback.innerHTML = `
                 <div class="feedback-item"><strong>Summary:</strong></div>
                 <div class="feedback-item">${oneSentenceSummary}</div>
             `;
+
             strengthsFeedback.innerHTML = '<div class="feedback-item"><strong>Strengths:</strong></div>' +
                 (strengths.length > 0 ? strengths.map(s => `<div class="feedback-item">${s}</div>`).join('') :
                     '<div class="feedback-item">Practice more to showcase strengths!</div>');
+
             improvementFeedback.innerHTML = '<div class="feedback-item"><strong>Areas for Improvement:</strong></div>' +
                 (improvements.length > 0 ? improvements.slice(0, 5).map(i => `<div class="feedback-item">${i}</div>`).join('') :
                     '<div class="feedback-item">Excellent work!</div>');
@@ -1756,6 +1730,7 @@
             profile.savedSpeeches = profile.savedSpeeches || [];
 
             try {
+                // Convert video blob to base64
                 const reader = new FileReader();
                 reader.readAsDataURL(currentBlob);
                 reader.onloadend = async function () {
@@ -1763,21 +1738,25 @@
                     const thumbnail = await generateThumbnail(currentBlob);
                     const duration = Math.round((Date.now() - startTime) / 1000);
 
+                    // Create speech object compatible with watch.html
                     const speech = {
                         id: Date.now(),
                         name: speechName,
                         timestamp: new Date().toISOString(),
                         transcription: finalTranscript,
                         video: base64data,
-                        summary: await summarizeText(finalTranscript),
+                        summary: generateSummary(finalTranscript),
                         thumbnail: thumbnail,
                         category: 'personal',
                         views: '0',
                         duration: duration
                     };
 
+                    // Add speech to savedSpeeches
                     profile.savedSpeeches.push(speech);
                     saveUserProfile(username, profile);
+
+                    // Hide popup and show confirmation
                     popupOverlay.style.display = "none";
                     alert("Speech saved successfully!");
                 };
@@ -1874,6 +1853,7 @@
             startVideoStream();
             setupSpeechRecognition();
 
+            // Add animation classes
             const animatedElements = document.querySelectorAll('.animated');
             animatedElements.forEach((element, index) => {
                 setTimeout(() => {
@@ -1882,6 +1862,7 @@
             });
         });
 
+        // Register service worker for PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js')
