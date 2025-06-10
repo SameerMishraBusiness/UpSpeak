@@ -4,171 +4,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UpSpeak - Empowering kids through effective communication with interactive features.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#4361ee">
     <title>UpSpeak Recording</title>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --primary-color: #007bff;
+            --primary-light: #e6f2ff;
+            --primary-dark: #0056b3;
+            --accent-color: #ff6b00;
+            --accent-light: #fff0e6;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --sidebar-width: 280px;
+            --easing: cubic-bezier(0.25, 0.1, 0.25, 1);
             --secondary-color: #ff9933;
-            --text-color: #2c3e50;
+            --background-gradient: linear-gradient(135deg, #ecf0f1, #d5dbdb);
             --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             --transition-speed: 0.3s;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #e17055;
+            --light-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --section-spacing: 2.5rem;
+            --stone-color: #6b7280;
+            --copper-color: #b87333;
+            --gold-color: #ffd700;
+            --diamond-color: #b9f2ff;
             --button-glow: 0 0 20px rgba(255, 153, 51, 0.6);
             --popup-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            background: linear-gradient(135deg, #0073e6, #ff8c00);
-            color: #fff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
-            min-height: 100vh;
+            height: 100vh;
+            display: flex;
+            background: linear-gradient(135deg, #0073e6, #ff8c00);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: var(--text-dark);
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            z-index: 100;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform var(--transition-speed) var(--easing);
+            overflow: hidden;
+            border-radius: 0 24px 24px 0;
         }
 
-        header {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 25px 0;
-            box-shadow: var(--box-shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            width: 100%;
-            text-align: center;
+        .sidebar.collapsed {
+            transform: translateX(calc(-1 * var(--sidebar-width)));
         }
 
-        .navbar {
+        .sidebar.expanded {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
         }
 
         .logo {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-color);
             display: flex;
             align-items: center;
-            cursor: pointer;
-            transition: transform var(--transition-speed) ease;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: transform 0.3s ease;
         }
 
         .logo:hover {
-            transform: scale(1.08);
+            transform: scale(1.02);
         }
 
-        .logo .microphone-icon {
-            width: 55px;
-            height: 55px;
-            margin-right: 15px;
-            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+        .microphone-icon {
+            width: 42px;
+            height: 42px;
+            margin-right: 0.75rem;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.15));
         }
 
-        .logo .upspeak-up {
-            color: var(--secondary-color);
+        .upspeak-up {
+            color: var(--accent-color);
         }
 
-        .logo .upspeak-speak {
+        .upspeak-speak {
             color: var(--primary-color);
         }
 
         .nav-menu {
             list-style: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
+            padding: 1.5rem 0;
             margin: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .nav-menu li {
-            margin: 0 30px;
-            position: relative;
+        .nav-menu-item {
+            margin: 0.5rem 0;
+            width: 100%;
+            padding: 0 1.25rem;
         }
 
-        .nav-menu>li>a {
-            color: #555;
-            font-weight: 500;
-            transition: color var(--transition-speed) ease, padding-bottom var(--transition-speed) ease;
+        .nav-menu-link {
             display: flex;
             align-items: center;
+            padding: 0.85rem 1.25rem;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 1rem;
             text-decoration: none;
-            padding-bottom: 4px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .nav-menu>li>a:hover {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .nav-menu .carrot {
-            margin-left: 7px;
-            font-size: 0.9em;
-            transition: transform var(--transition-speed) ease;
-        }
-
-        .nav-menu li:hover .carrot {
-            transform: rotate(180deg);
-        }
-
-        .dropdown-content {
-            display: none;
+        .nav-menu-link::before {
+            content: '';
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.98);
-            min-width: 240px;
-            box-shadow: var(--box-shadow);
-            padding: 20px 30px;
-            z-index: 1;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: left;
-            border-radius: 15px;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: transparent;
+            transition: all 0.3s ease;
+            border-radius: 0 4px 4px 0;
             opacity: 0;
-            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
-            backdrop-filter: blur(10px);
         }
 
-        .nav-menu li:hover .dropdown-content {
-            display: block;
+        .nav-menu-link:hover {
+            color: var(--text-dark);
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .nav-menu-link:hover::before {
             opacity: 1;
-            transform: translateX(-50%) translateY(10px);
         }
 
-        .dropdown-content a {
-            color: var(--text-color);
-            padding: 12px 0;
-            text-decoration: none;
-            display: block;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-            border-radius: 8px;
+        .nav-menu-icon {
+            margin-right: 1rem;
+            font-size: 1.4rem;
+            min-width: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
         }
 
-        .dropdown-content a:hover {
-            background-color: rgba(0, 123, 255, 0.1);
+        .nav-menu-link:hover .nav-menu-icon {
+            transform: translateY(-2px);
+        }
+
+        .nav-menu-link.record:hover::before {
+            background: var(--primary-color);
+        }
+
+        .nav-menu-link.learn:hover::before {
+            background: var(--accent-color);
+        }
+
+        .nav-menu-link.watch:hover::before {
+            background: #059669;
+        }
+
+        .nav-menu-link.profile:hover::before {
+            background: #dc2626;
+        }
+
+        .nav-menu-link.community:hover::before {
+            background: #7c3aed;
+        }
+
+        .nav-menu-link.about:hover::before {
+            background: #d97706;
+        }
+
+        .nav-menu-icon.record {
             color: var(--primary-color);
+        }
+
+        .nav-menu-icon.learn {
+            color: var(--accent-color);
+        }
+
+        .nav-menu-icon.watch {
+            color: #059669;
+        }
+
+        .nav-menu-icon.profile {
+            color: #dc2626;
+        }
+
+        .nav-menu-icon.community {
+            color: #7c3aed;
+        }
+
+        .nav-menu-icon.about {
+            color: #d97706;
+        }
+
+        .nav-menu-link.active {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .nav-menu-link.active::before {
+            background: var(--primary-color);
+            opacity: 1;
+        }
+
+        .profile-container {
+            padding: 1.25rem;
+            margin: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            border-radius: 12px;
+            background: linear-gradient(to right, var(--primary-light), rgba(255, 255, 255, 0.8));
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.1);
+            width: calc(100% - 2.5rem);
+        }
+
+        .profile-container:hover {
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+            transform: translateY(-2px);
         }
 
         .profile-icon {
-            font-size: 3rem;
-            color: #777;
-            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-right: 1rem;
+            transition: transform 0.3s ease;
         }
 
-        .profile-icon:hover {
+        .profile-container:hover .profile-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: block;
+            line-height: 1.2;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .profile-status {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            overflow-y: auto;
+            height: 100vh;
+            transition: margin-left var(--transition-speed) var(--easing);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #0073e6, #ff8c00);
+        }
+
+        .main-content.collapsed {
+            margin-left: 0;
+        }
+
+        .collapse-toggle {
+            position: fixed;
+            top: 1.5rem;
+            left: var(--sidebar-width);
+            width: 40px;
+            height: 40px;
+            background: var(--primary-light);
             color: var(--primary-color);
-            transform: scale(1.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease, left var(--transition-speed) var(--easing);
+            z-index: 99;
+            font-size: 1.2rem;
+            border-radius: 0 20px 20px 0;
+        }
+
+        .collapse-toggle.collapsed {
+            left: 0;
+        }
+
+        .collapse-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .close-mobile {
+            display: none;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .close-mobile:hover {
+            background: var(--primary-color);
+            color: white;
         }
 
         .container {
@@ -512,7 +704,7 @@
         }
 
         .popup h2 {
-            color: var(--text-color);
+            color: var(--text-dark);
             font-size: 1.8em;
             margin: 0 0 20px 0;
         }
@@ -579,7 +771,34 @@
             background: #e4606d;
         }
 
+        .transcription-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 1024px) {
+            :root {
+                --sidebar-width: 240px;
+                --section-spacing: 2rem;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .action-btn {
+                width: 180px;
+            }
+        }
+
         @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 220px;
+                --section-spacing: 1.5rem;
+            }
+
             .container {
                 flex-direction: column;
                 padding: 20px;
@@ -611,6 +830,57 @@
                 font-size: 18px;
             }
 
+            .sidebar-header {
+                padding: 1.25rem;
+            }
+
+            .microphone-icon {
+                width: 36px;
+                height: 36px;
+            }
+
+            .nav-menu-link {
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            :root {
+                --sidebar-width: 100%;
+                --section-spacing: 1rem;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-radius: 0;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.collapsed {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.expanded {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                padding: 1rem;
+            }
+
+            .collapse-toggle {
+                left: 0;
+            }
+
+            .close-mobile {
+                display: flex;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
             .popup {
                 width: 80%;
                 padding: 20px;
@@ -622,20 +892,84 @@
             }
         }
 
-        .transcription-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 15px;
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .nav-menu-item {
+            animation: fadeInRight 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .nav-menu-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .nav-menu-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .nav-menu-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .nav-menu-item:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .nav-menu-item:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .nav-menu-item:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animated {
+            animation: fadeIn 0.8s ease forwards;
         }
     </style>
 </head>
 
 <body>
-    <header id="mainHeader">
-        <nav class="navbar">
-            <div class="logo" onclick="goToHome()">
-                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <nav class="sidebar expanded" role="navigation" aria-label="Main navigation">
+        <div class="sidebar-header">
+            <a href="home.html" class="logo" aria-label="UpSpeak Home">
+                <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
                     <defs>
                         <linearGradient id="microphone-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#0073e6;stop-opacity:1" />
@@ -645,87 +979,127 @@
                     <path fill="url(#microphone-gradient)"
                         d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
                 </svg>
-                <span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span>
-            </div>
-            <ul class="nav-menu">
-                <li>
-                    <a href="evaluation.html">Practice <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="evaluation.html">Recording Studio</a>
-                    </div>
-                </li>
-                <li>
-                    <a href="learn.html">Learn <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="learn.html">Videos</a>
-                        <a href="learn.html">Puzzles</a>
-                        <a href="learn.html">Drills</a>
-                    </div>
-                </li>
-                <li>
-                    <a href="profile.html">Profile <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="profile.html">Personality</a>
-                        <a href="profile.html">Badges</a>
-                        <a href="profile.html">Quests</a>
-                    </div>
-                </li>
-                <li>
-                    <a href="watch.html">Watch <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="watch.html">Speech Archive</a>
-                        <a href="watch.html">Famous Speeches</a>
-                    </div>
-                </li>
-                <li>
-                    <a href="about.html">About <i class="fas fa-caret-down carrot"></i></a>
-                    <div class="dropdown-content">
-                        <a href="about.html">UpSpeak Credentials</a>
-                    </div>
-                </li>
-            </ul>
-            <a href="user.html"><i class="fas fa-user-circle profile-icon"></i></a>
-        </nav>
-    </header>
-    <div class="container">
-        <div class="left-section">
-            <div class="video-container" id="videoContainer">
-                <video id="video" autoplay muted></video>
-            </div>
-            <div id="transcription" class="transcription-box">Transcription will appear here...</div>
-            <div class="transcription-buttons">
-                <button id="downloadBtn" class="action-btn download-btn" disabled style="display: none;"><i
-                        class="fas fa-download"></i> Download</button>
-                <button id="saveBtn" class="action-btn save-btn" disabled style="display: none;"><i
-                        class="fas fa-save"></i> Save</button>
+                <span class="logo-text"><span class="upspeak-up">Up</span><span class="upspeak-speak">Speak</span></span>
+            </a>
+            <div class="close-mobile" aria-label="Close sidebar">
+                <i class="fas fa-times"></i>
             </div>
         </div>
-        <div class="right-section">
-            <div class="buttons-container" id="buttonsContainer">
-                <button id="startBtn" class="record-btn primary-btn">Start Recording</button>
-                <button id="stopBtn" class="record-btn primary-btn" disabled>Stop Recording</button>
-                <button id="restartBtn" class="record-btn secondary-btn" disabled>Restart</button>
-                <div class="feedback-box rating-box" id="ratingFeedback" style="display: none;"></div>
-                <div class="feedback-box summary-box" id="summaryFeedback" style="display: none;"></div>
-                <div class="feedback-box strengths-box" id="strengthsFeedback" style="display: none;"></div>
-                <div class="feedback-box improvement-box" id="improvementFeedback" style="display: none;"></div>
+
+        <ul class="nav-menu">
+            <li class="nav-menu-item">
+                <a href="evaluation.html" class="nav-menu-link record active" aria-label="Record">
+                    <i class="fas fa-microphone nav-menu-icon record" aria-hidden="true"></i>
+                    <span class="nav-menu-text">Record</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="learn.html" class="nav-menu-link learn" aria-label="Learn">
+                    <i class="fas fa-book-open nav-menu-icon learn" aria-hidden="true"></i>
+                    <span class="nav-menu-text">Learn</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="watch.html" class="nav-menu-link watch" aria-label="Watch">
+                    <i class="fas fa-video nav-menu-icon watch" aria-hidden="true"></i>
+                    <span class="nav-menu-text">Watch</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="profile.html" class="nav-menu-link profile" aria-label="Profile">
+                    <i class="fas fa-user nav-menu-icon profile" aria-hidden="true"></i>
+                    <span class="nav-menu-text">Profile</span>
+                </a>
+            </li>
+            <li class="nav-menu-item">
+                <a href="about.html" class="nav-menu-link about" aria-label="About">
+                    <i class="fas fa-info-circle nav-menu-icon about" aria-hidden="true"></i>
+                    <span class="nav-menu-text">About</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="profile-container">
+            <i class="fas fa-user-circle profile-icon" aria-hidden="true"></i>
+            <div class="profile-info">
+                <a href="user.html" class="profile-name" id="profile-name">User</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="collapse-toggle" aria-label="Toggle sidebar">
+        <i class="fas fa-angle-left"></i>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="left-section">
+                <div class="video-container" id="videoContainer">
+                    <video id="video" autoplay muted></video>
+                </div>
+                <div id="transcription" class="transcription-box">Transcription will appear here...</div>
+                <div class="transcription-buttons">
+                    <button id="downloadBtn" class="action-btn download-btn" disabled style="display: none;"><i
+                            class="fas fa-download"></i> Download</button>
+                    <button id="saveBtn" class="action-btn save-btn" disabled style="display: none;"><i
+                            class="fas fa-save"></i> Save</button>
+                </div>
+            </div>
+            <div class="right-section">
+                <div class="buttons-container" id="buttonsContainer">
+                    <button id="startBtn" class="record-btn primary-btn">Start Recording</button>
+                    <button id="stopBtn" class="record-btn primary-btn" disabled>Stop Recording</button>
+                    <button id="restartBtn" class="record-btn secondary-btn" disabled>Restart</button>
+                    <div class="feedback-box rating-box" id="ratingFeedback" style="display: none;"></div>
+                    <div class="feedback-box summary-box" id="summaryFeedback" style="display: none;"></div>
+                    <div class="feedback-box strengths-box" id="strengthsFeedback" style="display: none;"></div>
+                    <div class="feedback-box improvement-box" id="improvementFeedback" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="popup-overlay" id="popupOverlay">
+            <div class="popup">
+                <h2>Save Your Speech</h2>
+                <input type="text" id="speechName" placeholder="Enter speech name" required>
+                <div class="popup-buttons">
+                    <button class="popup-btn confirm" id="confirmSave">Save</button>
+                    <button class="popup-btn cancel" id="cancelSave">Cancel</button>
+                </div>
             </div>
         </div>
     </div>
-    <div class="popup-overlay" id="popupOverlay">
-        <div class="popup">
-            <h2>Save Your Speech</h2>
-            <input type="text" id="speechName" placeholder="Enter speech name" required>
-            <div class="popup-buttons">
-                <button class="popup-btn confirm" id="confirmSave">Save</button>
-                <button class="popup-btn cancel" id="cancelSave">Cancel</button>
-            </div>
-        </div>
-    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         emailjs.init("OFpAE4YZWQ73EpEdW");
 
+        // Sidebar Toggle Functionality
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        const collapseToggle = document.querySelector('.collapse-toggle');
+        const closeMobile = document.querySelector('.close-mobile');
+
+        function toggleSidebar() {
+            const isCollapsed = sidebar.classList.contains('collapsed');
+            sidebar.classList.toggle('collapsed', !isCollapsed);
+            sidebar.classList.toggle('expanded', isCollapsed);
+            mainContent.classList.toggle('collapsed', !isCollapsed);
+            collapseToggle.classList.toggle('collapsed', !isCollapsed);
+
+            const icon = collapseToggle.querySelector('i');
+            icon.classList.toggle('fa-angle-right', !isCollapsed);
+            icon.classList.toggle('fa-angle-left', isCollapsed);
+        }
+
+        collapseToggle.addEventListener('click', toggleSidebar);
+
+        closeMobile.addEventListener('click', function () {
+            if (!sidebar.classList.contains('collapsed')) {
+                toggleSidebar();
+            }
+        });
+
+        // Recording Functionality
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = SpeechRecognition ? new SpeechRecognition() : null;
         if (recognition) {
@@ -829,13 +1203,10 @@
         let isRecording = false;
         let finalTranscript = "";
         let silenceTimeout;
-        let previousFrame = null;
         let startTime;
         let currentBlob = null;
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
 
-        function goToHome() { window.location.href = 'index.html'; }
+        function goToHome() { window.location.href = 'home.html'; }
 
         async function startVideoStream() {
             try {
@@ -913,8 +1284,6 @@
             startBtn.disabled = true;
             stopBtn.disabled = false;
             restartBtn.disabled = false;
-            previousFrame = null;
-            detectHandMotions();
             document.getElementById("videoContainer").classList.add("recording");
         }
 
@@ -951,52 +1320,83 @@
             }
         }
 
-        function detectHandMotions() {
-            if (!isRecording) return;
-            if (!videoElement.videoWidth || !videoElement.videoHeight) {
-                requestAnimationFrame(detectHandMotions);
+        async function evaluateSpeech() {
+            if (!finalTranscript.trim()) {
+                transcriptionBox.textContent = "No speech detected.";
                 return;
             }
-            canvas.width = videoElement.videoWidth;
-            canvas.height = videoElement.videoHeight;
-            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-            const currentFrame = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            if (previousFrame) {
-                let motionCount = 0;
-                for (let i = 0; i < currentFrame.data.length; i += 20) {
-                    const diff = Math.abs(currentFrame.data[i] - previousFrame.data[i]) +
-                        Math.abs(currentFrame.data[i + 1] - previousFrame.data[i + 1]) +
-                        Math.abs(currentFrame.data[i + 2] - previousFrame.data[i + 2]);
-                    if (diff > 50) motionCount++;
-                }
-            }
-            previousFrame = currentFrame;
-            requestAnimationFrame(detectHandMotions);
-        }
 
-        function generateSummary(text) {
-            const sentences = text.split(/[.!?]/).filter(s => s.trim().length > 0);
-            const wordFrequency = {};
-            const allText = sentences.join(' ').toLowerCase();
-            const words = allText.match(/\b[a-z\d]+\b/g) || [];
-            const stopWords = new Set(['a', 'an', 'the', 'and', 'or', 'but', 'is', 'are', 'was', 'were', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'about', 'as', 'of', 'that', 'this', 'these', 'those', 'it', 'its', 'they', 'them', 'their', 'he', 'she', 'his', 'her', 'we', 'you', 'i', 'me', 'my', 'our']);
-            words.forEach(word => {
-                if (!stopWords.has(word) && word.length > 1) {
-                    wordFrequency[word] = (wordFrequency[word] || 0) + 1;
-                }
-            });
-
-            const sentenceScores = sentences.map(sentence => {
-                const sentenceWords = sentence.toLowerCase().match(/\b[a-z\d]+\b/g) || [];
-                let score = 0;
-                sentenceWords.forEach(word => {
-                    if (wordFrequency[word]) score += wordFrequency[word];
+            try {
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer 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',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'mistralai/mixtral-8x7b-instruct',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are an expert public speaking coach for young speakers. Analyze the provided speech transcript, ignoring grammar and sentence structure, as the focus is on delivery and content. Provide: 1) An overall score out of 100 (be slightly generous), 2) A one-sentence summary of the speech’s main message, 3) Exactly 4-6 specific strengths(based on speech quality), focusing on delivery, engagement, or content, 4) Exactly 2-4 specific areas for improvement(based on speech quality) focusing on actionable feedback for public speaking. It is imperative the feedback is specific. Instead of saying "strong use of anecdotes" say "your anecdote of {anecdote} improved {aspect of speech} in your speech! Make it VERY specific, good enough to change a child life. DO NOT HALLUCINATE. DO NOT MAKE UP CONTENT. DO NOT MAKE UP FACTUAL INFO ABOUT THE SPEECH THAT DID NOT HAPPEN. Format the response as a JSON object with fields: score, summary, strengths, improvements. Each strength and improvement should be a concise, speech-specific sentence.'
+                            },
+                            {
+                                role: 'user',
+                                content: finalTranscript
+                            }
+                        ]
+                    })
                 });
-                if (sentences.indexOf(sentence) === 0) score *= 1.5;
-                return { sentence, score: sentenceWords.length > 0 ? score / Math.sqrt(sentenceWords.length) : 0 };
-            });
 
-            return sentenceScores.sort((a, b) => b.score - a.score)[0]?.sentence || "No summary available.";
+                if (!response.ok) {
+                    throw new Error('Failed to fetch AI evaluation');
+                }
+
+                const data = await response.json();
+                const evaluation = JSON.parse(data.choices[0].message.content);
+
+                // Process evaluation
+                const overallScore = Math.min(100, Math.max(0, parseInt(evaluation.score) || 60));
+                const summary = evaluation.summary || "No summary available.";
+                const strengths = evaluation.strengths || [];
+                const improvements = evaluation.improvements || [];
+
+                if (overallScore >= 80) createConfetti();
+
+                ratingFeedback.innerHTML = `
+                    <div class="feedback-score">Overall Rating: ${overallScore}/100</div>
+                `;
+
+                summaryFeedback.innerHTML = `
+                    <div class="feedback-item"><strong>Summary:</strong></div>
+                    <div class="feedback-item">${summary}</div>
+                `;
+
+                strengthsFeedback.innerHTML = '<div class="feedback-item"><strong>Strengths:</strong></div>' +
+                    (strengths.length > 0 ? strengths.map(s => `<div class="feedback-item">${s}</div>`).join('') :
+                        '<div class="feedback-item">Practice more to showcase strengths!</div>');
+
+                improvementFeedback.innerHTML = '<div class="feedback-item"><strong>Areas for Improvement:</strong></div>' +
+                    (improvements.length > 0 ? improvements.map(i => `<div class="feedback-item">${i}</div>`).join('') :
+                        '<div class="feedback-item">Excellent work!</div>');
+
+                ratingFeedback.style.display = "block";
+                summaryFeedback.style.display = "block";
+                strengthsFeedback.style.display = "block";
+                improvementFeedback.style.display = "block";
+
+                const state = loadState();
+                const username = state.session;
+                let profile = getUserProfile(username);
+                if (strengths.length >= 5) {
+                    profile.speechesWithFivePlusStrengths += 1;
+                }
+                saveUserProfile(username, profile);
+
+            } catch (error) {
+                console.error("Error evaluating speech:", error);
+                transcriptionBox.textContent = "Error evaluating speech. Please try again.";
+            }
         }
 
         function generateThumbnail(videoBlob) {
@@ -1022,16 +1422,6 @@
             });
         }
 
-        function getRandomPositiveEmoji() {
-            const emojis = ["🌟", "👍", "💪", "🔥", "✨", "👏", "🎯", "💯"];
-            return emojis[Math.floor(Math.random() * emojis.length)];
-        }
-
-        function getRandomImprovementEmoji() {
-            const emojis = ["📈", "🔍", "🔨", "🛠️", "🧠", "🚀", "💡", "🎓"];
-            return emojis[Math.floor(Math.random() * emojis.length)];
-        }
-
         function createConfetti() {
             const colors = ['#ff0', '#f00', '#0f0', '#00f', '#f0f', '#0ff'];
             for (let i = 0; i < 100; i++) {
@@ -1044,153 +1434,6 @@
                 document.body.appendChild(confetti);
                 setTimeout(() => confetti.remove(), 3000);
             }
-        }
-
-        function extractAuthor(citationSentence) {
-            const authorPatterns = [
-                /dr\.?\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i,
-                /professor\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i,
-                /according\s+to\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i,
-                /as\s+stated\s+by\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i
-            ];
-            for (const pattern of authorPatterns) {
-                const match = citationSentence.match(pattern);
-                if (match) return match[1];
-            }
-            return "an expert";
-        }
-
-        function extractEmotion(emotionalSentence) {
-            const emotionalPhrases = ["i feel", "we must", "our shared", "thank you", "grateful"];
-            for (const phrase of emotionalPhrases) {
-                if (emotionalSentence.toLowerCase().includes(phrase)) {
-                    return phrase;
-                }
-            }
-            return "emotion";
-        }
-
-        function evaluateSpeech() {
-            const strengths = [];
-            const improvements = [];
-            const sentences = finalTranscript.split(/[.!?]/).filter(s => s.trim().length > 0);
-            const wordCount = finalTranscript.split(/\s+/).filter(Boolean).length;
-            const oneSentenceSummary = generateSummary(finalTranscript);
-            let overallScore = 30;
-            const durationSeconds = Math.max(10, (Date.now() - startTime) / 1000);
-
-            if (sentences.length >= 7 && wordCount > 200) {
-                overallScore += 10;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Content Depth</span> Your speech, beginning with "${sentences[0].trim().substring(0, 30)}...", delivers substantial content with ${wordCount} words across ${sentences.length} sentences.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Content Depth</span> Your speech (${wordCount} words) needs more depth. Elaborate on "${sentences[0]?.trim().substring(0, 30) || 'your topic'}..." to exceed 200 words.`);
-            }
-
-            const citationPhrases = ["according to", "as stated by", "research by", "dr.", "professor"];
-            const hasCitation = sentences.find(s => citationPhrases.some(p => s.toLowerCase().includes(p)));
-            if (hasCitation) {
-                const author = extractAuthor(hasCitation);
-                overallScore += 10;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Credibility</span> Citing ${author} in "${hasCitation.trim().substring(0, 50)}..." bolsters your speech's authority.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Credibility</span> Cite a specific source, e.g., "According to Dr. Johnson..." after "${sentences[0]?.trim().substring(0, 30) || 'your point'}...", to enhance credibility.`);
-            }
-
-            const emotionalPhrases = ["i feel", "we must", "our shared", "thank you", "grateful"];
-            const emotionalSentence = sentences.find(s => emotionalPhrases.some(p => s.toLowerCase().includes(p)));
-            if (emotionalSentence) {
-                const emotion = extractEmotion(emotionalSentence);
-                overallScore += 10;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Emotional Connection</span> Using "${emotion}" in "${emotionalSentence.trim().substring(0, 50)}..." creates a strong audience bond.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Emotional Connection</span> Incorporate phrases like "I feel" or "we must" after "${sentences[0]?.trim().substring(0, 30) || 'your intro'}..." to engage emotionally.`);
-            }
-
-            const transitionWords = ["however", "therefore", "moreover", "for example", "in addition"];
-            const transitionSentence = sentences.find(s => transitionWords.some(w => s.toLowerCase().includes(w)));
-            if (transitionSentence) {
-                const transitionWord = transitionWords.find(w => transitionSentence.toLowerCase().includes(w));
-                overallScore += 10;
-            strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Flow</span> The transition "${transitionWord}" in "${transitionSentence.trim().substring(0, 50)}..." ensures a smooth flow.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Flow</span> Add transitions like "for example" after "${sentences[1]?.trim().substring(0, 30) || 'your second point'}..." to connect ideas.`);
-            }
-
-            const fillerWords = ["um", "uh", "like", "you know"];
-            const fillerMatches = finalTranscript.match(new RegExp(`\\b(${fillerWords.join('|')})\\b`, "gi")) || [];
-            if (fillerMatches.length === 0) {
-                overallScore += 10;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Clarity</span> Your speech, starting with "${sentences[0]?.trim().substring(0, 30) || 'your message'}...", is free of fillers, enhancing clarity.`);
-            } else if (fillerMatches.length <= 2) {
-                overallScore += 5;
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Clarity</span> Reduce "${fillerMatches[0]}" (${fillerMatches.length} times) in "${sentences[1]?.trim().substring(0, 30) || 'your delivery'}..." for sharper clarity.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Clarity</span> Eliminate "${fillerMatches[0]}" (${fillerMatches.length} times); pause instead to strengthen "${sentences[1]?.trim().substring(0, 30) || 'key points'}...".`);
-            }
-
-            const wordsPerMinute = Math.floor((wordCount / durationSeconds) * 60);
-            const keySentence = sentences[Math.floor(sentences.length / 2)]?.trim() || 'your speech';
-            if (wordsPerMinute >= 120 && wordsPerMinute <= 180) {
-                overallScore += 10;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Pace</span> Your ${wordsPerMinute} wpm pace perfectly suits "${keySentence.substring(0, 50)}...".`);
-            } else if (wordsPerMinute > 180) {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Pace</span> Slow down (${wordsPerMinute} wpm) to clarify "${keySentence.substring(0, 50)}...".`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Pace</span> Increase pace (${wordsPerMinute} wpm) to energize "${keySentence.substring(0, 50)}...".`);
-            }
-
-            const persuasiveWords = ["must", "essential", "crucial", "important"];
-            const persuasiveSentence = sentences.find(s => persuasiveWords.some(w => s.toLowerCase().includes(w)));
-            if (persuasiveSentence) {
-                const persuasiveWord = persuasiveWords.find(w => persuasiveSentence.toLowerCase().includes(w));
-                overallScore += 10;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Persuasion</span> The word "${persuasiveWord}" in "${persuasiveSentence.trim().substring(0, 50)}..." drives your argument.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Persuasion</span> Use "crucial" or "must" in "${sentences[sentences.length - 2]?.trim().substring(0, 30) || 'your argument'}..." to persuade.`);
-            }
-
-            const callToActionWords = ["let's", "join", "start", "consider"];
-            const ctaSentence = sentences.find(s => callToActionWords.some(w => s.toLowerCase().includes(w)));
-            if (ctaSentence) {
-                const ctaWord = callToActionWords.find(w => ctaSentence.toLowerCase().includes(w));
-                overallScore += 10;
-                strengths.push(`${getRandomPositiveEmoji()} <span class="feedback-badge badge-positive">Call to Action</span> The phrase "${ctaWord}" in "${ctaSentence.trim().substring(0, 50)}..." inspires action.`);
-            } else {
-                improvements.push(`${getRandomImprovementEmoji()} <span class="feedback-badge badge-negative">Call to Action</span> End with "Let's start..." after "${sentences[sentences.length - 1]?.trim().substring(0, 30) || 'your conclusion'}..." to motivate.`);
-            }
-
-            overallScore = Math.min(100, overallScore);
-            if (overallScore >= 85) createConfetti();
-
-            ratingFeedback.innerHTML = `
-                                <div class="feedback-score">Overall Rating: ${overallScore}/100</div>
-                            `;
-
-            summaryFeedback.innerHTML = `
-                                <div class="feedback-item"><strong>Summary:</strong></div>
-                                <div class="feedback-item">${oneSentenceSummary}</div>
-                            `;
-
-            strengthsFeedback.innerHTML = '<div class="feedback-item"><strong>Strengths:</strong></div>' +
-                (strengths.length > 0 ? strengths.map(s => `<div class="feedback-item">${s}</div>`).join('') :
-                    '<div class="feedback-item">Practice more to showcase strengths!</div>');
-
-            improvementFeedback.innerHTML = '<div class="feedback-item"><strong>Areas for Improvement:</strong></div>' +
-                (improvements.length > 0 ? improvements.slice(0, 3).map(i => `<div class="feedback-item">${i}</div>`).join('') :
-                    '<div class="feedback-item">Excellent work!</div>');
-
-            ratingFeedback.style.display = "block";
-            summaryFeedback.style.display = "block";
-            strengthsFeedback.style.display = "block";
-            improvementFeedback.style.display = "block";
-
-            const state = loadState();
-            const username = state.session;
-            let profile = getUserProfile(username);
-            if (strengths.length >= 5) {
-                profile.speechesWithFivePlusStrengths += 1;
-            }
-            saveUserProfile(username, profile);
         }
 
         function downloadSpeech() {
@@ -1207,30 +1450,45 @@
         }
 
         async function saveSpeech(speechName) {
-            if (currentBlob && finalTranscript) {
-                const state = loadState();
-                const username = state.session;
-                let profile = getUserProfile(username);
+            if (!currentBlob || !finalTranscript) {
+                alert("No speech data to save.");
+                return;
+            }
+
+            const state = loadState();
+            const username = state.session;
+            if (!username) {
+                alert("You must be logged in to save a speech.");
+                return;
+            }
+
+            let profile = getUserProfile(username);
+            profile.savedSpeeches = profile.savedSpeeches || [];
+
+            try {
                 const reader = new FileReader();
                 reader.readAsDataURL(currentBlob);
                 reader.onloadend = async function () {
                     const base64data = reader.result;
                     const thumbnail = await generateThumbnail(currentBlob);
                     const duration = Math.round((Date.now() - startTime) / 1000);
-                    profile.savedSpeeches = profile.savedSpeeches || [];
-                    profile.savedSpeeches.push({
+
+                    const speech = {
                         id: Date.now(),
                         name: speechName,
                         timestamp: new Date().toISOString(),
                         transcription: finalTranscript,
                         video: base64data,
-                        summary: generateSummary(finalTranscript),
+                        summary: summaryFeedback.querySelector('.feedback-item:last-child')?.textContent || "No summary available.",
                         thumbnail: thumbnail,
                         category: 'personal',
                         views: '0',
                         duration: duration
-                    });
+                    };
+
+                    profile.savedSpeeches.push(speech);
                     saveUserProfile(username, profile);
+
                     popupOverlay.style.display = "none";
                     alert("Speech saved successfully!");
                 };
@@ -1238,8 +1496,18 @@
                     console.error("Failed to read video blob");
                     alert("Error saving speech. Please try again.");
                 };
-            } else {
-                alert("No speech data to save.");
+            } catch (error) {
+                console.error("Error saving speech:", error);
+                alert("Error saving speech. Please try again.");
+            }
+        }
+
+        function setUserName() {
+            const state = loadState();
+            const username = state.session;
+            if (username) {
+                const profile = getUserProfile(username);
+                document.getElementById('profile-name').textContent = profile.name;
             }
         }
 
@@ -1251,18 +1519,20 @@
                 const loginPopup = document.createElement("div");
                 loginPopup.className = "popup-overlay";
                 loginPopup.innerHTML = `
-                                    <div class="popup">
-                                        <h2>Session Expired</h2>
-                                        <p>Please log in to access the recording studio.</p>
-                                        <div class="popup-buttons">
-                                            <button class="popup-btn confirm" onclick="window.location.href='index.html'">OK</button>
-                                        </div>
-                                    </div>
-                                `;
+                    <div class="popup">
+                        <h2>Session Expired</h2>
+                        <p>Please log in to access the recording studio.</p>
+                        <div class="popup-buttons">
+                            <button class="popup-btn confirm" onclick="window.location.href='home.html'">OK</button>
+                        </div>
+                    </div>
+                `;
                 document.body.appendChild(loginPopup);
                 loginPopup.style.display = "flex";
                 return;
             }
+
+            setUserName();
 
             startBtn.addEventListener("click", startRecording);
             stopBtn.addEventListener("click", stopRecording);
@@ -1305,16 +1575,32 @@
                     saveBtn.style.display = "none";
                     downloadBtn.disabled = true;
                     saveBtn.disabled = true;
-                    ratingFeedback.style.display = "none";
-                    summaryFeedback.style.display = "none";
-                    strengthsFeedback.style.display = "none";
-                    improvementFeedback.style.display = "none";
+                    ratingFeedbac
                 }
             });
 
             startVideoStream();
             setupSpeechRecognition();
+
+            const animatedElements = document.querySelectorAll('.animated');
+            animatedElements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = "1";
+                }, 100 * index);
+            });
         });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
     </script>
 </body>
 
